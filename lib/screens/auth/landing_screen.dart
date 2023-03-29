@@ -42,7 +42,7 @@ class LandingScreen extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                  builder: (context) => const LoginScreen()));
+                                  builder: (context) => LoginScreen()));
                         },
                       ),
                       const SizedBox(
