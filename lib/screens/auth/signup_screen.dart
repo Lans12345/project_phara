@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:phara/screens/home_screen.dart';
-import 'package:phara/screens/login_screen.dart';
+import 'package:phara/screens/auth/login_screen.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/button_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
@@ -61,6 +61,7 @@ class SignupScreen extends StatelessWidget {
                 height: 10,
               ),
               TextFieldWidget(
+                  showEye: true,
                   isObscure: true,
                   inputType: TextInputType.streetAddress,
                   label: 'Password',
@@ -69,6 +70,7 @@ class SignupScreen extends StatelessWidget {
                 height: 10,
               ),
               TextFieldWidget(
+                  showEye: true,
                   isObscure: true,
                   inputType: TextInputType.streetAddress,
                   label: 'Confirm Password',

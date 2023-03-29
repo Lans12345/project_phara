@@ -36,6 +36,8 @@ class LoginScreen extends StatelessWidget {
                 height: 10,
               ),
               TextFieldWidget(
+                  showEye: true,
+                  isObscure: true,
                   hint: 'Password',
                   label: 'Password',
                   controller: passwordController),

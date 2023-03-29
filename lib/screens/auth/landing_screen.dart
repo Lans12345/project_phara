@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:phara/screens/auth/signup_screen.dart';
-import 'package:phara/screens/login_screen.dart';
+import 'package:phara/screens/auth/login_screen.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/button_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
