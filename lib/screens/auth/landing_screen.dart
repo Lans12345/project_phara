@@ -80,7 +80,7 @@ class LandingScreen extends StatelessWidget {
                         onPressed: (() {
                           Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                  builder: (context) => const SignupScreen()));
+                                  builder: (context) => SignupScreen()));
                         }),
                         child: TextBold(
                             text: 'Signup', fontSize: 18, color: Colors.white),
