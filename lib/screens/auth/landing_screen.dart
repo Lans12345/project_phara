@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phara/screens/auth/signup_screen.dart';
 import 'package:phara/screens/login_screen.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/button_widget.dart';
@@ -76,7 +77,11 @@ class LandingScreen extends StatelessWidget {
                         ],
                       ),
                       TextButton(
-                        onPressed: (() {}),
+                        onPressed: (() {
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => const SignupScreen()));
+                        }),
                         child: TextBold(
                             text: 'Signup', fontSize: 18, color: Colors.white),
                       ),
