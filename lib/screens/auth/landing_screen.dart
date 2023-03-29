@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phara/screens/login_screen.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/button_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
@@ -38,7 +39,11 @@ class LandingScreen extends StatelessWidget {
                     children: [
                       ButtonWidget(
                         label: 'Login',
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginScreen()));
+                        },
                       ),
                       const SizedBox(
                         height: 20,
