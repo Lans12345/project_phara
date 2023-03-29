@@ -15,16 +15,15 @@ class ButtonWidget extends StatelessWidget {
       this.width = 300,
       this.fontSize = 18,
       this.height = 50,
-      this.color = Colors.blue});
+      this.color = const Color.fromARGB(255, 233, 228, 228)});
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         minWidth: width,
         height: height,
-        color: color,
+        color: color?.withOpacity(0.6),
         onPressed: onPressed,
-        child:
-            TextRegular(text: label, fontSize: fontSize!, color: Colors.white));
+        child: TextBold(text: label, fontSize: fontSize!, color: Colors.white));
   }
 }
