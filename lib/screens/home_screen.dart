@@ -15,6 +15,32 @@ class HomeScreen extends StatelessWidget {
     zoom: 14.4746,
   );
 
+  final List<LatLng> _markerLocations = [
+    const LatLng(37.4220, -122.0841),
+    const LatLng(37.4275, -122.1697),
+    const LatLng(37.7749, -122.4194),
+    const LatLng(37.3382, -121.8863),
+    const LatLng(37.4833, -122.2167),
+    const LatLng(37.3352, -121.8811),
+    const LatLng(37.3541, -121.9552),
+    const LatLng(37.5407, -122.2924),
+    const LatLng(37.8044, -122.2711),
+    const LatLng(37.8716, -122.2727),
+  ];
+
+  Set<Marker> _createMarkers() {
+    return _markerLocations.map((location) {
+      return Marker(
+        markerId: MarkerId(location.toString()),
+        position: location,
+        infoWindow: const InfoWindow(
+          title: 'Marker Title',
+          snippet: 'Marker Snippet',
+        ),
+      );
+    }).toSet();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,6 +107,7 @@ class HomeScreen extends StatelessWidget {
       body: Stack(
         children: [
           GoogleMap(
+            markers: _createMarkers(),
             zoomControlsEnabled: false,
             mapType: MapType.normal,
             initialCameraPosition: _kGooglePlex,
