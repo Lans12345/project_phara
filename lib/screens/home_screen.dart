@@ -35,8 +35,8 @@ class HomeScreen extends StatelessWidget {
         markerId: MarkerId(location.toString()),
         position: location,
         infoWindow: const InfoWindow(
-          title: 'Marker Title',
-          snippet: 'Marker Snippet',
+          title: 'Lance Olana',
+          snippet: 'Sniper 150',
         ),
       );
     }).toSet();
@@ -111,6 +111,7 @@ class HomeScreen extends StatelessWidget {
       body: Stack(
         children: [
           GoogleMap(
+            myLocationEnabled: true,
             markers: _createMarkers(),
             zoomControlsEnabled: false,
             mapType: MapType.normal,
