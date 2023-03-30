@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phara/utils/colors.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -10,8 +11,19 @@ class HomeScreen extends StatelessWidget {
         child: SizedBox(),
       ),
       appBar: AppBar(
-        foregroundColor: Colors.black,
+        foregroundColor: grey,
         backgroundColor: Colors.white,
+        title: TextFormField(
+          decoration: const InputDecoration.collapsed(
+            hintText: "Search Location",
+            hintStyle: TextStyle(fontFamily: 'QBold', color: grey),
+            border: InputBorder.none,
+          ),
+        ),
+        actions: [
+          IconButton(
+              onPressed: (() {}), icon: const Icon(Icons.pin_drop_outlined))
+        ],
       ),
     );
   }
