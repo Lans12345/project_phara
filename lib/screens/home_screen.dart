@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/button_widget.dart';
+import 'package:phara/widgets/drawer_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   final Completer<GoogleMapController> _controller =
@@ -60,7 +61,7 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       drawer: const Drawer(
-        child: SizedBox(),
+        child: DrawerWidget(),
       ),
       appBar: AppBar(
         foregroundColor: grey,
