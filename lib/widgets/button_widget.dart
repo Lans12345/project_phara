@@ -6,7 +6,9 @@ class ButtonWidget extends StatelessWidget {
   final VoidCallback onPressed;
   final double? width;
   final double? fontSize;
+  final double? radius;
   final double? height;
+  final double? opacity;
   final Color? color;
 
   const ButtonWidget(
@@ -15,14 +17,17 @@ class ButtonWidget extends StatelessWidget {
       this.width = 300,
       this.fontSize = 18,
       this.height = 50,
+      this.radius = 5,
+      this.opacity = 0.6,
       this.color = const Color.fromARGB(255, 233, 228, 228)});
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radius!)),
         minWidth: width,
         height: height,
-        color: color?.withOpacity(0.6),
+        color: color?.withOpacity(opacity!),
         onPressed: onPressed,
         child: TextBold(text: label, fontSize: fontSize!, color: Colors.white));
   }
