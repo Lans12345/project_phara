@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:phara/screens/home_screen.dart';
+import 'package:phara/screens/pages/trips_page.dart';
 import 'package:phara/widgets/text_widget.dart';
 
 class DrawerWidget extends StatelessWidget {
@@ -100,8 +101,8 @@ class DrawerWidget extends StatelessWidget {
                 color: Colors.grey,
               ),
               onTap: () {
-                // Navigator.of(context).pushReplacement(
-                //     MaterialPageRoute(builder: (context) => HomeScreen()));
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const TripsPage()));
               },
             ),
             ListTile(

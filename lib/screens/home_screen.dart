@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:phara/screens/pages/bookmark_page.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/button_widget.dart';
 import 'package:phara/widgets/drawer_widget.dart';
@@ -79,7 +80,10 @@ class HomeScreen extends StatelessWidget {
           ),
           FloatingActionButton(
               backgroundColor: Colors.white,
-              onPressed: (() {}),
+              onPressed: (() {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const BookmarksPage()));
+              }),
               child: const Icon(
                 Icons.collections_bookmark_outlined,
                 color: grey,
