@@ -89,7 +89,7 @@ class SignupScreen extends StatelessWidget {
                     label: 'Signup',
                     onPressed: (() {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const HomeScreen()));
+                          builder: (context) => HomeScreen()));
                     }),
                   ),
                 ),
