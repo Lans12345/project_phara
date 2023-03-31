@@ -31,6 +31,7 @@ class _MessagesTabState extends State<MessagesTab> {
             width: 300,
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(100)),
             child: TextFormField(
+              textCapitalization: TextCapitalization.sentences,
               controller: messageController,
               decoration: InputDecoration(
                 prefixIcon: const Icon(
@@ -92,7 +93,7 @@ class _MessagesTabState extends State<MessagesTab> {
                       child: ListTile(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const ChatPage()));
+                              builder: (context) => ChatPage()));
                         },
                         leading: const CircleAvatar(
                           maxRadius: 25,
