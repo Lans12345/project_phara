@@ -13,6 +13,8 @@ class _ChatPageState extends State<ChatPage> {
 
   String message = '';
 
+  final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,64 +75,67 @@ class _ChatPageState extends State<ChatPage> {
             ),
             Expanded(
               child: SizedBox(
-                child: ListView.builder(itemBuilder: ((context, index) {
-                  return Row(
-                    mainAxisAlignment: index % 2 == 0
-                        ? MainAxisAlignment.end
-                        : MainAxisAlignment.start,
-                    children: [
-                      index % 2 != 0
-                          ? const Padding(
-                              padding: EdgeInsets.only(left: 5),
-                              child: CircleAvatar(
-                                minRadius: 15,
-                                maxRadius: 15,
-                                backgroundImage: NetworkImage(
-                                    'https://i.pinimg.com/originals/45/e1/9c/45e19c74f5c293c27a7ec8aee6a92936.jpg'),
+                child: ListView.builder(
+                    itemCount: 50,
+                    controller: _scrollController,
+                    itemBuilder: ((context, index) {
+                      return Row(
+                        mainAxisAlignment: index % 2 == 0
+                            ? MainAxisAlignment.end
+                            : MainAxisAlignment.start,
+                        children: [
+                          index % 2 != 0
+                              ? const Padding(
+                                  padding: EdgeInsets.only(left: 5),
+                                  child: CircleAvatar(
+                                    minRadius: 15,
+                                    maxRadius: 15,
+                                    backgroundImage: NetworkImage(
+                                        'https://i.pinimg.com/originals/45/e1/9c/45e19c74f5c293c27a7ec8aee6a92936.jpg'),
+                                  ),
+                                )
+                              : const SizedBox(),
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 10.0),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 15.0),
+                            decoration: BoxDecoration(
+                              color: black,
+                              borderRadius: BorderRadius.only(
+                                topLeft: const Radius.circular(20.0),
+                                topRight: const Radius.circular(20.0),
+                                bottomLeft: index % 2 == 0
+                                    ? const Radius.circular(20.0)
+                                    : const Radius.circular(0.0),
+                                bottomRight: index % 2 == 0
+                                    ? const Radius.circular(0.0)
+                                    : const Radius.circular(20.0),
                               ),
-                            )
-                          : const SizedBox(),
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 10.0),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 15.0),
-                        decoration: BoxDecoration(
-                          color: black,
-                          borderRadius: BorderRadius.only(
-                            topLeft: const Radius.circular(20.0),
-                            topRight: const Radius.circular(20.0),
-                            bottomLeft: index % 2 == 0
-                                ? const Radius.circular(20.0)
-                                : const Radius.circular(0.0),
-                            bottomRight: index % 2 == 0
-                                ? const Radius.circular(0.0)
-                                : const Radius.circular(20.0),
-                          ),
-                        ),
-                        child: const Text(
-                          'Sample Message',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                      ),
-                      index % 2 == 0
-                          ? const Padding(
-                              padding: EdgeInsets.only(right: 5),
-                              child: CircleAvatar(
-                                minRadius: 15,
-                                maxRadius: 15,
-                                backgroundImage: AssetImage(
-                                  'assets/images/profile.png',
-                                ),
+                            ),
+                            child: const Text(
+                              'Sample Message',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
                               ),
-                            )
-                          : const SizedBox(),
-                    ],
-                  );
-                })),
+                            ),
+                          ),
+                          index % 2 == 0
+                              ? const Padding(
+                                  padding: EdgeInsets.only(right: 5),
+                                  child: CircleAvatar(
+                                    minRadius: 15,
+                                    maxRadius: 15,
+                                    backgroundImage: AssetImage(
+                                      'assets/images/profile.png',
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox(),
+                        ],
+                      );
+                    })),
               ),
             ),
             const Divider(
@@ -186,6 +191,10 @@ class _ChatPageState extends State<ChatPage> {
                       onPressed: message == ''
                           ? (() {})
                           : (() {
+                              _scrollController.animateTo(
+                                  _scrollController.position.maxScrollExtent,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.easeOut);
                               messageController.clear();
                             }),
                       child: Icon(
