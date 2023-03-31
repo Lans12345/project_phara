@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:phara/screens/pages/bookmark_page.dart';
@@ -7,6 +8,9 @@ import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/book_bottomsheet_widget.dart';
 import 'package:phara/widgets/button_widget.dart';
 import 'package:phara/widgets/drawer_widget.dart';
+import 'package:phara/widgets/text_widget.dart';
+
+import 'pages/messages_tab.dart';
 
 class HomeScreen extends StatelessWidget {
   final Completer<GoogleMapController> _controller =
@@ -114,7 +118,27 @@ class HomeScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-              onPressed: (() {}), icon: const Icon(Icons.pin_drop_outlined))
+            onPressed: (() {}),
+            icon: const Icon(Icons.pin_drop_outlined),
+          ),
+          Badge(
+            position: BadgePosition.custom(start: -1, top: 3),
+            badgeContent: TextRegular(
+              text: '1',
+              fontSize: 12,
+              color: Colors.white,
+            ),
+            child: IconButton(
+              onPressed: (() {
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => MessagesTab()));
+              }),
+              icon: const Icon(Icons.message_outlined),
+            ),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
         ],
       ),
       body: Stack(
