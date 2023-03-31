@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:phara/screens/auth/login_screen.dart';
 import 'package:phara/screens/home_screen.dart';
+import 'package:phara/screens/pages/messages_tab.dart';
 import 'package:phara/screens/pages/trips_page.dart';
 import 'package:phara/widgets/text_widget.dart';
 
@@ -94,6 +96,18 @@ class DrawerWidget extends StatelessWidget {
               },
             ),
             ListTile(
+              leading: const Icon(Icons.message_outlined),
+              title: TextRegular(
+                text: 'Messages',
+                fontSize: 12,
+                color: Colors.grey,
+              ),
+              onTap: () {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const MessagesTab()));
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.tab_rounded),
               title: TextRegular(
                 text: 'Recent trips',
@@ -166,9 +180,9 @@ class DrawerWidget extends StatelessWidget {
                             ),
                             FlatButton(
                               onPressed: () {
-                                // Navigator.of(context).pushReplacement(
-                                //     MaterialPageRoute(
-                                //         builder: (context) => LogInPage()));
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) => LoginScreen()));
                               },
                               child: const Text(
                                 'Continue',
