@@ -103,8 +103,8 @@ class DrawerWidget extends StatelessWidget {
                 color: Colors.grey,
               ),
               onTap: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const MessagesTab()));
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => MessagesTab()));
               },
             ),
             ListTile(
