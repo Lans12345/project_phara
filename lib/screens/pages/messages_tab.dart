@@ -77,19 +77,11 @@ class _MessagesTabState extends State<MessagesTab> {
           ),
           Expanded(
             child: SizedBox(
-              child: ListView.separated(
+              child: ListView.builder(
                   itemCount: 100,
-                  separatorBuilder: (context, index) {
-                    return const Padding(
-                      padding: EdgeInsets.only(left: 20, right: 20),
-                      child: Divider(
-                        color: grey,
-                      ),
-                    );
-                  },
                   itemBuilder: ((context, index) {
                     return Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                      padding: const EdgeInsets.all(5),
                       child: ListTile(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
@@ -98,21 +90,47 @@ class _MessagesTabState extends State<MessagesTab> {
                         leading: const CircleAvatar(
                           maxRadius: 25,
                           minRadius: 25,
-                          backgroundImage: AssetImage(
-                            'assets/images/profile.png',
+                          backgroundImage: NetworkImage(
+                            'https://i.pinimg.com/originals/45/e1/9c/45e19c74f5c293c27a7ec8aee6a92936.jpg',
                           ),
                         ),
-                        title: TextBold(
-                            text: 'Lance Olana', fontSize: 15, color: grey),
+                        title: index % 2 == 0
+                            ? TextRegular(
+                                text: 'Lance Olana', fontSize: 15, color: grey)
+                            : TextBold(
+                                text: 'Lance Olana',
+                                fontSize: 15,
+                                color: Colors.black),
                         subtitle: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            TextRegular(
-                                text: 'Sample message right here',
-                                fontSize: 12,
-                                color: grey),
-                            TextRegular(
-                                text: '2:30 PM', fontSize: 12, color: grey),
+                            index % 2 == 0
+                                ? const Text(
+                                    'Sample message right here',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: grey,
+                                        fontFamily: 'QRegular'),
+                                  )
+                                : const Text(
+                                    'Sample message right here',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 12,
+                                        color: Colors.black,
+                                        fontFamily: 'QBold'),
+                                  ),
+                            index % 2 == 0
+                                ? TextRegular(
+                                    text: '2:30 PM', fontSize: 12, color: grey)
+                                : TextBold(
+                                    text: '2:30 PM',
+                                    fontSize: 12,
+                                    color: Colors.black),
                           ],
                         ),
                         trailing: const Icon(
