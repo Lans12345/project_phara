@@ -15,6 +15,8 @@ class _ChatPageState extends State<ChatPage> {
 
   final ScrollController _scrollController = ScrollController();
 
+  bool executed = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +51,19 @@ class _ChatPageState extends State<ChatPage> {
                     itemCount: 50,
                     controller: _scrollController,
                     itemBuilder: ((context, index) {
+                      if (executed) {
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((timeStamp) {
+                          _scrollController.animateTo(
+                              _scrollController.position.maxScrollExtent,
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeOut);
+
+                          setState(() {
+                            executed = false;
+                          });
+                        });
+                      }
                       return Row(
                         mainAxisAlignment: index % 2 == 0
                             ? MainAxisAlignment.end
