@@ -18,61 +18,31 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        foregroundColor: grey,
+        backgroundColor: Colors.white,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const CircleAvatar(
+              minRadius: 22,
+              maxRadius: 22,
+              backgroundImage: NetworkImage(
+                  'https://i.pinimg.com/originals/45/e1/9c/45e19c74f5c293c27a7ec8aee6a92936.jpg'),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            TextRegular(text: 'Lance Olana', fontSize: 18, color: grey),
+          ],
+        ),
+      ),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            IconButton(
-              onPressed: (() {
-                Navigator.pop(context);
-              }),
-              icon: const Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: grey,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Card(
-                color: Colors.white.withOpacity(0.9),
-                elevation: 3,
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 175,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const CircleAvatar(
-                        minRadius: 50,
-                        maxRadius: 50,
-                        backgroundImage: NetworkImage(
-                            'https://i.pinimg.com/originals/45/e1/9c/45e19c74f5c293c27a7ec8aee6a92936.jpg'),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      TextBold(
-                        text: 'Lance Olana',
-                        fontSize: 18,
-                        color: grey,
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      TextRegular(
-                        text: '09090104355',
-                        fontSize: 14,
-                        color: grey,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
             Expanded(
               child: SizedBox(
                 child: ListView.builder(
