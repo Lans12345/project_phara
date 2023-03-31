@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phara/screens/pages/chat_page.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/text_widget.dart';
 
@@ -89,6 +90,10 @@ class _MessagesTabState extends State<MessagesTab> {
                     return Padding(
                       padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                       child: ListTile(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const ChatPage()));
+                        },
                         leading: const CircleAvatar(
                           maxRadius: 25,
                           minRadius: 25,
