@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:phara/screens/home_screen.dart';
 import 'package:phara/screens/auth/login_screen.dart';
+import 'package:phara/screens/splashtohome_screen.dart';
 import 'package:phara/services/signup.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/button_widget.dart';
@@ -137,7 +138,7 @@ class SignupScreen extends StatelessWidget {
           email: emailController.text, password: passwordController.text);
       showToast("Registered Succesfully!");
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => HomeScreen()));
+          MaterialPageRoute(builder: (context) => const SplashToHomeScreen()));
     } on Exception catch (e) {
       showToast("An error occurred: $e");
     }
