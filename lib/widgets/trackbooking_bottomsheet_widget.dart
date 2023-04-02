@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:phara/widgets/text_widget.dart';
 
 import '../utils/colors.dart';
@@ -117,16 +118,85 @@ class TrackBookingBottomSheetWidget extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (int i = 0; i < 5; i++)
-                    const Icon(
-                      Icons.star_border_rounded,
-                      color: grey,
-                      size: 32,
-                    ),
-                ],
+              Center(
+                child: RatingBar.builder(
+                  initialRating: 5,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: false,
+                  itemCount: 5,
+                  itemPadding: const EdgeInsets.symmetric(horizontal: 0.0),
+                  itemBuilder: (context, _) => const Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
+                  onRatingUpdate: (rating) async {
+                    // var collection =
+                    //     FirebaseFirestore
+                    //         .instance
+                    //         .collection(
+                    //             'Providers')
+                    //         .where('id',
+                    //             isEqualTo:
+                    //                 data[
+                    //                     'id']);
+
+                    // var querySnapshot =
+                    //     await collection
+                    //         .get();
+
+                    // for (var queryDocumentSnapshot
+                    //     in querySnapshot
+                    //         .docs) {
+                    //   Map<String, dynamic>
+                    //       data1 =
+                    //       queryDocumentSnapshot
+                    //           .data();
+
+                    //   FirebaseFirestore
+                    //       .instance
+                    //       .collection(
+                    //           'Providers')
+                    //       .doc(data['id'])
+                    //       .update({
+                    //     'reviews': FieldValue
+                    //         .arrayUnion([
+                    //       FirebaseAuth
+                    //           .instance
+                    //           .currentUser!
+                    //           .uid
+                    //     ]),
+                    //     'ratings': data1[
+                    //             'ratings'] +
+                    //         rating,
+                    //     'nums':
+                    //         data1['nums'] +
+                    //             1,
+                    //   });
+                    // }
+
+                    // addRatings(
+                    //     name,
+                    //     rating.toInt(),
+                    //     data['id'],
+                    //     profilePicture);
+
+                    // Navigator.pop(context);
+
+                    // print(rating);
+                  },
+                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     for (int i = 0; i < 5; i++)
+                //       const Icon(
+                //         Icons.star_border_rounded,
+                //         color: grey,
+                //         size: 32,
+                //       ),
+                //   ],
+                // ),
               ),
               const SizedBox(
                 height: 10,
