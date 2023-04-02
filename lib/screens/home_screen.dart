@@ -60,6 +60,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   GoogleMapController? mapController;
 
+  Set<Marker> markers = {};
+
   @override
   Widget build(BuildContext context) {
     final CameraPosition camPosition = CameraPosition(
@@ -169,14 +171,15 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 GoogleMap(
                   myLocationButtonEnabled: false,
-                  myLocationEnabled: true,
-                  markers: _createMarkers(context),
+                  myLocationEnabled: false,
+                  markers: markers,
                   zoomControlsEnabled: false,
                   mapType: MapType.normal,
                   initialCameraPosition: camPosition,
                   onMapCreated: (GoogleMapController controller) {
                     _controller.complete(controller);
                     setState(() {
+                      myLocationMarker(markers, lat, long);
                       mapController = controller;
                     });
                   },
@@ -243,6 +246,22 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
     }).toSet();
+  }
+
+  myLocationMarker(Set<Marker> markers, double lat, double lang) async {
+    Marker mark1 = Marker(
+        onDrag: (value) {
+          print(value);
+        },
+        draggable: true,
+        markerId: const MarkerId('mark1'),
+        infoWindow: const InfoWindow(
+          title: 'Your Current Location',
+        ),
+        icon: BitmapDescriptor.defaultMarker,
+        position: LatLng(lat, lang));
+
+    markers.add(mark1);
   }
 
   getLocation() async {
