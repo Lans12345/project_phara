@@ -1,4 +1,9 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:phara/screens/auth/landing_screen.dart';
+import 'package:phara/screens/home_screen.dart';
 import 'package:phara/widgets/text_widget.dart';
 
 import '../utils/colors.dart';
@@ -15,19 +20,19 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // Timer(const Duration(seconds: 5), () async {
-    //   Navigator.of(context).pushReplacement(MaterialPageRoute(
-    //     builder: (context) => StreamBuilder<User?>(
-    //         stream: FirebaseAuth.instance.authStateChanges(),
-    //         builder: (context, snapshot) {
-    //           if (snapshot.hasData) {
-    //             return const HomeScreen();
-    //           } else {
-    //             return const LoginScreen();
-    //           }
-    //         }),
-    //   ));
-    // });
+    Timer(const Duration(seconds: 5), () async {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => StreamBuilder<User?>(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return HomeScreen();
+              } else {
+                return const LandingScreen();
+              }
+            }),
+      ));
+    });
   }
 
   @override
