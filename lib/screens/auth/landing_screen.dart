@@ -91,21 +91,41 @@ class LandingScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          GestureDetector(
-                            onTap: () {},
-                            child: Image.asset(
-                              'assets/images/fblogo.png',
-                              height: 35,
+                          Container(
+                            decoration: BoxDecoration(
+                              color: grey.withOpacity(0.75),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Image.asset(
+                                  'assets/images/fblogo.png',
+                                  height: 35,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ),
                           const SizedBox(
                             width: 25,
                           ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Image.asset(
-                              'assets/images/googlelogo.png',
-                              height: 35,
+                          Container(
+                            decoration: BoxDecoration(
+                              color: grey.withOpacity(0.75),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Image.asset(
+                                  'assets/images/googlelogo.png',
+                                  height: 35,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ),
                         ],
