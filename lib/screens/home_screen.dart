@@ -165,6 +165,9 @@ class _HomeScreenState extends State<HomeScreen> {
             body: Stack(
               children: [
                 GoogleMap(
+                  buildingsEnabled: true,
+                  liteModeEnabled: true,
+                  compassEnabled: true,
                   myLocationButtonEnabled: false,
                   myLocationEnabled: false,
                   markers: markers,
@@ -174,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onMapCreated: (GoogleMapController controller) {
                     _controller.complete(controller);
                     setState(() {
-                      myLocationMarker(markers, lat, long);
+                      myLocationMarker(lat, long);
                       mapController = controller;
                     });
                   },
@@ -224,20 +227,20 @@ class _HomeScreenState extends State<HomeScreen> {
           );
   }
 
-  myLocationMarker(Set<Marker> markers, double lat, double lang) async {
-    Marker mark1 = Marker(
+  myLocationMarker(double lat, double lang) async {
+    Marker mylocationMarker = Marker(
         onDrag: (value) {
           print(value);
         },
         draggable: true,
-        markerId: const MarkerId('mark1'),
+        markerId: const MarkerId('currentLocation'),
         infoWindow: const InfoWindow(
           title: 'Your Current Location',
         ),
         icon: BitmapDescriptor.defaultMarker,
         position: LatLng(lat, lang));
 
-    markers.add(mark1);
+    markers.add(mylocationMarker);
   }
 
   getLocation() async {
