@@ -10,7 +10,7 @@ class TripsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const DrawerWidget(),
+      drawer: DrawerWidget(),
       appBar: AppbarWidget('Recent Trips'),
       body: ListView.builder(itemBuilder: ((context, index) {
         return Padding(

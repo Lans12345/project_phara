@@ -10,7 +10,7 @@ class BookmarksPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const DrawerWidget(),
+      drawer: DrawerWidget(),
       appBar: AppbarWidget('Bookmarks'),
       body: ListView.builder(itemBuilder: ((context, index) {
         return Padding(

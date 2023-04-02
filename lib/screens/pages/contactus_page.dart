@@ -11,7 +11,7 @@ class ContactusPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const DrawerWidget(),
+      drawer: DrawerWidget(),
       appBar: AppbarWidget('Contact Us'),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),

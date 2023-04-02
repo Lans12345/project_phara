@@ -115,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     )),
               ],
             ),
-            drawer: const Drawer(
+            drawer: Drawer(
               child: DrawerWidget(),
             ),
             appBar: AppBar(

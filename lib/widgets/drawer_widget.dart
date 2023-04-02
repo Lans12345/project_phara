@@ -7,10 +7,12 @@ import 'package:phara/screens/pages/aboutus_page.dart';
 import 'package:phara/screens/pages/contactus_page.dart';
 import 'package:phara/screens/pages/messages_tab.dart';
 import 'package:phara/screens/pages/trips_page.dart';
+import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/text_widget.dart';
+import 'package:phara/widgets/textfield_widget.dart';
 
 class DrawerWidget extends StatelessWidget {
-  const DrawerWidget({Key? key}) : super(key: key);
+  final numberController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +57,91 @@ class DrawerWidget extends StatelessWidget {
                             const SizedBox(
                               width: 10,
                             ),
-                            TextRegular(
-                              text: data['number'],
-                              fontSize: 14,
-                              color: Colors.grey,
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                TextRegular(
+                                  text: data['number'],
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: ((context) {
+                                          return AlertDialog(
+                                            title: TextRegular(
+                                                text: 'New contact number',
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                            content: SizedBox(
+                                              height: 55,
+                                              child: TextFieldWidget(
+                                                  radius: 0,
+                                                  inputType:
+                                                      TextInputType.number,
+                                                  hint: data['number'],
+                                                  color: grey,
+                                                  height: 35,
+                                                  label: '',
+                                                  controller: numberController),
+                                            ),
+                                            actions: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  TextButton(
+                                                    onPressed: (() {
+                                                      Navigator.pop(context);
+                                                    }),
+                                                    child: TextBold(
+                                                        text: 'Close',
+                                                        fontSize: 14,
+                                                        color: grey),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: (() async {
+                                                      if (numberController
+                                                              .text !=
+                                                          '') {
+                                                        numberController
+                                                            .clear();
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection('Users')
+                                                            .doc(data['id'])
+                                                            .update({
+                                                          'number':
+                                                              numberController
+                                                                  .text
+                                                        });
+                                                        Navigator.pop(context);
+                                                      }
+                                                    }),
+                                                    child: TextBold(
+                                                        text: 'Update',
+                                                        fontSize: 15,
+                                                        color: Colors.black),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          );
+                                        }));
+                                  },
+                                  child: const Icon(
+                                    Icons.edit_outlined,
+                                    color: grey,
+                                    size: 16,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
