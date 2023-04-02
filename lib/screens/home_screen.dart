@@ -9,7 +9,9 @@ import 'package:phara/widgets/book_bottomsheet_widget.dart';
 import 'package:phara/widgets/button_widget.dart';
 import 'package:phara/widgets/drawer_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
+import 'package:uuid/uuid.dart';
 
+import '../widgets/delegate/search_my_places.dart';
 import 'pages/messages_tab.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -114,11 +116,20 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         foregroundColor: grey,
         backgroundColor: Colors.white,
-        title: TextFormField(
-          decoration: const InputDecoration.collapsed(
-            hintText: "Search Location",
-            hintStyle: TextStyle(fontFamily: 'QBold', color: grey),
-            border: InputBorder.none,
+        title: GestureDetector(
+          onTap: () async {
+            final sessionToken = const Uuid().v4();
+
+            await showSearch(
+                context: context, delegate: LocationsSearch(sessionToken));
+          },
+          child: TextFormField(
+            enabled: false,
+            decoration: const InputDecoration.collapsed(
+              hintText: "Search Location",
+              hintStyle: TextStyle(fontFamily: 'QBold', color: grey),
+              border: InputBorder.none,
+            ),
           ),
         ),
         actions: [
