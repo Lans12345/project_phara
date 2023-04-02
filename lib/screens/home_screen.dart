@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final CameraPosition camPosition = CameraPosition(
       target: LatLng(lat, long),
-      zoom: 14.4746,
+      zoom: 16,
     );
     return hasLoaded
         ? Scaffold(
