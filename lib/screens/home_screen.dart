@@ -171,7 +171,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   myLocationButtonEnabled: false,
                   myLocationEnabled: false,
                   markers: markers,
-                  zoomControlsEnabled: false,
                   mapType: MapType.normal,
                   initialCameraPosition: camPosition,
                   onMapCreated: (GoogleMapController controller) {
