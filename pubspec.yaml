@@ -45,6 +45,15 @@ dependencies:
   google_sign_in:
   geocoding: ^2.1.0
   uuid:
+  geolocator: ^9.0.2
+  share_plus:
+  intl: ^0.17.0
+  flutter_polyline_points: ^1.0.0
+  flutter_google_places:
+  image_picker: ^0.8.5
+  flutter_facebook_auth:
+  riverpod:
+  flutter_riverpod:
 
 dev_dependencies:
   flutter_test:
