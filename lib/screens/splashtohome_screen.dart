@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:phara/screens/home_screen.dart';
 
+import '../plugins/my_location.dart';
 import '../utils/colors.dart';
 
 class SplashToHomeScreen extends StatefulWidget {
@@ -17,6 +18,7 @@ class _SplashToHomeScreenState extends State<SplashToHomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    determinePosition();
     Timer(const Duration(seconds: 5), () async {
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => HomeScreen()));

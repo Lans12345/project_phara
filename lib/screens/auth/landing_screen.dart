@@ -9,8 +9,21 @@ import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/button_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
 
-class LandingScreen extends StatelessWidget {
+import '../../plugins/my_location.dart';
+
+class LandingScreen extends StatefulWidget {
   const LandingScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LandingScreen> createState() => _LandingScreenState();
+}
+
+class _LandingScreenState extends State<LandingScreen> {
+  @override
+  void initState() {
+    super.initState();
+    determinePosition();
+  }
 
   @override
   Widget build(BuildContext context) {
