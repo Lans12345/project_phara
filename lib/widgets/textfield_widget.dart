@@ -12,6 +12,8 @@ class TextFieldWidget extends StatefulWidget {
   final TextInputType? inputType;
   late bool? showEye;
 
+  final TextCapitalization? textCapitalization;
+
   TextFieldWidget(
       {required this.label,
       this.hint = '',
@@ -21,6 +23,7 @@ class TextFieldWidget extends StatefulWidget {
       this.height = 40,
       this.maxLine = 1,
       this.showEye = false,
+      this.textCapitalization = TextCapitalization.sentences,
       this.inputType = TextInputType.text});
 
   @override
@@ -46,6 +49,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
               ),
               borderRadius: BorderRadius.circular(5)),
           child: TextFormField(
+            textCapitalization: widget.textCapitalization!,
             keyboardType: widget.inputType,
             decoration: InputDecoration(
               suffixIcon: widget.showEye! == true

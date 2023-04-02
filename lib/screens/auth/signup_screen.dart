@@ -1,10 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:phara/screens/home_screen.dart';
 import 'package:phara/screens/auth/login_screen.dart';
+import 'package:phara/services/signup.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/button_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
 import 'package:phara/widgets/textfield_widget.dart';
+import 'package:phara/widgets/toast_widget.dart';
 
 class SignupScreen extends StatelessWidget {
   final emailController = TextEditingController();
@@ -59,6 +62,7 @@ class SignupScreen extends StatelessWidget {
                   height: 10,
                 ),
                 TextFieldWidget(
+                    textCapitalization: TextCapitalization.none,
                     inputType: TextInputType.streetAddress,
                     label: 'Email',
                     controller: emailController),
@@ -66,6 +70,7 @@ class SignupScreen extends StatelessWidget {
                   height: 10,
                 ),
                 TextFieldWidget(
+                    textCapitalization: TextCapitalization.none,
                     showEye: true,
                     isObscure: true,
                     inputType: TextInputType.streetAddress,
@@ -75,6 +80,7 @@ class SignupScreen extends StatelessWidget {
                   height: 10,
                 ),
                 TextFieldWidget(
+                    textCapitalization: TextCapitalization.none,
                     showEye: true,
                     isObscure: true,
                     inputType: TextInputType.streetAddress,
@@ -88,8 +94,7 @@ class SignupScreen extends StatelessWidget {
                     color: black,
                     label: 'Signup',
                     onPressed: (() {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => HomeScreen()));
+                      register(context);
                     }),
                   ),
                 ),
@@ -119,5 +124,22 @@ class SignupScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  register(context) async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
+
+      signup(nameController.text, numberController.text, addressController.text,
+          emailController.text);
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
+      showToast("Registered Succesfully!");
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => HomeScreen()));
+    } on Exception catch (e) {
+      showToast("An error occurred: $e");
+    }
   }
 }

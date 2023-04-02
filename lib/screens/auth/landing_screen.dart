@@ -123,36 +123,7 @@ class LandingScreen extends StatelessWidget {
                               padding: const EdgeInsets.all(8.0),
                               child: GestureDetector(
                                 onTap: () async {
-                                  try {
-                                    final GoogleSignIn googleSignIn =
-                                        GoogleSignIn(scopes: ['email']);
-
-                                    final googleSignInAccount =
-                                        await googleSignIn.signIn();
-
-                                    if (googleSignInAccount == null) {
-                                      return;
-                                    }
-                                    final googleSignInAuth =
-                                        await googleSignInAccount
-                                            .authentication;
-                                    final credential =
-                                        GoogleAuthProvider.credential(
-                                      accessToken: googleSignInAuth.accessToken,
-                                      idToken: googleSignInAuth.idToken,
-                                    );
-
-                                    await FirebaseAuth.instance
-                                        .signInWithCredential(credential);
-                                  } on Exception {
-                                    Fluttertoast.showToast(
-                                        msg: 'Cannot Proceed!');
-                                  }
-
-                                  // createAccountFirestore(
-                                  //     googleSignInAccount.email,
-                                  //     googleSignInAccount.photoUrl!,
-                                  //     googleSignInAccount.displayName!);
+                                  googleLogin();
                                 },
                                 child: Image.asset(
                                   'assets/images/googlelogo.png',
@@ -176,5 +147,31 @@ class LandingScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  googleLogin() async {
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
+
+      final googleSignInAccount = await googleSignIn.signIn();
+
+      if (googleSignInAccount == null) {
+        return;
+      }
+      final googleSignInAuth = await googleSignInAccount.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuth.accessToken,
+        idToken: googleSignInAuth.idToken,
+      );
+
+      // createAccountFirestore(
+      //     googleSignInAccount.email,
+      //     googleSignInAccount.photoUrl!,
+      //     googleSignInAccount.displayName!);
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+    } on Exception {
+      Fluttertoast.showToast(msg: 'Cannot Proceed!');
+    }
   }
 }
