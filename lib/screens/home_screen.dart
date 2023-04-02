@@ -18,11 +18,6 @@ import '../widgets/delegate/search_my_places.dart';
 import 'pages/messages_tab.dart';
 
 class HomeScreen extends StatefulWidget {
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -205,7 +200,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           opacity: 1,
                           color: Colors.green,
                           label: 'Book a ride',
-                          onPressed: (() {})),
+                          onPressed: (() {
+                            showModalBottomSheet(
+                                isScrollControlled: true,
+                                context: context,
+                                builder: ((context) {
+                                  return BookBottomSheetWidget();
+                                }));
+                          })),
                       const SizedBox(
                         height: 25,
                       ),
@@ -220,32 +222,6 @@ class _HomeScreenState extends State<HomeScreen> {
               child: CircularProgressIndicator(),
             ),
           );
-  }
-
-  Set<Marker> _createMarkers(context) {
-    return _markerLocations.map((location) {
-      return Marker(
-        markerId: MarkerId(location.toString()),
-        draggable: true,
-        onDragEnd: (value) {
-          print(value.latitude);
-          print(value.longitude);
-        },
-        position: location,
-        infoWindow: InfoWindow(
-          onTap: () {
-            showModalBottomSheet(
-                isScrollControlled: true,
-                context: context,
-                builder: ((context) {
-                  return BookBottomSheetWidget();
-                }));
-          },
-          title: 'Lance Olana',
-          snippet: 'Sniper 150',
-        ),
-      );
-    }).toSet();
   }
 
   myLocationMarker(Set<Marker> markers, double lat, double lang) async {
