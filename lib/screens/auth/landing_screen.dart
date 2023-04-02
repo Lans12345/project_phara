@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:phara/screens/auth/signup_screen.dart';
 import 'package:phara/screens/auth/login_screen.dart';
+import 'package:phara/services/signup.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/button_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
@@ -168,6 +169,9 @@ class LandingScreen extends StatelessWidget {
       //     googleSignInAccount.email,
       //     googleSignInAccount.photoUrl!,
       //     googleSignInAccount.displayName!);
+
+      signup(
+          googleSignInAccount.displayName, '', '', googleSignInAccount.email);
 
       await FirebaseAuth.instance.signInWithCredential(credential);
     } on Exception {
