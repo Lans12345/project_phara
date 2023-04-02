@@ -38,6 +38,11 @@ class HomeScreen extends StatelessWidget {
     return _markerLocations.map((location) {
       return Marker(
         markerId: MarkerId(location.toString()),
+        draggable: true,
+        onDragEnd: (value) {
+          print(value.latitude);
+          print(value.longitude);
+        },
         position: location,
         infoWindow: InfoWindow(
           onTap: () {
