@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:phara/screens/home_screen.dart';
-import 'package:phara/widgets/text_widget.dart';
 
 import '../utils/colors.dart';
 
@@ -40,10 +39,6 @@ class _SplashToHomeScreenState extends State<SplashToHomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextBold(text: 'Welcome', fontSize: 32, color: Colors.white),
-              const SizedBox(
-                height: 20,
-              ),
               Image.asset(
                 'assets/images/rider.png',
                 width: 250,
