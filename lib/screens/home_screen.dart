@@ -91,7 +91,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: (() {
                       mapController?.animateCamera(
                           CameraUpdate.newCameraPosition(CameraPosition(
-                              target: LatLng(lat, long), zoom: 16)));
+                              bearing: 45,
+                              tilt: 40,
+                              target: LatLng(lat, long),
+                              zoom: 16)));
                     }),
                     child: const Icon(
                       Icons.my_location_rounded,
