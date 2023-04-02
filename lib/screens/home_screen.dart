@@ -60,9 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final CameraPosition camPosition = CameraPosition(
-      target: LatLng(lat, long),
-      zoom: 16,
-    );
+        target: LatLng(lat, long), zoom: 16, bearing: 45, tilt: 40);
     return hasLoaded
         ? Scaffold(
             floatingActionButton: Column(
@@ -166,7 +164,6 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 GoogleMap(
                   buildingsEnabled: true,
-                  liteModeEnabled: true,
                   compassEnabled: true,
                   myLocationButtonEnabled: false,
                   myLocationEnabled: false,
@@ -239,7 +236,34 @@ class _HomeScreenState extends State<HomeScreen> {
         icon: BitmapDescriptor.defaultMarker,
         position: LatLng(lat, lang));
 
+    // Marker driverMarker = Marker(
+    //     onDragEnd: (value) {
+    //       print(value);
+    //     },
+    //     draggable: true,
+    //     markerId: const MarkerId('driver1'),
+    //     infoWindow: InfoWindow(
+    //       onTap: () {
+    //         showModalBottomSheet(
+    //             isScrollControlled: true,
+    //             context: context,
+    //             builder: ((context) {
+    //               return BookBottomSheetWidget();
+    //             }));
+    //       },
+    //       title: 'Lance Olana',
+    //       snippet: '09090104355',
+    //     ),
+    //     icon: await BitmapDescriptor.fromAssetImage(
+    //       const ImageConfiguration(
+    //         size: Size(12, 12),
+    //       ),
+    //       'assets/images/driver.png',
+    //     ),
+    //     position: const LatLng(8.472385879216784, 124.64719623327255));
+
     markers.add(mylocationMarker);
+    // markers.add(driverMarker);
   }
 
   getLocation() async {
