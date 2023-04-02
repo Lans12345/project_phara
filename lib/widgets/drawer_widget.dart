@@ -198,7 +198,8 @@ class DrawerWidget extends StatelessWidget {
                                     ),
                                   ),
                                   FlatButton(
-                                    onPressed: () {
+                                    onPressed: () async {
+                                      await FirebaseAuth.instance.signOut();
                                       Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
                                               builder: (context) =>
