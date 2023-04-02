@@ -67,6 +67,9 @@ class LocationsSearch extends SearchDelegate<Suggestion> {
                               (snapshot.data![index] as Suggestion)
                                   .description);
 
+                          print(location[0].latitude);
+                          print(location[0].longitude);
+
                           // ref.read(latProvider.notifier).state =
                           //     location[0].latitude;
                           // ref.read(longProvider.notifier).state =
