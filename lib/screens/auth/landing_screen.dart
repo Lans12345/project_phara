@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:phara/screens/auth/signup_screen.dart';
 import 'package:phara/screens/auth/login_screen.dart';
 import 'package:phara/utils/colors.dart';
@@ -119,7 +122,38 @@ class LandingScreen extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: GestureDetector(
-                                onTap: () {},
+                                onTap: () async {
+                                  try {
+                                    final GoogleSignIn googleSignIn =
+                                        GoogleSignIn(scopes: ['email']);
+
+                                    final googleSignInAccount =
+                                        await googleSignIn.signIn();
+
+                                    if (googleSignInAccount == null) {
+                                      return;
+                                    }
+                                    final googleSignInAuth =
+                                        await googleSignInAccount
+                                            .authentication;
+                                    final credential =
+                                        GoogleAuthProvider.credential(
+                                      accessToken: googleSignInAuth.accessToken,
+                                      idToken: googleSignInAuth.idToken,
+                                    );
+
+                                    await FirebaseAuth.instance
+                                        .signInWithCredential(credential);
+                                  } on Exception {
+                                    Fluttertoast.showToast(
+                                        msg: 'Cannot Proceed!');
+                                  }
+
+                                  // createAccountFirestore(
+                                  //     googleSignInAccount.email,
+                                  //     googleSignInAccount.photoUrl!,
+                                  //     googleSignInAccount.displayName!);
+                                },
                                 child: Image.asset(
                                   'assets/images/googlelogo.png',
                                   height: 35,
