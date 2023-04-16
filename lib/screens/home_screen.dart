@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as b;
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -18,6 +18,8 @@ import '../widgets/delegate/search_my_places.dart';
 import 'pages/messages_tab.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -143,8 +145,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: (() {}),
                   icon: const Icon(Icons.pin_drop_outlined),
                 ),
-                Badge(
-                  position: BadgePosition.custom(start: -1, top: 3),
+                b.Badge(
+                  position: b.BadgePosition.custom(start: -1, top: 3),
                   badgeContent: TextRegular(
                     text: '1',
                     fontSize: 12,
