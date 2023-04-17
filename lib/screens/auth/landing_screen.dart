@@ -105,55 +105,11 @@ class _LandingScreenState extends State<LandingScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: grey.withOpacity(0.75),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: Image.asset(
-                                  'assets/images/fblogo.png',
-                                  height: 35,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 25,
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: grey.withOpacity(0.75),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: GestureDetector(
-                                onTap: () async {
-                                  googleLogin();
-                                },
-                                child: Image.asset(
-                                  'assets/images/googlelogo.png',
-                                  height: 35,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
                     ],
                   ),
                 ),
                 const SizedBox(
-                  height: 60,
+                  height: 100,
                 ),
               ],
             ),
