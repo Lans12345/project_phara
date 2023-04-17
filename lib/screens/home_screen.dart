@@ -250,6 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
   getAllDrivers() async {
     FirebaseFirestore.instance
         .collection('Drivers')
+        .where('isActive', isEqualTo: true)
         .get()
         .then((QuerySnapshot querySnapshot) async {
       for (var doc in querySnapshot.docs) {
