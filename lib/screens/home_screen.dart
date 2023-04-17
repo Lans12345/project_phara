@@ -251,14 +251,13 @@ class _HomeScreenState extends State<HomeScreen> {
         .then((QuerySnapshot querySnapshot) async {
       for (var doc in querySnapshot.docs) {
         Marker driverMarker = Marker(
-         onTap: () {
-                setState(() {
-                  driverId = doc['id'];
-                });
-              },
+            onTap: () {
+              setState(() {
+                driverId = doc['id'];
+              });
+            },
             markerId: MarkerId(doc['name']),
             infoWindow: InfoWindow(
-              
               title: doc['name'],
               snippet: doc['number'],
             ),
