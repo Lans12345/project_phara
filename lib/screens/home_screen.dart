@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:badges/badges.dart' as b;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -30,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     determinePosition();
     getLocation();
+    getAllDrivers();
   }
 
   final Completer<GoogleMapController> _controller =
@@ -224,30 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
         icon: BitmapDescriptor.defaultMarker,
         position: LatLng(lat, lang));
 
-    Marker driverMarker = Marker(
-        markerId: const MarkerId('driver1'),
-        infoWindow: InfoWindow(
-          onTap: () {
-            showModalBottomSheet(
-                isScrollControlled: true,
-                context: context,
-                builder: ((context) {
-                  return BookBottomSheetWidget();
-                }));
-          },
-          title: 'Lance Olana',
-          snippet: '09090104355',
-        ),
-        icon: await BitmapDescriptor.fromAssetImage(
-          const ImageConfiguration(
-            size: Size(12, 12),
-          ),
-          'assets/images/driver.png',
-        ),
-        position: const LatLng(8.472385879216784, 124.64719623327255));
-
     markers.add(mylocationMarker);
-    markers.add(driverMarker);
   }
 
   getLocation() async {
@@ -265,6 +244,39 @@ class _HomeScreenState extends State<HomeScreen> {
       currentAddress =
           '${place.street}, ${place.subLocality}, ${place.locality}';
       hasLoaded = true;
+    });
+  }
+
+  getAllDrivers() async {
+    FirebaseFirestore.instance
+        .collection('Drivers')
+        .get()
+        .then((QuerySnapshot querySnapshot) async {
+      for (var doc in querySnapshot.docs) {
+        Marker driverMarker = Marker(
+            markerId: MarkerId(doc['name']),
+            infoWindow: InfoWindow(
+              onTap: () {
+                showModalBottomSheet(
+                    isScrollControlled: true,
+                    context: context,
+                    builder: ((context) {
+                      return BookBottomSheetWidget();
+                    }));
+              },
+              title: doc['name'],
+              snippet: doc['number'],
+            ),
+            icon: await BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(
+                size: Size(12, 12),
+              ),
+              'assets/images/driver.png',
+            ),
+            position: LatLng(doc['location']['lat'], doc['location']['long']));
+
+        markers.add(driverMarker);
+      }
     });
   }
 }
