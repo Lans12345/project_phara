@@ -8,6 +8,6 @@ final longProvider = StateProvider<double>((ref) {
   return 0;
 });
 
-final addressProvider = StateProvider<String>((ref) {
-  return 'Search location';
+final destinationProvider = StateProvider<String>((ref) {
+  return 'No address specified';
 });

@@ -114,23 +114,8 @@ class _HomeScreenState extends State<HomeScreen> {
             appBar: AppBar(
               foregroundColor: grey,
               backgroundColor: Colors.white,
-              title: GestureDetector(
-                onTap: () async {
-                  final sessionToken = const Uuid().v4();
-
-                  await showSearch(
-                      context: context,
-                      delegate: LocationsSearch(sessionToken));
-                },
-                child: TextFormField(
-                  enabled: false,
-                  decoration: const InputDecoration.collapsed(
-                    hintText: "Search Location",
-                    hintStyle: TextStyle(fontFamily: 'QBold', color: grey),
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
+              title:
+                  TextRegular(text: 'PHara', fontSize: 24, color: Colors.black),
               actions: [
                 IconButton(
                   onPressed: (() {}),
@@ -187,6 +172,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: Colors.green,
                               label: 'Book a ride',
                               onPressed: (() async {
+                                List<Placemark> p =
+                                    await placemarkFromCoordinates(lat, long);
+
+                                Placemark place = p[0];
+
                                 final sessionToken = const Uuid().v4();
 
                                 await showSearch(
@@ -199,6 +189,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     builder: ((context) {
                                       return BookBottomSheetWidget(
                                         driverId: driverId,
+                                        coordinates: {
+                                          'lat': lat,
+                                          'long': long,
+                                          'pickupLocation':
+                                              '${place.street}, ${place.locality}, ${place.administrativeArea}'
+                                        },
                                       );
                                     }));
                               }))

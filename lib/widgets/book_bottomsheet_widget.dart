@@ -14,7 +14,10 @@ class BookBottomSheetWidget extends StatelessWidget {
 
   final String driverId;
 
-  BookBottomSheetWidget({super.key, required this.driverId});
+  final Map coordinates;
+
+  BookBottomSheetWidget(
+      {super.key, required this.driverId, required this.coordinates});
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +127,7 @@ class BookBottomSheetWidget extends StatelessWidget {
                           SizedBox(
                             width: 270,
                             child: TextRegular(
-                                text: ref.read(addressProvider.notifier).state,
+                                text: coordinates['pickupLocation'],
                                 fontSize: 16,
                                 color: grey),
                           ),
@@ -143,6 +146,7 @@ class BookBottomSheetWidget extends StatelessWidget {
                             width: 250,
                             height: 42,
                             child: TextFormField(
+                              enabled: false,
                               controller: destinationController,
                               style: const TextStyle(
                                   color: Colors.black, fontFamily: 'QRegular'),
@@ -153,9 +157,17 @@ class BookBottomSheetWidget extends StatelessWidget {
                                 ),
                                 fillColor: Colors.white,
                                 filled: true,
+                                hintText: ref
+                                    .read(destinationProvider.notifier)
+                                    .state,
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: const BorderSide(
-                                      width: 1, color: Colors.grey),
+                                      width: 1, color: Colors.black),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                disabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      width: 1, color: Colors.black),
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                                 focusedBorder: OutlineInputBorder(
