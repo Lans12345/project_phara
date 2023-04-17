@@ -21,5 +21,18 @@ Future addBooking(driverId, origin, destination, distance, time, fare,
     'destinationCoordinates': {'lat': destinationLat, 'long': destinationLong},
   };
 
+  await FirebaseFirestore.instance
+      .collection('Users')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .update({
+    'notif': FieldValue.arrayUnion([
+      {
+        'notif': 'Youre booking was succesfully sent!',
+        'read': false,
+        'date': DateTime.now(),
+      }
+    ]),
+  });
+
   await docUser.set(json);
 }
