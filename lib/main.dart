@@ -1,10 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:phara/screens/splash_screen.dart';
+import 'package:wakelock/wakelock.dart';
 
 import 'firebase_options.dart';
 
 void main() async {
+  Wakelock.enable();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     name: 'project-phara',

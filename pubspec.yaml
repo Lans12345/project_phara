@@ -55,6 +55,7 @@ dependencies:
   riverpod:
   flutter_riverpod:
   flutter_rating_bar: ^4.0.0
+  wakelock:
 
 dev_dependencies:
   flutter_test:
