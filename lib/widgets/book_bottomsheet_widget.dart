@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phara/data/distance_calculations.dart';
+import 'package:phara/data/time_calculation.dart';
 
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/text_widget.dart';
@@ -184,19 +186,26 @@ class BookBottomSheetWidget extends StatelessWidget {
                         height: 10,
                       ),
                       TextRegular(
-                          text: 'Distance: 1.3km', fontSize: 15, color: grey),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      TextRegular(
-                          text: 'Estimated time: 30mins',
+                          text:
+                              'Distance: ${(calculateDistance(coordinates['lat'], coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)).toStringAsFixed(2)} km',
                           fontSize: 15,
                           color: grey),
                       const SizedBox(
                         height: 5,
                       ),
                       TextRegular(
-                          text: 'Fare: ₱250.00', fontSize: 15, color: grey),
+                          text:
+                              'Estimated time: ${(calculateTravelTime((calculateDistance(coordinates['lat'], coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)), 26.8)).toStringAsFixed(2)} hr/s',
+                          fontSize: 15,
+                          color: grey),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      TextRegular(
+                          text:
+                              'Fare: ₱${(((calculateDistance(coordinates['lat'], coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)) * 12) + 45).toStringAsFixed(2)}',
+                          fontSize: 15,
+                          color: grey),
                       const SizedBox(
                         height: 10,
                       ),
