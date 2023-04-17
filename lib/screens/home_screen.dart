@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:badges/badges.dart' as b;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -15,6 +16,7 @@ import 'package:phara/widgets/drawer_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
 import 'package:uuid/uuid.dart';
 
+import '../services/providers/coordinates_provider.dart';
 import '../widgets/delegate/search_my_places.dart';
 import 'pages/messages_tab.dart';
 
@@ -172,39 +174,48 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       driverId != ''
-                          ? ButtonWidget(
-                              width: 175,
-                              radius: 100,
-                              opacity: 1,
-                              color: Colors.green,
-                              label: 'Book a ride',
-                              onPressed: (() async {
-                                List<Placemark> p =
-                                    await placemarkFromCoordinates(lat, long);
+                          ? Consumer(builder: (context, ref, child) {
+                              return ButtonWidget(
+                                  width: 175,
+                                  radius: 100,
+                                  opacity: 1,
+                                  color: Colors.green,
+                                  label: 'Book a ride',
+                                  onPressed: (() async {
+                                    List<Placemark> p =
+                                        await placemarkFromCoordinates(
+                                            lat, long);
 
-                                Placemark place = p[0];
+                                    Placemark place = p[0];
 
-                                final sessionToken = const Uuid().v4();
+                                    final sessionToken = const Uuid().v4();
 
-                                await showSearch(
-                                    context: context,
-                                    delegate: LocationsSearch(sessionToken));
+                                    await showSearch(
+                                        context: context,
+                                        delegate:
+                                            LocationsSearch(sessionToken));
 
-                                showModalBottomSheet(
-                                    isScrollControlled: true,
-                                    context: context,
-                                    builder: ((context) {
-                                      return BookBottomSheetWidget(
-                                        driverId: driverId,
-                                        coordinates: {
-                                          'lat': lat,
-                                          'long': long,
-                                          'pickupLocation':
-                                              '${place.street}, ${place.locality}, ${place.administrativeArea}'
-                                        },
-                                      );
-                                    }));
-                              }))
+                                    if (ref
+                                            .read(destinationProvider.notifier)
+                                            .state !=
+                                        'No address specified') {
+                                      showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          context: context,
+                                          builder: ((context) {
+                                            return BookBottomSheetWidget(
+                                              driverId: driverId,
+                                              coordinates: {
+                                                'lat': lat,
+                                                'long': long,
+                                                'pickupLocation':
+                                                    '${place.street}, ${place.locality}, ${place.administrativeArea}'
+                                              },
+                                            );
+                                          }));
+                                    }
+                                  }));
+                            })
                           : const SizedBox(),
                       const SizedBox(
                         height: 25,
