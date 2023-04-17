@@ -34,5 +34,20 @@ Future addBooking(driverId, origin, destination, distance, time, fare,
     ]),
   });
 
+  await FirebaseFirestore.instance
+      .collection('Users')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .update({
+    'history': FieldValue.arrayUnion([
+      {
+        'origin': origin,
+        'destination': destination,
+        'distance': distance,
+        'fare': fare,
+        'date': DateTime.now(),
+      }
+    ]),
+  });
+
   await docUser.set(json);
 }
