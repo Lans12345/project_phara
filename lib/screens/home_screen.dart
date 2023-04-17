@@ -217,10 +217,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   myLocationMarker(double lat, double lang) async {
     Marker mylocationMarker = Marker(
-        onDrag: (value) {
-          print(value);
-        },
-        draggable: true,
         markerId: const MarkerId('currentLocation'),
         infoWindow: const InfoWindow(
           title: 'Your Current Location',
@@ -229,7 +225,6 @@ class _HomeScreenState extends State<HomeScreen> {
         position: LatLng(lat, lang));
 
     Marker driverMarker = Marker(
-        draggable: true,
         markerId: const MarkerId('driver1'),
         infoWindow: InfoWindow(
           onTap: () {
