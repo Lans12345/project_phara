@@ -186,7 +186,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               opacity: 1,
                               color: Colors.green,
                               label: 'Book a ride',
-                              onPressed: (() {
+                              onPressed: (() async {
+                                final sessionToken = const Uuid().v4();
+
+                                await showSearch(
+                                    context: context,
+                                    delegate: LocationsSearch(sessionToken));
+
                                 showModalBottomSheet(
                                     isScrollControlled: true,
                                     context: context,

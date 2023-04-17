@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:geocoding/geocoding.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:phara/services/providers/coordinates_provider.dart';
 
 import '../../services/place_service.dart';
 
@@ -59,28 +61,28 @@ class LocationsSearch extends SearchDelegate<Suggestion> {
                 )
               : snapshot.hasData
                   ? ListView.builder(
-                      itemBuilder: (context, index) => ListTile(
-                        title: Text(
-                            (snapshot.data![index] as Suggestion).description),
-                        onTap: () async {
-                          List<Location> location = await locationFromAddress(
-                              (snapshot.data![index] as Suggestion)
-                                  .description);
+                      itemBuilder: (context, index) =>
+                          Consumer(builder: ((context, ref, child) {
+                        return ListTile(
+                          title: Text((snapshot.data![index] as Suggestion)
+                              .description),
+                          onTap: () async {
+                            List<Location> location = await locationFromAddress(
+                                (snapshot.data![index] as Suggestion)
+                                    .description);
 
-                          print(location[0].latitude);
-                          print(location[0].longitude);
+                            ref.read(latProvider.notifier).state =
+                                location[0].latitude;
+                            ref.read(longProvider.notifier).state =
+                                location[0].longitude;
 
-                          // ref.read(latProvider.notifier).state =
-                          //     location[0].latitude;
-                          // ref.read(longProvider.notifier).state =
-                          //     location[0].longitude;
-
-                          // ref.read(addressProvider.notifier).state =
-                          //     (snapshot.data![index] as Suggestion)
-                          //         .description;
-                          close(context, snapshot.data![index] as Suggestion);
-                        },
-                      ),
+                            ref.read(addressProvider.notifier).state =
+                                (snapshot.data![index] as Suggestion)
+                                    .description;
+                            close(context, snapshot.data![index] as Suggestion);
+                          },
+                        );
+                      })),
                       itemCount: snapshot.data!.length,
                     )
                   : const Center(child: Text('Loading...'));

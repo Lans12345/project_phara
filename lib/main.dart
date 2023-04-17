@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phara/screens/splash_screen.dart';
 import 'package:wakelock/wakelock.dart';
 import 'firebase_options.dart';
@@ -11,7 +12,7 @@ void main() async {
     name: 'project-phara',
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
