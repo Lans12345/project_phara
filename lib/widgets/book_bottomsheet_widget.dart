@@ -8,6 +8,10 @@ import 'button_widget.dart';
 class BookBottomSheetWidget extends StatelessWidget {
   final destinationController = TextEditingController();
 
+  final String driverId;
+
+  BookBottomSheetWidget({super.key, required this.driverId});
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

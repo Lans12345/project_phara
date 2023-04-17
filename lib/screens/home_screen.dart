@@ -44,6 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   var hasLoaded = false;
 
+  String driverId = '';
+
   GoogleMapController? mapController;
 
   Set<Marker> markers = {};
@@ -177,30 +179,24 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      ButtonWidget(
-                          width: 175,
-                          radius: 100,
-                          opacity: 1,
-                          color: Colors.red,
-                          label: 'Clear pin',
-                          onPressed: (() {})),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      ButtonWidget(
-                          width: 175,
-                          radius: 100,
-                          opacity: 1,
-                          color: Colors.green,
-                          label: 'Book a ride',
-                          onPressed: (() {
-                            showModalBottomSheet(
-                                isScrollControlled: true,
-                                context: context,
-                                builder: ((context) {
-                                  return BookBottomSheetWidget();
-                                }));
-                          })),
+                      driverId != ''
+                          ? ButtonWidget(
+                              width: 175,
+                              radius: 100,
+                              opacity: 1,
+                              color: Colors.green,
+                              label: 'Book a ride',
+                              onPressed: (() {
+                                showModalBottomSheet(
+                                    isScrollControlled: true,
+                                    context: context,
+                                    builder: ((context) {
+                                      return BookBottomSheetWidget(
+                                        driverId: driverId,
+                                      );
+                                    }));
+                              }))
+                          : const SizedBox(),
                       const SizedBox(
                         height: 25,
                       ),
@@ -255,16 +251,14 @@ class _HomeScreenState extends State<HomeScreen> {
         .then((QuerySnapshot querySnapshot) async {
       for (var doc in querySnapshot.docs) {
         Marker driverMarker = Marker(
+         onTap: () {
+                setState(() {
+                  driverId = doc['id'];
+                });
+              },
             markerId: MarkerId(doc['name']),
             infoWindow: InfoWindow(
-              onTap: () {
-                showModalBottomSheet(
-                    isScrollControlled: true,
-                    context: context,
-                    builder: ((context) {
-                      return BookBottomSheetWidget();
-                    }));
-              },
+              
               title: doc['name'],
               snippet: doc['number'],
             ),
