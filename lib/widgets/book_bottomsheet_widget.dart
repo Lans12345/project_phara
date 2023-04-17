@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phara/data/distance_calculations.dart';
 import 'package:phara/data/time_calculation.dart';
+import 'package:phara/services/add_booking.dart';
 
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/text_widget.dart';
@@ -223,46 +224,148 @@ class BookBottomSheetWidget extends StatelessWidget {
                             color: Colors.green,
                             label: 'Book now',
                             onPressed: (() {
-                              Navigator.pop(context);
-                              showModalBottomSheet(
-                                  isDismissible: false,
-                                  isScrollControlled: true,
+                              showDialog(
                                   context: context,
-                                  builder: ((context) {
-                                    return TrackBookingBottomSheetWidget(
-                                      tripDetails: {
-                                        'driverId': driverId,
-                                        'distance': (calculateDistance(
-                                                coordinates['lat'],
-                                                coordinates['long'],
-                                                ref
-                                                    .read(latProvider.notifier)
-                                                    .state,
-                                                ref
-                                                    .read(longProvider.notifier)
-                                                    .state))
-                                            .toStringAsFixed(2),
-                                        'origin': coordinates['pickupLocation'],
-                                        'destination': ref
-                                            .read(destinationProvider.notifier)
-                                            .state,
-                                        'fare': (((calculateDistance(
-                                                        coordinates['lat'],
-                                                        coordinates['long'],
-                                                        ref
-                                                            .read(latProvider
-                                                                .notifier)
+                                  builder: (context) => AlertDialog(
+                                        title: const Text(
+                                          'Booking Confirmation',
+                                          style: TextStyle(
+                                              fontFamily: 'QBold',
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        content: const Text(
+                                          'Confirm booking?',
+                                          style:
+                                              TextStyle(fontFamily: 'QRegular'),
+                                        ),
+                                        actions: <Widget>[
+                                          MaterialButton(
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(true),
+                                            child: const Text(
+                                              'Close',
+                                              style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontFamily: 'QRegular',
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          MaterialButton(
+                                            onPressed: () async {
+                                              addBooking(
+                                                  driverId,
+                                                  coordinates['pickupLocation'],
+                                                  ref
+                                                      .read(destinationProvider
+                                                          .notifier)
+                                                      .state,
+                                                  (calculateDistance(
+                                                          coordinates['lat'],
+                                                          coordinates['long'],
+                                                          ref
+                                                              .read(latProvider
+                                                                  .notifier)
+                                                              .state,
+                                                          ref
+                                                              .read(longProvider
+                                                                  .notifier)
+                                                              .state))
+                                                      .toStringAsFixed(2),
+                                                  (calculateTravelTime(
+                                                          (calculateDistance(
+                                                              coordinates[
+                                                                  'lat'],
+                                                              coordinates[
+                                                                  'long'],
+                                                              ref
+                                                                  .read(latProvider
+                                                                      .notifier)
+                                                                  .state,
+                                                              ref
+                                                                  .read(longProvider
+                                                                      .notifier)
+                                                                  .state)),
+                                                          26.8))
+                                                      .toStringAsFixed(2),
+                                                  (((calculateDistance(
+                                                                  coordinates[
+                                                                      'lat'],
+                                                                  coordinates[
+                                                                      'long'],
+                                                                  ref
+                                                                      .read(latProvider
+                                                                          .notifier)
+                                                                      .state,
+                                                                  ref
+                                                                      .read(longProvider
+                                                                          .notifier)
+                                                                      .state)) *
+                                                              12) +
+                                                          45)
+                                                      .toStringAsFixed(2),
+                                                  coordinates['lat'],
+                                                  coordinates['long'],
+                                                  ref.read(latProvider.notifier).state,
+                                                  ref.read(longProvider.notifier).state);
+                                              Navigator.pop(context);
+
+                                              showModalBottomSheet(
+                                                  isDismissible: false,
+                                                  isScrollControlled: true,
+                                                  context: context,
+                                                  builder: ((context) {
+                                                    return TrackBookingBottomSheetWidget(
+                                                      tripDetails: {
+                                                        'driverId': driverId,
+                                                        'distance': (calculateDistance(
+                                                                coordinates[
+                                                                    'lat'],
+                                                                coordinates[
+                                                                    'long'],
+                                                                ref
+                                                                    .read(latProvider
+                                                                        .notifier)
+                                                                    .state,
+                                                                ref
+                                                                    .read(longProvider
+                                                                        .notifier)
+                                                                    .state))
+                                                            .toStringAsFixed(2),
+                                                        'origin': coordinates[
+                                                            'pickupLocation'],
+                                                        'destination': ref
+                                                            .read(
+                                                                destinationProvider
+                                                                    .notifier)
                                                             .state,
-                                                        ref
-                                                            .read(longProvider
-                                                                .notifier)
-                                                            .state)) *
-                                                    12) +
-                                                45)
-                                            .toStringAsFixed(2)
-                                      },
-                                    );
-                                  }));
+                                                        'fare': (((calculateDistance(
+                                                                        coordinates[
+                                                                            'lat'],
+                                                                        coordinates[
+                                                                            'long'],
+                                                                        ref
+                                                                            .read(latProvider
+                                                                                .notifier)
+                                                                            .state,
+                                                                        ref
+                                                                            .read(longProvider.notifier)
+                                                                            .state)) *
+                                                                    12) +
+                                                                45)
+                                                            .toStringAsFixed(2)
+                                                      },
+                                                    );
+                                                  }));
+                                            },
+                                            child: const Text(
+                                              'Continue',
+                                              style: TextStyle(
+                                                  fontFamily: 'QBold',
+                                                  fontWeight: FontWeight.w800),
+                                            ),
+                                          ),
+                                        ],
+                                      ));
                             })),
                       ),
                     ],
