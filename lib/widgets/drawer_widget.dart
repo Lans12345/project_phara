@@ -14,6 +14,8 @@ import 'package:phara/widgets/textfield_widget.dart';
 class DrawerWidget extends StatelessWidget {
   final numberController = TextEditingController();
 
+  DrawerWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     final Stream<DocumentSnapshot> userData = FirebaseFirestore.instance
@@ -195,7 +197,7 @@ class DrawerWidget extends StatelessWidget {
                     ),
                     onTap: () {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => HomeScreen()));
+                          builder: (context) => const HomeScreen()));
                     },
                   ),
                   ListTile(
@@ -211,7 +213,7 @@ class DrawerWidget extends StatelessWidget {
                     },
                   ),
                   ListTile(
-                    leading: const Icon(Icons.tab_rounded),
+                    leading: const Icon(Icons.collections_bookmark_outlined),
                     title: TextRegular(
                       text: 'Recent trips',
                       fontSize: 12,

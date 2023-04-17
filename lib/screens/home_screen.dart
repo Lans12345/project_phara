@@ -11,12 +11,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:phara/data/user_stream.dart';
 import 'package:phara/plugins/my_location.dart';
-import 'package:phara/screens/pages/bookmark_page.dart';
+import 'package:phara/screens/pages/trips_page.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/book_bottomsheet_widget.dart';
 import 'package:phara/widgets/button_widget.dart';
 import 'package:phara/widgets/drawer_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
+import 'package:phara/widgets/toast_widget.dart';
 import 'package:uuid/uuid.dart';
 
 import '../services/providers/coordinates_provider.dart';
@@ -101,20 +102,107 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   height: 15,
                 ),
-                FloatingActionButton(
-                    backgroundColor: Colors.white,
-                    onPressed: (() {}),
-                    child: b.Badge(
-                      badgeStyle: b.BadgeStyle(
-                        badgeColor: Colors.amber[700]!,
-                      ),
-                      badgeContent: TextRegular(
-                          text: '5', fontSize: 12, color: Colors.white),
-                      child: const Icon(
-                        Icons.star_border_rounded,
-                        color: grey,
-                      ),
-                    )),
+                StreamBuilder<DocumentSnapshot>(
+                    stream: FirebaseData().userData,
+                    builder:
+                        (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(child: Text('Loading'));
+                      } else if (snapshot.hasError) {
+                        return const Center(
+                            child: Text('Something went wrong'));
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      dynamic data = snapshot.data;
+
+                      List oldfavs = data['favorites'];
+
+                      List favs = oldfavs.reversed.toList();
+                      return FloatingActionButton(
+                          backgroundColor: Colors.white,
+                          onPressed: (() {
+                            if (favs.isNotEmpty) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      content: SizedBox(
+                                        height: 100,
+                                        child: Center(
+                                          child: ListView.builder(
+                                              itemCount: favs.length,
+                                              itemBuilder: (context, index) {
+                                                return Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          10, 5, 10, 5),
+                                                  child: ListTile(
+                                                    title: TextRegular(
+                                                        text: favs[index],
+                                                        fontSize: 14,
+                                                        color: Colors.black),
+                                                    trailing: IconButton(
+                                                      onPressed: () async {
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection('Users')
+                                                            .doc(FirebaseAuth
+                                                                .instance
+                                                                .currentUser!
+                                                                .uid)
+                                                            .update({
+                                                          'favorites':
+                                                              FieldValue
+                                                                  .arrayRemove([
+                                                            favs[index]
+                                                          ]),
+                                                        });
+                                                        Navigator.pop(context);
+                                                      },
+                                                      icon: const Icon(
+                                                        Icons.star_rounded,
+                                                        color: Colors.amber,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              }),
+                                        ),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: TextRegular(
+                                              text: 'Close',
+                                              fontSize: 14,
+                                              color: grey),
+                                        ),
+                                      ],
+                                    );
+                                  });
+                            } else {
+                              showToast('Your favorites are empty');
+                            }
+                          }),
+                          child: b.Badge(
+                            showBadge: favs.isNotEmpty,
+                            badgeStyle: b.BadgeStyle(
+                              badgeColor: Colors.amber[700]!,
+                            ),
+                            badgeContent: TextRegular(
+                                text: favs.length.toString(),
+                                fontSize: 12,
+                                color: Colors.white),
+                            child: const Icon(
+                              Icons.star_border_rounded,
+                              color: grey,
+                            ),
+                          ));
+                    }),
                 const SizedBox(
                   height: 15,
                 ),
@@ -122,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: Colors.white,
                     onPressed: (() {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const BookmarksPage()));
+                          builder: (context) => const TripsPage()));
                     }),
                     child: const Icon(
                       Icons.collections_bookmark_outlined,
@@ -159,6 +247,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       List notifs = oldnotifs.reversed.toList();
                       return PopupMenuButton(
                           icon: b.Badge(
+                            showBadge: notifs.isNotEmpty,
                             badgeContent: TextRegular(
                               text: data['notif'].length.toString(),
                               fontSize: 12,
