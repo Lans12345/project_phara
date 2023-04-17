@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:phara/widgets/text_widget.dart';
 
 import '../utils/colors.dart';
 import 'button_widget.dart';
 
 class TrackBookingBottomSheetWidget extends StatelessWidget {
-  const TrackBookingBottomSheetWidget({Key? key}) : super(key: key);
+  final Map tripDetails;
+
+  const TrackBookingBottomSheetWidget({super.key, required this.tripDetails});
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +71,9 @@ class TrackBookingBottomSheetWidget extends StatelessWidget {
                     color: Colors.red,
                   ),
                   title: TextRegular(
-                      text: 'Distance: 1.3km', fontSize: 16, color: grey),
+                      text: 'Distance: ${tripDetails['distance']} km',
+                      fontSize: 16,
+                      color: grey),
                 ),
               ),
               SizedBox(
@@ -81,7 +84,9 @@ class TrackBookingBottomSheetWidget extends StatelessWidget {
                     color: grey,
                   ),
                   title: TextRegular(
-                      text: 'From: Sample location', fontSize: 16, color: grey),
+                      text: 'From:  ${tripDetails['origin']}',
+                      fontSize: 16,
+                      color: grey),
                 ),
               ),
               SizedBox(
@@ -92,7 +97,7 @@ class TrackBookingBottomSheetWidget extends StatelessWidget {
                     color: Colors.red,
                   ),
                   title: TextRegular(
-                      text: 'To: Sample destination',
+                      text: 'To:  ${tripDetails['destination']}',
                       fontSize: 16,
                       color: grey),
                 ),
@@ -105,7 +110,9 @@ class TrackBookingBottomSheetWidget extends StatelessWidget {
                     color: grey,
                   ),
                   title: TextRegular(
-                      text: 'Fare: ₱200.00', fontSize: 16, color: grey),
+                      text: 'Fare: ₱${tripDetails['fare']}',
+                      fontSize: 16,
+                      color: grey),
                 ),
               ),
               const SizedBox(
@@ -116,96 +123,13 @@ class TrackBookingBottomSheetWidget extends StatelessWidget {
                 thickness: 1.5,
               ),
               const SizedBox(
-                height: 10,
-              ),
-              Center(
-                child: RatingBar.builder(
-                  initialRating: 5,
-                  minRating: 1,
-                  direction: Axis.horizontal,
-                  allowHalfRating: false,
-                  itemCount: 5,
-                  itemPadding: const EdgeInsets.symmetric(horizontal: 0.0),
-                  itemBuilder: (context, _) => const Icon(
-                    Icons.star,
-                    color: Colors.amber,
-                  ),
-                  onRatingUpdate: (rating) async {
-                    // var collection =
-                    //     FirebaseFirestore
-                    //         .instance
-                    //         .collection(
-                    //             'Providers')
-                    //         .where('id',
-                    //             isEqualTo:
-                    //                 data[
-                    //                     'id']);
-
-                    // var querySnapshot =
-                    //     await collection
-                    //         .get();
-
-                    // for (var queryDocumentSnapshot
-                    //     in querySnapshot
-                    //         .docs) {
-                    //   Map<String, dynamic>
-                    //       data1 =
-                    //       queryDocumentSnapshot
-                    //           .data();
-
-                    //   FirebaseFirestore
-                    //       .instance
-                    //       .collection(
-                    //           'Providers')
-                    //       .doc(data['id'])
-                    //       .update({
-                    //     'reviews': FieldValue
-                    //         .arrayUnion([
-                    //       FirebaseAuth
-                    //           .instance
-                    //           .currentUser!
-                    //           .uid
-                    //     ]),
-                    //     'ratings': data1[
-                    //             'ratings'] +
-                    //         rating,
-                    //     'nums':
-                    //         data1['nums'] +
-                    //             1,
-                    //   });
-                    // }
-
-                    // addRatings(
-                    //     name,
-                    //     rating.toInt(),
-                    //     data['id'],
-                    //     profilePicture);
-
-                    // Navigator.pop(context);
-
-                    // print(rating);
-                  },
-                ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     for (int i = 0; i < 5; i++)
-                //       const Icon(
-                //         Icons.star_border_rounded,
-                //         color: grey,
-                //         size: 32,
-                //       ),
-                //   ],
-                // ),
-              ),
-              const SizedBox(
-                height: 10,
+                height: 20,
               ),
               ButtonWidget(
                 radius: 100,
                 opacity: 1,
                 color: black,
-                label: 'Add rating',
+                label: 'Track driver',
                 onPressed: (() {}),
               ),
               const SizedBox(

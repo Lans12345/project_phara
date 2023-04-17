@@ -225,10 +225,43 @@ class BookBottomSheetWidget extends StatelessWidget {
                             onPressed: (() {
                               Navigator.pop(context);
                               showModalBottomSheet(
+                                  isDismissible: false,
                                   isScrollControlled: true,
                                   context: context,
                                   builder: ((context) {
-                                    return const TrackBookingBottomSheetWidget();
+                                    return TrackBookingBottomSheetWidget(
+                                      tripDetails: {
+                                        'driverId': driverId,
+                                        'distance': (calculateDistance(
+                                                coordinates['lat'],
+                                                coordinates['long'],
+                                                ref
+                                                    .read(latProvider.notifier)
+                                                    .state,
+                                                ref
+                                                    .read(longProvider.notifier)
+                                                    .state))
+                                            .toStringAsFixed(2),
+                                        'origin': coordinates['pickupLocation'],
+                                        'destination': ref
+                                            .read(destinationProvider.notifier)
+                                            .state,
+                                        'fare': (((calculateDistance(
+                                                        coordinates['lat'],
+                                                        coordinates['long'],
+                                                        ref
+                                                            .read(latProvider
+                                                                .notifier)
+                                                            .state,
+                                                        ref
+                                                            .read(longProvider
+                                                                .notifier)
+                                                            .state)) *
+                                                    12) +
+                                                45)
+                                            .toStringAsFixed(2)
+                                      },
+                                    );
                                   }));
                             })),
                       ),
