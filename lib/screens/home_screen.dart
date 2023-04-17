@@ -2,11 +2,14 @@ import 'dart:async';
 
 import 'package:badges/badges.dart' as b;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:phara/data/user_stream.dart';
 import 'package:phara/plugins/my_location.dart';
 import 'package:phara/screens/pages/bookmark_page.dart';
 import 'package:phara/utils/colors.dart';
@@ -136,21 +139,73 @@ class _HomeScreenState extends State<HomeScreen> {
               title:
                   TextRegular(text: 'PHara', fontSize: 24, color: Colors.black),
               actions: [
-                b.Badge(
-                  position: b.BadgePosition.custom(start: -1, top: 3),
-                  badgeContent: TextRegular(
-                    text: '1',
-                    fontSize: 12,
-                    color: Colors.white,
-                  ),
-                  child: IconButton(
-                    onPressed: (() {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => MessagesTab()));
+                StreamBuilder<DocumentSnapshot>(
+                    stream: FirebaseData().userData,
+                    builder:
+                        (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(child: Text('Loading'));
+                      } else if (snapshot.hasError) {
+                        return const Center(
+                            child: Text('Something went wrong'));
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      dynamic data = snapshot.data;
+
+                      List oldnotifs = data['notif'];
+
+                      List notifs = oldnotifs.reversed.toList();
+                      return PopupMenuButton(
+                          icon: b.Badge(
+                            badgeContent: TextRegular(
+                              text: data['notif'].length.toString(),
+                              fontSize: 12,
+                              color: Colors.white,
+                            ),
+                            child: const Icon(Icons.notifications_rounded),
+                          ),
+                          itemBuilder: (context) {
+                            return [
+                              for (int i = 0; i < notifs.length; i++)
+                                PopupMenuItem(
+                                    child: ListTile(
+                                  title: TextRegular(
+                                      text: notifs[i]['notif'],
+                                      fontSize: 14,
+                                      color: Colors.black),
+                                  subtitle: TextRegular(
+                                      text: DateFormat.yMMMd()
+                                          .add_jm()
+                                          .format(notifs[i]['date'].toDate()),
+                                      fontSize: 10,
+                                      color: grey),
+                                  leading: const Icon(
+                                    Icons.notifications_active_outlined,
+                                    color: grey,
+                                  ),
+                                  trailing: IconButton(
+                                    onPressed: () async {
+                                      await FirebaseFirestore.instance
+                                          .collection('Users')
+                                          .doc(FirebaseAuth
+                                              .instance.currentUser!.uid)
+                                          .update({
+                                        'notif':
+                                            FieldValue.arrayRemove([notifs[i]]),
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete_outline_rounded,
+                                      color: grey,
+                                    ),
+                                  ),
+                                )),
+                            ];
+                          });
                     }),
-                    icon: const Icon(Icons.notifications_rounded),
-                  ),
-                ),
                 const SizedBox(
                   width: 10,
                 ),
