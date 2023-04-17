@@ -84,9 +84,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => MessagesTab()));
                     }),
-                    child: const Icon(
-                      Icons.message_outlined,
-                      color: grey,
+                    child: b.Badge(
+                      badgeStyle: const b.BadgeStyle(
+                        badgeColor: Colors.red,
+                      ),
+                      badgeContent: TextRegular(
+                          text: '1', fontSize: 12, color: Colors.white),
+                      child: const Icon(
+                        Icons.message_outlined,
+                        color: grey,
+                      ),
                     )),
                 const SizedBox(
                   height: 15,
@@ -141,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => MessagesTab()));
                     }),
-                    icon: const Icon(Icons.message_outlined),
+                    icon: const Icon(Icons.notifications_rounded),
                   ),
                 ),
                 const SizedBox(
