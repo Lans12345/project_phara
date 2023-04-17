@@ -64,6 +64,9 @@ class LocationsSearch extends SearchDelegate<Suggestion> {
                       itemBuilder: (context, index) =>
                           Consumer(builder: ((context, ref, child) {
                         return ListTile(
+                          trailing: IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.star_border_rounded)),
                           title: Text((snapshot.data![index] as Suggestion)
                               .description),
                           onTap: () async {

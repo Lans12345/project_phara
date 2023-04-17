@@ -61,26 +61,6 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 FloatingActionButton(
                     backgroundColor: Colors.white,
-                    onPressed: (() {}),
-                    child: const Icon(
-                      Icons.pin_drop_rounded,
-                      color: Colors.red,
-                    )),
-                const SizedBox(
-                  height: 15,
-                ),
-                FloatingActionButton(
-                    backgroundColor: Colors.white,
-                    onPressed: (() {}),
-                    child: const Icon(
-                      Icons.push_pin_rounded,
-                      color: grey,
-                    )),
-                const SizedBox(
-                  height: 15,
-                ),
-                FloatingActionButton(
-                    backgroundColor: Colors.white,
                     onPressed: (() {
                       mapController?.animateCamera(
                           CameraUpdate.newCameraPosition(CameraPosition(
@@ -92,6 +72,36 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: const Icon(
                       Icons.my_location_rounded,
                       color: grey,
+                    )),
+                const SizedBox(
+                  height: 15,
+                ),
+                FloatingActionButton(
+                    backgroundColor: Colors.white,
+                    onPressed: (() {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => MessagesTab()));
+                    }),
+                    child: const Icon(
+                      Icons.message_outlined,
+                      color: grey,
+                    )),
+                const SizedBox(
+                  height: 15,
+                ),
+                FloatingActionButton(
+                    backgroundColor: Colors.white,
+                    onPressed: (() {}),
+                    child: b.Badge(
+                      badgeStyle: b.BadgeStyle(
+                        badgeColor: Colors.amber[700]!,
+                      ),
+                      badgeContent: TextRegular(
+                          text: '5', fontSize: 12, color: Colors.white),
+                      child: const Icon(
+                        Icons.star_border_rounded,
+                        color: grey,
+                      ),
                     )),
                 const SizedBox(
                   height: 15,
@@ -117,10 +127,6 @@ class _HomeScreenState extends State<HomeScreen> {
               title:
                   TextRegular(text: 'PHara', fontSize: 24, color: Colors.black),
               actions: [
-                IconButton(
-                  onPressed: (() {}),
-                  icon: const Icon(Icons.pin_drop_outlined),
-                ),
                 b.Badge(
                   position: b.BadgePosition.custom(start: -1, top: 3),
                   badgeContent: TextRegular(
@@ -144,6 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
             body: Stack(
               children: [
                 GoogleMap(
+                  zoomControlsEnabled: false,
                   buildingsEnabled: true,
                   compassEnabled: true,
                   myLocationButtonEnabled: false,
