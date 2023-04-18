@@ -256,7 +256,7 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
                         .update({
                       'ratings': FieldValue.arrayUnion(
                           [FirebaseAuth.instance.currentUser!.uid]),
-                      'stars': stars + 1
+                      'stars': stars + rating.toInt()
                     });
                   },
                 ),
