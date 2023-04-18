@@ -216,6 +216,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       Icons.collections_bookmark_outlined,
                       color: grey,
                     )),
+                const SizedBox(
+                  height: 15,
+                ),
+                FloatingActionButton(
+                    backgroundColor: Colors.white,
+                    onPressed: (() {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => const HomeScreen()));
+                    }),
+                    child: const Icon(
+                      Icons.refresh,
+                      color: grey,
+                    )),
               ],
             ),
             drawer: Drawer(
