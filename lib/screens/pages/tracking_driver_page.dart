@@ -95,10 +95,30 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
             color: grey,
           ),
         ),
-        centerTitle: true,
         foregroundColor: grey,
         backgroundColor: Colors.white,
-        title: TextRegular(text: 'Lance Olana', fontSize: 24, color: grey),
+        title: Row(
+          children: [
+            const CircleAvatar(
+              minRadius: 17.5,
+              maxRadius: 17.5,
+              backgroundImage: AssetImage('assets/images/profile.png'),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            TextRegular(text: 'Lance Olana', fontSize: 20, color: grey),
+          ],
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.message_outlined,
+              color: grey,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -252,7 +252,11 @@ class BookBottomSheetWidget extends StatelessWidget {
                                           ),
                                           MaterialButton(
                                             onPressed: () async {
-                                              
+                                              await FirebaseFirestore.instance
+                                                  .collection('Drivers')
+                                                  .doc(driverId)
+                                                  .update({'isActive': false});
+
                                               addBooking(
                                                   driverId,
                                                   coordinates['pickupLocation'],
@@ -306,8 +310,14 @@ class BookBottomSheetWidget extends StatelessWidget {
                                                       .toStringAsFixed(2),
                                                   coordinates['lat'],
                                                   coordinates['long'],
-                                                  ref.read(latProvider.notifier).state,
-                                                  ref.read(longProvider.notifier).state);
+                                                  ref
+                                                      .read(
+                                                          latProvider.notifier)
+                                                      .state,
+                                                  ref
+                                                      .read(
+                                                          longProvider.notifier)
+                                                      .state);
                                               Navigator.pop(context);
 
                                               showModalBottomSheet(
