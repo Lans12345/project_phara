@@ -205,7 +205,7 @@ class _TrackBookingBottomSheetWidgetState
                                     'ratings': FieldValue.arrayUnion([
                                       FirebaseAuth.instance.currentUser!.uid
                                     ]),
-                                    'stars': stars + 1
+                                    'stars': stars + rating.toInt()
                                   });
                                 },
                               ),
