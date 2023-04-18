@@ -42,7 +42,7 @@ class BookBottomSheetWidget extends StatelessWidget {
             }
             dynamic data = snapshot.data;
 
-            double rating = data['ratings'].length / data['stars'];
+            double rating = data['stars'] / data['ratings'].length;
             return Consumer(builder: ((context, ref, child) {
               return SizedBox(
                 height: 500,
