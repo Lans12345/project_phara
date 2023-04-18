@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:phara/screens/pages/tracking_driver_page.dart';
 import 'package:phara/widgets/text_widget.dart';
 
 import '../screens/home_screen.dart';
@@ -141,7 +142,12 @@ class _TrackBookingBottomSheetWidgetState
                 opacity: 1,
                 color: black,
                 label: 'Track driver',
-                onPressed: (() {}),
+                onPressed: (() {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => TrackingOfDriverPage(
+                            tripDetails: widget.tripDetails,
+                          )));
+                }),
               ),
               const SizedBox(
                 height: 15,
