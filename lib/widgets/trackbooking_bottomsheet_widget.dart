@@ -185,7 +185,7 @@ class _TrackBookingBottomSheetWidgetState
                                 onRatingUpdate: (rating) async {
                                   int stars = 0;
 
-                                  FirebaseFirestore.instance
+                                  await FirebaseFirestore.instance
                                       .collection('Drivers')
                                       .where('id',
                                           isEqualTo:
