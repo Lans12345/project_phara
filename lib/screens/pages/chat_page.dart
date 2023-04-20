@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:phara/services/add_messages.dart';
 import 'package:phara/widgets/text_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -155,39 +156,66 @@ class _ChatPageState extends State<ChatPage> {
                                               ),
                                             )
                                           : const SizedBox(),
-                                      Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 10.0, horizontal: 10.0),
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10.0, horizontal: 15.0),
-                                        decoration: BoxDecoration(
-                                          color: black,
-                                          borderRadius: BorderRadius.only(
-                                            topLeft:
-                                                const Radius.circular(20.0),
-                                            topRight:
-                                                const Radius.circular(20.0),
-                                            bottomLeft: messages[index]
-                                                        ['sender'] ==
-                                                    FirebaseAuth.instance
-                                                        .currentUser!.uid
-                                                ? const Radius.circular(20.0)
-                                                : const Radius.circular(0.0),
-                                            bottomRight: messages[index]
-                                                        ['sender'] ==
-                                                    FirebaseAuth.instance
-                                                        .currentUser!.uid
-                                                ? const Radius.circular(0.0)
-                                                : const Radius.circular(20.0),
+                                      Column(
+                                        crossAxisAlignment: messages[index]
+                                                    ['sender'] ==
+                                                FirebaseAuth
+                                                    .instance.currentUser!.uid
+                                            ? CrossAxisAlignment.end
+                                            : CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 10.0,
+                                                horizontal: 10.0),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 10.0,
+                                                horizontal: 15.0),
+                                            decoration: BoxDecoration(
+                                              color: black,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft:
+                                                    const Radius.circular(20.0),
+                                                topRight:
+                                                    const Radius.circular(20.0),
+                                                bottomLeft: messages[index]
+                                                            ['sender'] ==
+                                                        FirebaseAuth.instance
+                                                            .currentUser!.uid
+                                                    ? const Radius.circular(
+                                                        20.0)
+                                                    : const Radius.circular(
+                                                        0.0),
+                                                bottomRight: messages[index]
+                                                            ['sender'] ==
+                                                        FirebaseAuth.instance
+                                                            .currentUser!.uid
+                                                    ? const Radius.circular(0.0)
+                                                    : const Radius.circular(
+                                                        20.0),
+                                              ),
+                                            ),
+                                            child: Text(
+                                              messages[index]['message'],
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16.0,
+                                                  fontFamily: 'QRegular'),
+                                            ),
                                           ),
-                                        ),
-                                        child: Text(
-                                          messages[index]['message'],
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16.0,
+                                          Align(
+                                            alignment: Alignment.bottomRight,
+                                            child: Text(
+                                              DateFormat.jm().format(
+                                                  messages[index]['dateTime']
+                                                      .toDate()),
+                                              style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 11.0,
+                                                  fontFamily: 'QRegular'),
+                                            ),
                                           ),
-                                        ),
+                                        ],
                                       ),
                                       messages[index]['sender'] ==
                                               FirebaseAuth
@@ -258,47 +286,42 @@ class _ChatPageState extends State<ChatPage> {
                                 borderRadius: BorderRadius.circular(100)),
                             minWidth: 75,
                             height: 45,
-                            color: message != '' ? Colors.green : grey,
-                            onPressed: message == ''
-                                ? (() {})
-                                : (() async {
-                                    if (message != '') {
-                                      try {
-                                        await FirebaseFirestore.instance
-                                            .collection('Messages')
-                                            .doc(FirebaseAuth
-                                                    .instance.currentUser!.uid +
-                                                widget.driverId)
-                                            .update({
-                                          'lastMessage': messageController.text,
-                                          'dateTime': DateTime.now(),
-                                          'messages': FieldValue.arrayUnion([
-                                            {
-                                              'message': messageController.text,
-                                              'dateTime': DateTime.now(),
-                                              'sender': FirebaseAuth
-                                                  .instance.currentUser!.uid
-                                            }
-                                          ]),
-                                        });
-                                      } catch (e) {
-                                        addMessage(widget.driverId,
-                                            messageController.text);
+                            color: Colors.green,
+                            onPressed: (() async {
+                              if (message != '') {
+                                try {
+                                  await FirebaseFirestore.instance
+                                      .collection('Messages')
+                                      .doc(FirebaseAuth
+                                              .instance.currentUser!.uid +
+                                          widget.driverId)
+                                      .update({
+                                    'lastMessage': messageController.text,
+                                    'dateTime': DateTime.now(),
+                                    'messages': FieldValue.arrayUnion([
+                                      {
+                                        'message': messageController.text,
+                                        'dateTime': DateTime.now(),
+                                        'sender': FirebaseAuth
+                                            .instance.currentUser!.uid
                                       }
-                                      _scrollController.animateTo(
-                                          _scrollController
-                                              .position.maxScrollExtent,
-                                          duration:
-                                              const Duration(milliseconds: 500),
-                                          curve: Curves.easeOut);
-                                      messageController.clear();
-                                      message = '';
-                                    }
-                                  }),
-                            child: Icon(
+                                    ]),
+                                  });
+                                } catch (e) {
+                                  addMessage(
+                                      widget.driverId, messageController.text);
+                                }
+                                _scrollController.animateTo(
+                                    _scrollController.position.maxScrollExtent,
+                                    duration: const Duration(milliseconds: 500),
+                                    curve: Curves.easeOut);
+                                messageController.clear();
+                                message = '';
+                              }
+                            }),
+                            child: const Icon(
                               Icons.send,
-                              color:
-                                  message != '' ? Colors.white : Colors.white30,
+                              color: Colors.white,
                             ),
                           ),
                         ],
