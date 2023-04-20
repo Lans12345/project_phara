@@ -7,6 +7,8 @@ import '../../widgets/appbar_widget.dart';
 import '../../widgets/drawer_widget.dart';
 
 class MessagesTab extends StatefulWidget {
+  const MessagesTab({super.key});
+
   @override
   State<MessagesTab> createState() => _MessagesTabState();
 }
@@ -85,7 +87,9 @@ class _MessagesTabState extends State<MessagesTab> {
                       child: ListTile(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ChatPage()));
+                              builder: (context) => const ChatPage(
+                                driverId: '',
+                              )));
                         },
                         leading: const CircleAvatar(
                           maxRadius: 25,

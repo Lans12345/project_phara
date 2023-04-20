@@ -8,12 +8,12 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
+import 'package:phara/screens/pages/chat_page.dart';
 import 'package:phara/widgets/text_widget.dart';
 
 import '../../plugins/my_location.dart';
 import '../../utils/colors.dart';
 import '../home_screen.dart';
-import 'messages_tab.dart';
 
 class TrackingOfDriverPage extends StatefulWidget {
   final Map tripDetails;
@@ -97,8 +97,10 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => MessagesTab()));
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => ChatPage(
+                        driverId: widget.tripDetails['driverId'],
+                      )));
             },
             icon: const Icon(
               Icons.message_outlined,
@@ -133,7 +135,7 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
                     alignment: Alignment.topCenter,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.red.withOpacity(0.5),
+                        color: grey.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(50),
                       ),
                       height: 50,
