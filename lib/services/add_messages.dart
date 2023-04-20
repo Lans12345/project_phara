@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future addMessage(driverId, message) async {
+Future addMessage(driverId, message, driverName) async {
   final docUser = FirebaseFirestore.instance
       .collection('Messages')
       .doc(FirebaseAuth.instance.currentUser!.uid + driverId);
@@ -18,7 +18,8 @@ Future addMessage(driverId, message) async {
     'userId': FirebaseAuth.instance.currentUser!.uid,
     'driverId': driverId,
     'dateTime': DateTime.now(),
-    'seen': false
+    'seen': false,
+    'driverName': driverName
   };
 
   await docUser.set(json);

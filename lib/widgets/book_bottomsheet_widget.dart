@@ -327,6 +327,8 @@ class BookBottomSheetWidget extends StatelessWidget {
                                                   builder: ((context) {
                                                     return TrackBookingBottomSheetWidget(
                                                       tripDetails: {
+                                                        'driverName':
+                                                            data['name'],
                                                         'driverId': driverId,
                                                         'distance': (calculateDistance(
                                                                 coordinates[

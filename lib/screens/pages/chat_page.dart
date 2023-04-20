@@ -11,7 +11,8 @@ import '../../utils/colors.dart';
 
 class ChatPage extends StatefulWidget {
   final String driverId;
-  const ChatPage({super.key, required this.driverId});
+  final String driverName;
+  const ChatPage({super.key, required this.driverId, required this.driverName});
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
@@ -58,6 +59,7 @@ class _ChatPageState extends State<ChatPage> {
         .collection('Messages')
         .doc(FirebaseAuth.instance.currentUser!.uid + widget.driverId)
         .snapshots();
+
     return WillPopScope(
       onWillPop: onWillPop,
       child: Scaffold(
@@ -116,13 +118,14 @@ class _ChatPageState extends State<ChatPage> {
                                 child: CircularProgressIndicator());
                           }
                           dynamic data = snapshot.data;
-                          List messages = data['messages'];
+                          List messages = data['messages'] ?? [];
                           return Expanded(
                             child: SizedBox(
                               child: ListView.builder(
                                   itemCount: messages.length,
                                   controller: _scrollController,
                                   itemBuilder: ((context, index) {
+                                    print(messages);
                                     if (executed) {
                                       WidgetsBinding.instance
                                           .addPostFrameCallback((timeStamp) {
@@ -320,7 +323,7 @@ class _ChatPageState extends State<ChatPage> {
                                     });
                                   } catch (e) {
                                     addMessage(widget.driverId,
-                                        messageController.text);
+                                        messageController.text, driverName);
                                   }
                                   _scrollController.animateTo(
                                       _scrollController

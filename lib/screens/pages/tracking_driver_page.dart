@@ -99,6 +99,7 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
             onPressed: () {
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) => ChatPage(
+                        driverName: widget.tripDetails['driverName'],
                         driverId: widget.tripDetails['driverId'],
                       )));
             },
@@ -276,5 +277,13 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
             ],
           );
         });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+
+    mapController!.dispose();
   }
 }
