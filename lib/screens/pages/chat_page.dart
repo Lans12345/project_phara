@@ -32,7 +32,6 @@ class _ChatPageState extends State<ChatPage> {
 
   bool executed = true;
 
-  String driverName = '';
   String driverContactNumber = '';
 
   bool hasLoaded = false;
@@ -45,7 +44,6 @@ class _ChatPageState extends State<ChatPage> {
         .then((QuerySnapshot querySnapshot) async {
       for (var doc in querySnapshot.docs) {
         setState(() {
-          driverName = doc['name'];
           driverContactNumber = doc['number'];
           hasLoaded = true;
         });
@@ -79,7 +77,7 @@ class _ChatPageState extends State<ChatPage> {
               const SizedBox(
                 width: 10,
               ),
-              TextRegular(text: driverName, fontSize: 18, color: grey),
+              TextRegular(text: widget.driverName, fontSize: 18, color: grey),
             ],
           ),
           actions: [
@@ -117,138 +115,151 @@ class _ChatPageState extends State<ChatPage> {
                             return const Center(
                                 child: CircularProgressIndicator());
                           }
-                          dynamic data = snapshot.data;
-                          List messages = data['messages'] ?? [];
-                          return Expanded(
-                            child: SizedBox(
-                              child: ListView.builder(
-                                  itemCount: messages.length,
-                                  controller: _scrollController,
-                                  itemBuilder: ((context, index) {
-                                    print(messages);
-                                    if (executed) {
-                                      WidgetsBinding.instance
-                                          .addPostFrameCallback((timeStamp) {
-                                        _scrollController.animateTo(
-                                            _scrollController
-                                                .position.maxScrollExtent,
-                                            duration: const Duration(
-                                                milliseconds: 500),
-                                            curve: Curves.easeOut);
 
-                                        setState(() {
-                                          executed = false;
+                          try {
+                            dynamic data = snapshot.data;
+                            List messages = data['messages'] ?? [];
+                            return Expanded(
+                              child: SizedBox(
+                                child: ListView.builder(
+                                    itemCount: messages.isNotEmpty
+                                        ? messages.length
+                                        : 0,
+                                    controller: _scrollController,
+                                    itemBuilder: ((context, index) {
+                                      if (executed) {
+                                        WidgetsBinding.instance
+                                            .addPostFrameCallback((timeStamp) {
+                                          _scrollController.animateTo(
+                                              _scrollController
+                                                  .position.maxScrollExtent,
+                                              duration: const Duration(
+                                                  milliseconds: 500),
+                                              curve: Curves.easeOut);
+
+                                          setState(() {
+                                            executed = false;
+                                          });
                                         });
-                                      });
-                                    }
-                                    return Row(
-                                      mainAxisAlignment: messages[index]
-                                                  ['sender'] ==
-                                              FirebaseAuth
-                                                  .instance.currentUser!.uid
-                                          ? MainAxisAlignment.end
-                                          : MainAxisAlignment.start,
-                                      children: [
-                                        messages[index]['sender'] !=
+                                      }
+                                      return Row(
+                                        mainAxisAlignment: messages[index]
+                                                    ['sender'] ==
                                                 FirebaseAuth
                                                     .instance.currentUser!.uid
-                                            ? const Padding(
-                                                padding:
-                                                    EdgeInsets.only(left: 5),
-                                                child: CircleAvatar(
-                                                  minRadius: 15,
-                                                  maxRadius: 15,
-                                                  backgroundImage: NetworkImage(
-                                                      'https://i.pinimg.com/originals/45/e1/9c/45e19c74f5c293c27a7ec8aee6a92936.jpg'),
-                                                ),
-                                              )
-                                            : const SizedBox(),
-                                        Column(
-                                          crossAxisAlignment: messages[index]
-                                                      ['sender'] ==
+                                            ? MainAxisAlignment.end
+                                            : MainAxisAlignment.start,
+                                        children: [
+                                          messages[index]['sender'] !=
                                                   FirebaseAuth
                                                       .instance.currentUser!.uid
-                                              ? CrossAxisAlignment.end
-                                              : CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 10.0,
-                                                      horizontal: 10.0),
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 10.0,
-                                                      horizontal: 15.0),
-                                              decoration: BoxDecoration(
-                                                color: black,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft:
-                                                      const Radius.circular(
-                                                          20.0),
-                                                  topRight:
-                                                      const Radius.circular(
-                                                          20.0),
-                                                  bottomLeft: messages[index]
-                                                              ['sender'] ==
-                                                          FirebaseAuth.instance
-                                                              .currentUser!.uid
-                                                      ? const Radius.circular(
-                                                          20.0)
-                                                      : const Radius.circular(
-                                                          0.0),
-                                                  bottomRight: messages[index]
-                                                              ['sender'] ==
-                                                          FirebaseAuth.instance
-                                                              .currentUser!.uid
-                                                      ? const Radius.circular(
-                                                          0.0)
-                                                      : const Radius.circular(
-                                                          20.0),
-                                                ),
-                                              ),
-                                              child: Text(
-                                                messages[index]['message'],
-                                                style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16.0,
-                                                    fontFamily: 'QRegular'),
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.bottomRight,
-                                              child: Text(
-                                                DateFormat.jm().format(
-                                                    messages[index]['dateTime']
-                                                        .toDate()),
-                                                style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 11.0,
-                                                    fontFamily: 'QRegular'),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        messages[index]['sender'] ==
-                                                FirebaseAuth
-                                                    .instance.currentUser!.uid
-                                            ? const Padding(
+                                              ? const Padding(
+                                                  padding:
+                                                      EdgeInsets.only(left: 5),
+                                                  child: CircleAvatar(
+                                                    minRadius: 15,
+                                                    maxRadius: 15,
+                                                    backgroundImage: NetworkImage(
+                                                        'https://i.pinimg.com/originals/45/e1/9c/45e19c74f5c293c27a7ec8aee6a92936.jpg'),
+                                                  ),
+                                                )
+                                              : const SizedBox(),
+                                          Column(
+                                            crossAxisAlignment: messages[index]
+                                                        ['sender'] ==
+                                                    FirebaseAuth.instance
+                                                        .currentUser!.uid
+                                                ? CrossAxisAlignment.end
+                                                : CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 10.0,
+                                                        horizontal: 10.0),
                                                 padding:
-                                                    EdgeInsets.only(right: 5),
-                                                child: CircleAvatar(
-                                                  minRadius: 15,
-                                                  maxRadius: 15,
-                                                  backgroundImage: AssetImage(
-                                                    'assets/images/profile.png',
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 10.0,
+                                                        horizontal: 15.0),
+                                                decoration: BoxDecoration(
+                                                  color: black,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft:
+                                                        const Radius.circular(
+                                                            20.0),
+                                                    topRight:
+                                                        const Radius.circular(
+                                                            20.0),
+                                                    bottomLeft: messages[index]
+                                                                ['sender'] ==
+                                                            FirebaseAuth
+                                                                .instance
+                                                                .currentUser!
+                                                                .uid
+                                                        ? const Radius.circular(
+                                                            20.0)
+                                                        : const Radius.circular(
+                                                            0.0),
+                                                    bottomRight: messages[index]
+                                                                ['sender'] ==
+                                                            FirebaseAuth
+                                                                .instance
+                                                                .currentUser!
+                                                                .uid
+                                                        ? const Radius.circular(
+                                                            0.0)
+                                                        : const Radius.circular(
+                                                            20.0),
                                                   ),
                                                 ),
-                                              )
-                                            : const SizedBox(),
-                                      ],
-                                    );
-                                  })),
-                            ),
-                          );
+                                                child: Text(
+                                                  messages[index]['message'],
+                                                  style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16.0,
+                                                      fontFamily: 'QRegular'),
+                                                ),
+                                              ),
+                                              Align(
+                                                alignment:
+                                                    Alignment.bottomRight,
+                                                child: Text(
+                                                  DateFormat.jm().format(
+                                                      messages[index]
+                                                              ['dateTime']
+                                                          .toDate()),
+                                                  style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 11.0,
+                                                      fontFamily: 'QRegular'),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          messages[index]['sender'] ==
+                                                  FirebaseAuth
+                                                      .instance.currentUser!.uid
+                                              ? const Padding(
+                                                  padding:
+                                                      EdgeInsets.only(right: 5),
+                                                  child: CircleAvatar(
+                                                    minRadius: 15,
+                                                    maxRadius: 15,
+                                                    backgroundImage: AssetImage(
+                                                      'assets/images/profile.png',
+                                                    ),
+                                                  ),
+                                                )
+                                              : const SizedBox(),
+                                        ],
+                                      );
+                                    })),
+                              ),
+                            );
+                          } catch (e) {
+                            return const Expanded(child: SizedBox());
+                          }
                         }),
                     const Divider(
                       color: grey,
@@ -322,8 +333,10 @@ class _ChatPageState extends State<ChatPage> {
                                       ]),
                                     });
                                   } catch (e) {
-                                    addMessage(widget.driverId,
-                                        messageController.text, driverName);
+                                    addMessage(
+                                        widget.driverId,
+                                        messageController.text,
+                                        widget.driverName);
                                   }
                                   _scrollController.animateTo(
                                       _scrollController
