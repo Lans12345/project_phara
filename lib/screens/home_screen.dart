@@ -81,54 +81,53 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 15,
                 ),
                 FloatingActionButton(
-                    backgroundColor: Colors.white,
-                    onPressed: (() {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const MessagesTab()));
-                    }),
-                    child: b.Badge(
-                      badgeAnimation: const b.BadgeAnimation.fade(),
-                      badgeStyle: const b.BadgeStyle(
-                        badgeColor: Colors.red,
-                      ),
-                      badgeContent: SizedBox(
-                        child: StreamBuilder<QuerySnapshot>(
-                            stream: FirebaseFirestore.instance
-                                .collection('Messages')
-                                .where('userId',
-                                    isEqualTo:
-                                        FirebaseAuth.instance.currentUser!.uid)
-                                .where('seen', isEqualTo: false)
-                                .snapshots(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<QuerySnapshot> snapshot) {
-                              if (snapshot.hasError) {
-                                print('error');
-                                return const Center(child: Text('Error'));
-                              }
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Padding(
-                                  padding: EdgeInsets.only(top: 50),
-                                  child: Center(
-                                      child: CircularProgressIndicator(
-                                    color: Colors.black,
-                                  )),
-                                );
-                              }
+                  backgroundColor: Colors.white,
+                  onPressed: (() {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => const MessagesTab()));
+                  }),
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('Messages')
+                          .where('userId',
+                              isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                          .where('seen', isEqualTo: false)
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasError) {
+                          print('error');
+                          return const Center(child: Text('Error'));
+                        }
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Padding(
+                            padding: EdgeInsets.only(top: 50),
+                            child: Center(
+                                child: CircularProgressIndicator(
+                              color: Colors.black,
+                            )),
+                          );
+                        }
 
-                              final data = snapshot.requireData;
-                              return TextRegular(
-                                  text: data.docs.length.toString(),
-                                  fontSize: 12,
-                                  color: Colors.white);
-                            }),
-                      ),
-                      child: const Icon(
-                        Icons.message_outlined,
-                        color: grey,
-                      ),
-                    )),
+                        final data = snapshot.requireData;
+                        return b.Badge(
+                          showBadge: data.docs.isNotEmpty,
+                          badgeAnimation: const b.BadgeAnimation.fade(),
+                          badgeStyle: const b.BadgeStyle(
+                            badgeColor: Colors.red,
+                          ),
+                          badgeContent: TextRegular(
+                              text: data.docs.length.toString(),
+                              fontSize: 12,
+                              color: Colors.white),
+                          child: const Icon(
+                            Icons.message_outlined,
+                            color: grey,
+                          ),
+                        );
+                      }),
+                ),
                 const SizedBox(
                   height: 15,
                 ),

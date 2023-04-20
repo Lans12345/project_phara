@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:phara/plugins/my_location.dart';
 import 'package:phara/screens/auth/landing_screen.dart';
 import 'package:phara/screens/home_screen.dart';
@@ -24,17 +26,31 @@ class _SplashScreenState extends State<SplashScreen> {
 
     determinePosition();
     Timer(const Duration(seconds: 5), () async {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => StreamBuilder<User?>(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return HomeScreen();
-              } else {
-                return const LandingScreen();
-              }
-            }),
-      ));
+      bool serviceEnabled;
+
+      // Test if location services are enabled.
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        await Geolocator.requestPermission();
+        Fluttertoast.showToast(
+          toastLength: Toast.LENGTH_LONG,
+          msg:
+              'Cannot proceed without your location being enabled, turn on your location and open the app again',
+        );
+        return Future.error('Location services are disabled.');
+      } else {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => StreamBuilder<User?>(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return const HomeScreen();
+                } else {
+                  return const LandingScreen();
+                }
+              }),
+        ));
+      }
     });
   }
 
