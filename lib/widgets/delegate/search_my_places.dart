@@ -36,13 +36,16 @@ class LocationsSearch extends SearchDelegate<Suggestion> {
 
   @override
   Widget buildLeading(BuildContext context) {
-    return IconButton(
-      tooltip: 'Back',
-      icon: const Icon(Icons.arrow_back),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
+    return Consumer(builder: ((context, ref, child) {
+      return IconButton(
+        tooltip: 'Back',
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () {
+          ref.read(destinationProvider.notifier).state = 'No address specified';
+          Navigator.of(context).pop();
+        },
+      );
+    }));
   }
 
   @override

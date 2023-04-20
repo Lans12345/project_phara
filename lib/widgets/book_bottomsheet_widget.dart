@@ -222,7 +222,7 @@ class BookBottomSheetWidget extends StatelessWidget {
                             radius: 100,
                             opacity: 1,
                             color: Colors.green,
-                            label: 'Book now',
+                            label: 'Continue',
                             onPressed: (() {
                               showDialog(
                                   context: context,

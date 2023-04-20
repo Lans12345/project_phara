@@ -50,8 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   var hasLoaded = false;
 
-  String driverId = '';
-
   GoogleMapController? mapController;
 
   Set<Marker> markers = {};
@@ -89,40 +87,43 @@ class _HomeScreenState extends State<HomeScreen> {
                           builder: (context) => const MessagesTab()));
                     }),
                     child: b.Badge(
+                      badgeAnimation: const b.BadgeAnimation.fade(),
                       badgeStyle: const b.BadgeStyle(
                         badgeColor: Colors.red,
                       ),
-                      badgeContent: StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection('Messages')
-                              .where('userId',
-                                  isEqualTo:
-                                      FirebaseAuth.instance.currentUser!.uid)
-                              .where('seen', isEqualTo: false)
-                              .snapshots(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<QuerySnapshot> snapshot) {
-                            if (snapshot.hasError) {
-                              print('error');
-                              return const Center(child: Text('Error'));
-                            }
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Padding(
-                                padding: EdgeInsets.only(top: 50),
-                                child: Center(
-                                    child: CircularProgressIndicator(
-                                  color: Colors.black,
-                                )),
-                              );
-                            }
+                      badgeContent: SizedBox(
+                        child: StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('Messages')
+                                .where('userId',
+                                    isEqualTo:
+                                        FirebaseAuth.instance.currentUser!.uid)
+                                .where('seen', isEqualTo: false)
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (snapshot.hasError) {
+                                print('error');
+                                return const Center(child: Text('Error'));
+                              }
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Padding(
+                                  padding: EdgeInsets.only(top: 50),
+                                  child: Center(
+                                      child: CircularProgressIndicator(
+                                    color: Colors.black,
+                                  )),
+                                );
+                              }
 
-                            final data = snapshot.requireData;
-                            return TextRegular(
-                                text: data.docs.length.toString(),
-                                fontSize: 12,
-                                color: Colors.white);
-                          }),
+                              final data = snapshot.requireData;
+                              return TextRegular(
+                                  text: data.docs.length.toString(),
+                                  fontSize: 12,
+                                  color: Colors.white);
+                            }),
+                      ),
                       child: const Icon(
                         Icons.message_outlined,
                         color: grey,
@@ -365,52 +366,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      driverId != ''
-                          ? Consumer(builder: (context, ref, child) {
-                              return ButtonWidget(
-                                  width: 175,
-                                  radius: 100,
-                                  opacity: 1,
-                                  color: Colors.green,
-                                  label: 'Book a ride',
-                                  onPressed: (() async {
-                                    List<Placemark> p =
-                                        await placemarkFromCoordinates(
-                                            lat, long);
-
-                                    Placemark place = p[0];
-
-                                    final sessionToken = const Uuid().v4();
-
-                                    await showSearch(
-                                        context: context,
-                                        delegate:
-                                            LocationsSearch(sessionToken));
-
-                                    if (ref
-                                            .read(destinationProvider.notifier)
-                                            .state !=
-                                        'No address specified') {
-                                      showModalBottomSheet(
-                                          isScrollControlled: true,
-                                          context: context,
-                                          builder: ((context) {
-                                            return BookBottomSheetWidget(
-                                              driverId: driverId,
-                                              coordinates: {
-                                                'lat': lat,
-                                                'long': long,
-                                                'pickupLocation':
-                                                    '${place.street}, ${place.locality}, ${place.administrativeArea}'
-                                              },
-                                            );
-                                          }));
-                                    }
-                                  }));
-                            })
-                          : const SizedBox(),
-                      const SizedBox(
+                    children: const [
+                      SizedBox(
                         height: 25,
                       ),
                     ],
@@ -465,14 +422,106 @@ class _HomeScreenState extends State<HomeScreen> {
       for (var doc in querySnapshot.docs) {
         Marker driverMarker = Marker(
             onTap: () {
-              setState(() {
-                driverId = doc['id'];
-              });
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      content:
+                          Column(mainAxisSize: MainAxisSize.min, children: [
+                        Row(
+                          children: [
+                            const CircleAvatar(
+                              minRadius: 50,
+                              maxRadius: 50,
+                              backgroundImage: NetworkImage(
+                                  'https://i.pinimg.com/originals/45/e1/9c/45e19c74f5c293c27a7ec8aee6a92936.jpg'),
+                            ),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextBold(
+                                    text: 'Name: ${doc['name']}',
+                                    fontSize: 15,
+                                    color: grey),
+                                TextRegular(
+                                    text: 'Vehicle: Sniper 150',
+                                    fontSize: 14,
+                                    color: grey),
+                                TextRegular(
+                                    text: doc['ratings'].length != 0
+                                        ? 'Rating: ${(doc['stars'] / doc['ratings'].length).toStringAsFixed(2)} ★'
+                                        : 'No ratings',
+                                    fontSize: 14,
+                                    color: Colors.amber),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ]),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: TextRegular(
+                              text: 'Close', fontSize: 12, color: grey),
+                        ),
+                        Consumer(builder: (context, ref, child) {
+                          return ButtonWidget(
+                              opacity: 1,
+                              color: Colors.green,
+                              radius: 5,
+                              fontSize: 14,
+                              width: 100,
+                              height: 30,
+                              label: 'Book now',
+                              onPressed: () async {
+                                List<Placemark> p =
+                                    await placemarkFromCoordinates(lat, long);
+
+                                Placemark place = p[0];
+
+                                final sessionToken = const Uuid().v4();
+
+                                // ignore: use_build_context_synchronously
+                                await showSearch(
+                                    context: context,
+                                    delegate: LocationsSearch(sessionToken));
+
+                                if (ref
+                                        .read(destinationProvider.notifier)
+                                        .state !=
+                                    'No address specified') {
+                                  // ignore: use_build_context_synchronously
+                                  showModalBottomSheet(
+                                      isScrollControlled: true,
+                                      context: context,
+                                      builder: ((context) {
+                                        return BookBottomSheetWidget(
+                                          driverId: doc['id'],
+                                          coordinates: {
+                                            'lat': lat,
+                                            'long': long,
+                                            'pickupLocation':
+                                                '${place.street}, ${place.locality}, ${place.administrativeArea}'
+                                          },
+                                        );
+                                      }));
+                                }
+                              });
+                        }),
+                      ],
+                    );
+                  });
             },
             markerId: MarkerId(doc['name']),
             infoWindow: InfoWindow(
               title: doc['name'],
-              snippet: doc['number'],
+              snippet: doc['vehicle'],
             ),
             icon: await BitmapDescriptor.fromAssetImage(
               const ImageConfiguration(
