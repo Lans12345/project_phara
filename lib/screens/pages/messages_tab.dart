@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:phara/screens/pages/chat_page.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/text_widget.dart';
-
+import 'package:intl/intl.dart' show DateFormat, toBeginningOfSentenceCase;
 import '../../widgets/appbar_widget.dart';
 import '../../widgets/drawer_widget.dart';
 
@@ -81,12 +81,23 @@ class _MessagesTabState extends State<MessagesTab> {
             height: 10,
           ),
           StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('Messages')
-                  .where('userId',
-                      isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                  .orderBy('dateTime')
-                  .snapshots(),
+              stream: filter != ''
+                  ? FirebaseFirestore.instance
+                      .collection('Messages')
+                      .where('userId',
+                          isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                      .where('driverName',
+                          isGreaterThanOrEqualTo:
+                              toBeginningOfSentenceCase(filter))
+                      .where('driverName',
+                          isLessThan: '${toBeginningOfSentenceCase(filter)}z')
+                      .snapshots()
+                  : FirebaseFirestore.instance
+                      .collection('Messages')
+                      .where('userId',
+                          isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                      .orderBy('dateTime')
+                      .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) {
