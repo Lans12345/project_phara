@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:phara/screens/pages/chat_page.dart';
 import 'package:phara/utils/colors.dart';
@@ -77,75 +79,104 @@ class _MessagesTabState extends State<MessagesTab> {
           const SizedBox(
             height: 10,
           ),
-          Expanded(
-            child: SizedBox(
-              child: ListView.builder(
-                  itemCount: 100,
-                  itemBuilder: ((context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: ListTile(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const ChatPage(
-                                driverId: '',
-                              )));
-                        },
-                        leading: const CircleAvatar(
-                          maxRadius: 25,
-                          minRadius: 25,
-                          backgroundImage: NetworkImage(
-                            'https://i.pinimg.com/originals/45/e1/9c/45e19c74f5c293c27a7ec8aee6a92936.jpg',
-                          ),
-                        ),
-                        title: index % 2 == 0
-                            ? TextRegular(
-                                text: 'Lance Olana', fontSize: 15, color: grey)
-                            : TextBold(
-                                text: 'Lance Olana',
-                                fontSize: 15,
-                                color: Colors.black),
-                        subtitle: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            index % 2 == 0
-                                ? const Text(
-                                    'Sample message right here',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: grey,
-                                        fontFamily: 'QRegular'),
-                                  )
-                                : const Text(
-                                    'Sample message right here',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 12,
-                                        color: Colors.black,
-                                        fontFamily: 'QBold'),
-                                  ),
-                            index % 2 == 0
-                                ? TextRegular(
-                                    text: '2:30 PM', fontSize: 12, color: grey)
-                                : TextBold(
-                                    text: '2:30 PM',
-                                    fontSize: 12,
-                                    color: Colors.black),
-                          ],
-                        ),
-                        trailing: const Icon(
-                          Icons.arrow_right,
-                          color: grey,
-                        ),
-                      ),
-                    );
-                  })),
-            ),
-          ),
+          StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('Messages')
+                  .where('userId',
+                      isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  print('error');
+                  return const Center(child: Text('Error'));
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 50),
+                    child: Center(
+                        child: CircularProgressIndicator(
+                      color: Colors.black,
+                    )),
+                  );
+                }
+
+                final data = snapshot.requireData;
+                return Expanded(
+                  child: SizedBox(
+                    child: ListView.builder(
+                        itemCount: data.docs.length,
+                        itemBuilder: ((context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: ListTile(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const ChatPage(
+                                          driverId: '',
+                                        )));
+                              },
+                              leading: const CircleAvatar(
+                                maxRadius: 25,
+                                minRadius: 25,
+                                backgroundImage: NetworkImage(
+                                  'https://i.pinimg.com/originals/45/e1/9c/45e19c74f5c293c27a7ec8aee6a92936.jpg',
+                                ),
+                              ),
+                              title: index % 2 == 0
+                                  ? TextRegular(
+                                      text: 'Lance Olana',
+                                      fontSize: 15,
+                                      color: grey)
+                                  : TextBold(
+                                      text: 'Lance Olana',
+                                      fontSize: 15,
+                                      color: Colors.black),
+                              subtitle: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  index % 2 == 0
+                                      ? const Text(
+                                          'Sample message right here',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: grey,
+                                              fontFamily: 'QRegular'),
+                                        )
+                                      : const Text(
+                                          'Sample message right here',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 12,
+                                              color: Colors.black,
+                                              fontFamily: 'QBold'),
+                                        ),
+                                  index % 2 == 0
+                                      ? TextRegular(
+                                          text: '2:30 PM',
+                                          fontSize: 12,
+                                          color: grey)
+                                      : TextBold(
+                                          text: '2:30 PM',
+                                          fontSize: 12,
+                                          color: Colors.black),
+                                ],
+                              ),
+                              trailing: const Icon(
+                                Icons.arrow_right,
+                                color: grey,
+                              ),
+                            ),
+                          );
+                        })),
+                  ),
+                );
+              }),
         ],
       ),
     );
