@@ -86,14 +86,43 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: Colors.white,
                     onPressed: (() {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => MessagesTab()));
+                          builder: (context) => const MessagesTab()));
                     }),
                     child: b.Badge(
                       badgeStyle: const b.BadgeStyle(
                         badgeColor: Colors.red,
                       ),
-                      badgeContent: TextRegular(
-                          text: '1', fontSize: 12, color: Colors.white),
+                      badgeContent: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('Messages')
+                              .where('userId',
+                                  isEqualTo:
+                                      FirebaseAuth.instance.currentUser!.uid)
+                              .where('seen', isEqualTo: false)
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.hasError) {
+                              print('error');
+                              return const Center(child: Text('Error'));
+                            }
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Padding(
+                                padding: EdgeInsets.only(top: 50),
+                                child: Center(
+                                    child: CircularProgressIndicator(
+                                  color: Colors.black,
+                                )),
+                              );
+                            }
+
+                            final data = snapshot.requireData;
+                            return TextRegular(
+                                text: data.docs.length.toString(),
+                                fontSize: 12,
+                                color: Colors.white);
+                          }),
                       child: const Icon(
                         Icons.message_outlined,
                         color: grey,
