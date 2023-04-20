@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:phara/screens/pages/chat_page.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/text_widget.dart';
@@ -84,6 +85,7 @@ class _MessagesTabState extends State<MessagesTab> {
                   .collection('Messages')
                   .where('userId',
                       isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                  .orderBy('dateTime')
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -109,69 +111,98 @@ class _MessagesTabState extends State<MessagesTab> {
                         itemBuilder: ((context, index) {
                           return Padding(
                             padding: const EdgeInsets.all(5),
-                            child: ListTile(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const ChatPage(
-                                          driverId: '',
-                                        )));
-                              },
-                              leading: const CircleAvatar(
-                                maxRadius: 25,
-                                minRadius: 25,
-                                backgroundImage: NetworkImage(
-                                  'https://i.pinimg.com/originals/45/e1/9c/45e19c74f5c293c27a7ec8aee6a92936.jpg',
-                                ),
-                              ),
-                              title: index % 2 == 0
-                                  ? TextRegular(
-                                      text: 'Lance Olana',
-                                      fontSize: 15,
-                                      color: grey)
-                                  : TextBold(
-                                      text: 'Lance Olana',
-                                      fontSize: 15,
-                                      color: Colors.black),
-                              subtitle: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  index % 2 == 0
-                                      ? const Text(
-                                          'Sample message right here',
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: grey,
-                                              fontFamily: 'QRegular'),
-                                        )
-                                      : const Text(
-                                          'Sample message right here',
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w800,
-                                              fontSize: 12,
-                                              color: Colors.black,
-                                              fontFamily: 'QBold'),
-                                        ),
-                                  index % 2 == 0
-                                      ? TextRegular(
-                                          text: '2:30 PM',
-                                          fontSize: 12,
-                                          color: grey)
-                                      : TextBold(
-                                          text: '2:30 PM',
-                                          fontSize: 12,
-                                          color: Colors.black),
-                                ],
-                              ),
-                              trailing: const Icon(
-                                Icons.arrow_right,
-                                color: grey,
-                              ),
-                            ),
+                            child: StreamBuilder<DocumentSnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('Drivers')
+                                    .doc(data.docs[index]['driverId'])
+                                    .snapshots(),
+                                builder: (context,
+                                    AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const Center(child: Text('Loading'));
+                                  } else if (snapshot.hasError) {
+                                    return const Center(
+                                        child: Text('Something went wrong'));
+                                  } else if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  }
+                                  dynamic driverData = snapshot.data;
+                                  return ListTile(
+                                    onTap: () async {
+                                      await FirebaseFirestore.instance
+                                          .collection('Messages')
+                                          .doc(data.docs[index].id)
+                                          .update({'seen': true});
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const ChatPage(
+                                                    driverId: '',
+                                                  )));
+                                    },
+                                    leading: const CircleAvatar(
+                                      maxRadius: 25,
+                                      minRadius: 25,
+                                      backgroundImage: NetworkImage(
+                                        'https://i.pinimg.com/originals/45/e1/9c/45e19c74f5c293c27a7ec8aee6a92936.jpg',
+                                      ),
+                                    ),
+                                    title: data.docs[index]['seen'] == true
+                                        ? TextRegular(
+                                            text: driverData['name'],
+                                            fontSize: 15,
+                                            color: grey)
+                                        : TextBold(
+                                            text: driverData['name'],
+                                            fontSize: 15,
+                                            color: Colors.black),
+                                    subtitle: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        data.docs[index]['seen'] == true
+                                            ? Text(
+                                                data.docs[index]['lastMessage'],
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    fontSize: 12,
+                                                    color: grey,
+                                                    fontFamily: 'QRegular'),
+                                              )
+                                            : Text(
+                                                data.docs[index]['lastMessage'],
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w800,
+                                                    fontSize: 12,
+                                                    color: Colors.black,
+                                                    fontFamily: 'QBold'),
+                                              ),
+                                        data.docs[index]['seen'] == true
+                                            ? TextRegular(
+                                                text: DateFormat.jm().format(
+                                                    data.docs[index]['dateTime']
+                                                        .toDate()),
+                                                fontSize: 12,
+                                                color: grey)
+                                            : TextBold(
+                                                text: DateFormat.jm().format(
+                                                    data.docs[index]['dateTime']
+                                                        .toDate()),
+                                                fontSize: 12,
+                                                color: Colors.black),
+                                      ],
+                                    ),
+                                    trailing: const Icon(
+                                      Icons.arrow_right,
+                                      color: grey,
+                                    ),
+                                  );
+                                }),
                           );
                         })),
                   ),

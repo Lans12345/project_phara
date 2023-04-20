@@ -18,6 +18,7 @@ Future addMessage(driverId, message) async {
     'userId': FirebaseAuth.instance.currentUser!.uid,
     'driverId': driverId,
     'dateTime': DateTime.now(),
+    'seen': false
   };
 
   await docUser.set(json);

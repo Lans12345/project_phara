@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:phara/screens/pages/messages_tab.dart';
 import 'package:phara/services/add_messages.dart';
 import 'package:phara/widgets/text_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/colors.dart';
-import '../home_screen.dart';
 
 class ChatPage extends StatefulWidget {
   final String driverId;
@@ -308,13 +308,14 @@ class _ChatPageState extends State<ChatPage> {
                                         .update({
                                       'lastMessage': messageController.text,
                                       'dateTime': DateTime.now(),
+                                      'seen': false,
                                       'messages': FieldValue.arrayUnion([
                                         {
                                           'message': messageController.text,
                                           'dateTime': DateTime.now(),
                                           'sender': FirebaseAuth
                                               .instance.currentUser!.uid
-                                        }
+                                        },
                                       ]),
                                     });
                                   } catch (e) {
@@ -363,7 +364,7 @@ class _ChatPageState extends State<ChatPage> {
           ),
           MaterialButton(
             onPressed: () => Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const HomeScreen())),
+                MaterialPageRoute(builder: (context) => const MessagesTab())),
             child: TextBold(text: 'Yes', fontSize: 14, color: Colors.black),
           ),
         ],
