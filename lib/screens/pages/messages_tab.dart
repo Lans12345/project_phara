@@ -145,11 +145,11 @@ class _MessagesTabState extends State<MessagesTab> {
                                 ),
                                 title: data.docs[index]['seen'] == true
                                     ? TextRegular(
-                                        text: 'Lance Olana',
+                                        text: data.docs[index]['driverName'],
                                         fontSize: 15,
                                         color: grey)
                                     : TextBold(
-                                        text: 'Lance Olana',
+                                        text: data.docs[index]['driverName'],
                                         fontSize: 15,
                                         color: Colors.black),
                                 subtitle: Row(
