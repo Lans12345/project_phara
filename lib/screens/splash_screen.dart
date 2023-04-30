@@ -75,8 +75,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 height: 20,
               ),
               Image.asset(
-                'assets/images/rider.png',
-                width: 250,
+                'assets/images/animation.gif',
+                width: 350,
               ),
               const SizedBox(
                 height: 50,
