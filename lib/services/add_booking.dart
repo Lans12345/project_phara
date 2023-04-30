@@ -3,9 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 Future addBooking(driverId, origin, destination, distance, time, fare,
     originLat, originLong, destinationLat, destinationLong, userName) async {
-  final docUser = FirebaseFirestore.instance
-      .collection('Bookings')
-      .doc(FirebaseAuth.instance.currentUser!.uid);
+  final docUser = FirebaseFirestore.instance.collection('Bookings').doc();
 
   final json = {
     'status': 'Pending',
