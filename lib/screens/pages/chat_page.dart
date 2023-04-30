@@ -21,6 +21,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     super.initState();
+    getUserData();
     getDriverData();
   }
 
@@ -33,8 +34,23 @@ class _ChatPageState extends State<ChatPage> {
   bool executed = true;
 
   String driverContactNumber = '';
+  String userName = '';
 
   bool hasLoaded = false;
+
+  getUserData() {
+    FirebaseFirestore.instance
+        .collection('Users')
+        .where('id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((QuerySnapshot querySnapshot) async {
+      for (var doc in querySnapshot.docs) {
+        setState(() {
+          userName = doc['name'];
+        });
+      }
+    });
+  }
 
   getDriverData() {
     FirebaseFirestore.instance
@@ -336,7 +352,8 @@ class _ChatPageState extends State<ChatPage> {
                                     addMessage(
                                         widget.driverId,
                                         messageController.text,
-                                        widget.driverName);
+                                        widget.driverName,
+                                        userName);
                                   }
                                   _scrollController.animateTo(
                                       _scrollController

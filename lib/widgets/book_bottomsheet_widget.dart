@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phara/data/distance_calculations.dart';
@@ -12,21 +13,48 @@ import 'package:phara/widgets/trackbooking_bottomsheet_widget.dart';
 import '../services/providers/coordinates_provider.dart';
 import 'button_widget.dart';
 
-class BookBottomSheetWidget extends StatelessWidget {
-  final destinationController = TextEditingController();
-
+class BookBottomSheetWidget extends StatefulWidget {
   final String driverId;
 
   final Map coordinates;
 
-  BookBottomSheetWidget(
+  const BookBottomSheetWidget(
       {super.key, required this.driverId, required this.coordinates});
+
+  @override
+  State<BookBottomSheetWidget> createState() => _BookBottomSheetWidgetState();
+}
+
+class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
+  String userName = '';
+
+  @override
+  void initState() {
+    getUserData();
+    super.initState();
+  }
+
+  getUserData() {
+    FirebaseFirestore.instance
+        .collection('Users')
+        .where('id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((QuerySnapshot querySnapshot) async {
+      for (var doc in querySnapshot.docs) {
+        setState(() {
+          userName = doc['name'];
+        });
+      }
+    });
+  }
+
+  final destinationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final Stream<DocumentSnapshot> userData = FirebaseFirestore.instance
         .collection('Drivers')
-        .doc(driverId)
+        .doc(widget.driverId)
         .snapshots();
     return SingleChildScrollView(
       reverse: true,
@@ -130,7 +158,7 @@ class BookBottomSheetWidget extends StatelessWidget {
                           SizedBox(
                             width: 270,
                             child: TextRegular(
-                                text: coordinates['pickupLocation'],
+                                text: widget.coordinates['pickupLocation'],
                                 fontSize: 16,
                                 color: grey),
                           ),
@@ -188,7 +216,7 @@ class BookBottomSheetWidget extends StatelessWidget {
                       ),
                       TextRegular(
                           text:
-                              'Distance: ${(calculateDistance(coordinates['lat'], coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)).toStringAsFixed(2)} km',
+                              'Distance: ${(calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)).toStringAsFixed(2)} km',
                           fontSize: 15,
                           color: grey),
                       const SizedBox(
@@ -196,7 +224,7 @@ class BookBottomSheetWidget extends StatelessWidget {
                       ),
                       TextRegular(
                           text:
-                              'Estimated time: ${(calculateTravelTime((calculateDistance(coordinates['lat'], coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)), 26.8)).toStringAsFixed(2)} hr/s',
+                              'Estimated time: ${(calculateTravelTime((calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)), 26.8)).toStringAsFixed(2)} hr/s',
                           fontSize: 15,
                           color: grey),
                       const SizedBox(
@@ -204,7 +232,7 @@ class BookBottomSheetWidget extends StatelessWidget {
                       ),
                       TextRegular(
                           text:
-                              'Fare: ₱${(((calculateDistance(coordinates['lat'], coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)) * 12) + 45).toStringAsFixed(2)}',
+                              'Fare: ₱${(((calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)) * 12) + 45).toStringAsFixed(2)}',
                           fontSize: 15,
                           color: grey),
                       const SizedBox(
@@ -254,19 +282,36 @@ class BookBottomSheetWidget extends StatelessWidget {
                                             onPressed: () async {
                                               await FirebaseFirestore.instance
                                                   .collection('Drivers')
-                                                  .doc(driverId)
+                                                  .doc(widget.driverId)
                                                   .update({'isActive': false});
 
+                                              await FirebaseFirestore.instance
+                                                  .collection('Drivers')
+                                                  .doc(widget.driverId)
+                                                  .update({
+                                                'notif': FieldValue.arrayUnion([
+                                                  {
+                                                    'notif':
+                                                        'You received a new booking!',
+                                                    'read': false,
+                                                    'date': DateTime.now(),
+                                                  }
+                                                ]),
+                                              });
+
                                               addBooking(
-                                                  driverId,
-                                                  coordinates['pickupLocation'],
+                                                  widget.driverId,
+                                                  widget.coordinates[
+                                                      'pickupLocation'],
                                                   ref
                                                       .read(destinationProvider
                                                           .notifier)
                                                       .state,
                                                   (calculateDistance(
-                                                          coordinates['lat'],
-                                                          coordinates['long'],
+                                                          widget.coordinates[
+                                                              'lat'],
+                                                          widget.coordinates[
+                                                              'long'],
                                                           ref
                                                               .read(latProvider
                                                                   .notifier)
@@ -278,46 +323,26 @@ class BookBottomSheetWidget extends StatelessWidget {
                                                       .toStringAsFixed(2),
                                                   (calculateTravelTime(
                                                           (calculateDistance(
-                                                              coordinates[
+                                                              widget.coordinates[
                                                                   'lat'],
-                                                              coordinates[
+                                                              widget.coordinates[
                                                                   'long'],
                                                               ref
                                                                   .read(latProvider
                                                                       .notifier)
                                                                   .state,
                                                               ref
-                                                                  .read(longProvider
-                                                                      .notifier)
+                                                                  .read(
+                                                                      longProvider.notifier)
                                                                   .state)),
                                                           26.8))
                                                       .toStringAsFixed(2),
-                                                  (((calculateDistance(
-                                                                  coordinates[
-                                                                      'lat'],
-                                                                  coordinates[
-                                                                      'long'],
-                                                                  ref
-                                                                      .read(latProvider
-                                                                          .notifier)
-                                                                      .state,
-                                                                  ref
-                                                                      .read(longProvider
-                                                                          .notifier)
-                                                                      .state)) *
-                                                              12) +
-                                                          45)
-                                                      .toStringAsFixed(2),
-                                                  coordinates['lat'],
-                                                  coordinates['long'],
-                                                  ref
-                                                      .read(
-                                                          latProvider.notifier)
-                                                      .state,
-                                                  ref
-                                                      .read(
-                                                          longProvider.notifier)
-                                                      .state);
+                                                  (((calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)) * 12) + 45).toStringAsFixed(2),
+                                                  widget.coordinates['lat'],
+                                                  widget.coordinates['long'],
+                                                  ref.read(latProvider.notifier).state,
+                                                  ref.read(longProvider.notifier).state,
+                                                  userName);
                                               Navigator.pop(context);
 
                                               showModalBottomSheet(
@@ -329,11 +354,12 @@ class BookBottomSheetWidget extends StatelessWidget {
                                                       tripDetails: {
                                                         'driverName':
                                                             data['name'],
-                                                        'driverId': driverId,
+                                                        'driverId':
+                                                            widget.driverId,
                                                         'distance': (calculateDistance(
-                                                                coordinates[
+                                                                widget.coordinates[
                                                                     'lat'],
-                                                                coordinates[
+                                                                widget.coordinates[
                                                                     'long'],
                                                                 ref
                                                                     .read(latProvider
@@ -344,7 +370,8 @@ class BookBottomSheetWidget extends StatelessWidget {
                                                                         .notifier)
                                                                     .state))
                                                             .toStringAsFixed(2),
-                                                        'origin': coordinates[
+                                                        'origin': widget
+                                                                .coordinates[
                                                             'pickupLocation'],
                                                         'destination': ref
                                                             .read(
@@ -352,9 +379,9 @@ class BookBottomSheetWidget extends StatelessWidget {
                                                                     .notifier)
                                                             .state,
                                                         'fare': (((calculateDistance(
-                                                                        coordinates[
+                                                                        widget.coordinates[
                                                                             'lat'],
-                                                                        coordinates[
+                                                                        widget.coordinates[
                                                                             'long'],
                                                                         ref
                                                                             .read(latProvider
