@@ -304,7 +304,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     leading: const Icon(Icons.home),
                     title: TextRegular(
                       text: 'Home',
-                      fontSize: 12,
+                      fontSize: 14,
                       color: Colors.grey,
                     ),
                     onTap: () {
@@ -316,7 +316,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     leading: const Icon(Icons.message_outlined),
                     title: TextRegular(
                       text: 'Messages',
-                      fontSize: 12,
+                      fontSize: 14,
                       color: Colors.grey,
                     ),
                     onTap: () {
@@ -328,7 +328,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     leading: const Icon(Icons.collections_bookmark_outlined),
                     title: TextRegular(
                       text: 'Recent trips',
-                      fontSize: 12,
+                      fontSize: 14,
                       color: Colors.grey,
                     ),
                     onTap: () {
@@ -342,7 +342,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     ),
                     title: TextRegular(
                       text: 'Contact us',
-                      fontSize: 12,
+                      fontSize: 14,
                       color: Colors.grey,
                     ),
                     onTap: () {
@@ -356,7 +356,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     ),
                     title: TextRegular(
                       text: 'About us',
-                      fontSize: 12,
+                      fontSize: 14,
                       color: Colors.grey,
                     ),
                     onTap: () {
@@ -368,7 +368,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     leading: const Icon(Icons.logout),
                     title: TextRegular(
                       text: 'Logout',
-                      fontSize: 12,
+                      fontSize: 14,
                       color: Colors.grey,
                     ),
                     onTap: () {
@@ -414,6 +414,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 ],
                               ));
                     },
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Center(
+                    child: TextRegular(
+                        text: 'PHara 2023', fontSize: 11, color: grey),
                   ),
                 ],
               ),
