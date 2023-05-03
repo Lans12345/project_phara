@@ -113,6 +113,7 @@ class LoginScreen extends StatelessWidget {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         TextFieldWidget(
+                                          hint: 'Email',
                                           textCapitalization:
                                               TextCapitalization.none,
                                           inputType: TextInputType.emailAddress,
