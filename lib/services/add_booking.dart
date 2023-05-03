@@ -1,8 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future addBooking(driverId, origin, destination, distance, time, fare,
-    originLat, originLong, destinationLat, destinationLong, userName) async {
+Future addBooking(
+    driverId,
+    origin,
+    destination,
+    distance,
+    time,
+    fare,
+    originLat,
+    originLong,
+    destinationLat,
+    destinationLong,
+    userName,
+    userProfile) async {
   final docUser = FirebaseFirestore.instance.collection('Bookings').doc();
 
   final json = {
@@ -17,7 +28,8 @@ Future addBooking(driverId, origin, destination, distance, time, fare,
     'fare': fare,
     'originCoordinates': {'lat': originLat, 'long': originLong},
     'destinationCoordinates': {'lat': destinationLat, 'long': destinationLong},
-    'userName': userName
+    'userName': userName,
+    'userProfile': userProfile
   };
 
   await FirebaseFirestore.instance

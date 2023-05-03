@@ -27,6 +27,7 @@ class BookBottomSheetWidget extends StatefulWidget {
 
 class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
   String userName = '';
+  String userProfile = '';
 
   @override
   void initState() {
@@ -43,6 +44,7 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
       for (var doc in querySnapshot.docs) {
         setState(() {
           userName = doc['name'];
+          userProfile = doc['profilePicture'];
         });
       }
     });
@@ -342,7 +344,8 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                                   widget.coordinates['long'],
                                                   ref.read(latProvider.notifier).state,
                                                   ref.read(longProvider.notifier).state,
-                                                  userName);
+                                                  userName,
+                                                  userProfile);
                                               Navigator.pop(context);
 
                                               showModalBottomSheet(
@@ -352,7 +355,8 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                                   builder: ((context) {
                                                     return TrackBookingBottomSheetWidget(
                                                       tripDetails: {
-                                                        'driverProfile': data['profilePicture'],
+                                                        'driverProfile': data[
+                                                            'profilePicture'],
                                                         'driverName':
                                                             data['name'],
                                                         'driverId':
