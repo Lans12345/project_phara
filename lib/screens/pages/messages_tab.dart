@@ -24,7 +24,7 @@ class _MessagesTabState extends State<MessagesTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerWidget(),
+      drawer: const DrawerWidget(),
       appBar: AppbarWidget('Messages'),
       body: Column(
         children: [
@@ -136,11 +136,11 @@ class _MessagesTabState extends State<MessagesTab> {
                                                 ['driverName'],
                                           )));
                                 },
-                                leading: const CircleAvatar(
+                                leading: CircleAvatar(
                                   maxRadius: 25,
                                   minRadius: 25,
                                   backgroundImage: NetworkImage(
-                                    'https://i.pinimg.com/originals/45/e1/9c/45e19c74f5c293c27a7ec8aee6a92936.jpg',
+                                    data.docs[index]['driverProfile'],
                                   ),
                                 ),
                                 title: data.docs[index]['seen'] == true

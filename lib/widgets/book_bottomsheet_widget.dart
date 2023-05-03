@@ -100,11 +100,11 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                       ),
                       Row(
                         children: [
-                          const CircleAvatar(
+                          CircleAvatar(
                             minRadius: 50,
                             maxRadius: 50,
-                            backgroundImage: NetworkImage(
-                                'https://i.pinimg.com/originals/45/e1/9c/45e19c74f5c293c27a7ec8aee6a92936.jpg'),
+                            backgroundImage:
+                                NetworkImage(data['profilePicture']),
                           ),
                           const SizedBox(
                             width: 15,
@@ -352,6 +352,7 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                                   builder: ((context) {
                                                     return TrackBookingBottomSheetWidget(
                                                       tripDetails: {
+                                                        'driverProfile': data['profilePicture'],
                                                         'driverName':
                                                             data['name'],
                                                         'driverId':

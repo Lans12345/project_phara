@@ -83,15 +83,19 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
         backgroundColor: Colors.white,
         title: Row(
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               minRadius: 17.5,
               maxRadius: 17.5,
-              backgroundImage: AssetImage('assets/images/profile.png'),
+              backgroundImage:
+                  NetworkImage(widget.tripDetails['driverProfile']),
             ),
             const SizedBox(
               width: 20,
             ),
-            TextRegular(text: 'Lance Olana', fontSize: 20, color: grey),
+            TextRegular(
+                text: widget.tripDetails['driverName'],
+                fontSize: 20,
+                color: grey),
           ],
         ),
         actions: [

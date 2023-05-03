@@ -260,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     )),
               ],
             ),
-            drawer: Drawer(
+            drawer: const Drawer(
               child: DrawerWidget(),
             ),
             appBar: AppBar(
@@ -429,11 +429,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           Column(mainAxisSize: MainAxisSize.min, children: [
                         Row(
                           children: [
-                            const CircleAvatar(
+                            CircleAvatar(
                               minRadius: 50,
                               maxRadius: 50,
-                              backgroundImage: NetworkImage(
-                                  'https://i.pinimg.com/originals/45/e1/9c/45e19c74f5c293c27a7ec8aee6a92936.jpg'),
+                              backgroundImage:
+                                  NetworkImage(doc['profilePicture']),
                             ),
                             const SizedBox(
                               width: 15,
