@@ -60,6 +60,7 @@ dependencies:
   url_launcher:
   connectivity_plus:
   cached_network_image:
+  custom_map_markers:
 
 dev_dependencies:
   flutter_test:
