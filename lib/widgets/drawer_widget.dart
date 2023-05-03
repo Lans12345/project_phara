@@ -76,22 +76,42 @@ class DrawerWidget extends StatelessWidget {
                                     showDialog(
                                         context: context,
                                         builder: ((context) {
+                                          final formKey =
+                                              GlobalKey<FormState>();
                                           return AlertDialog(
+                                            backgroundColor: Colors.grey[100],
                                             title: TextRegular(
                                                 text: 'New contact number',
                                                 fontSize: 14,
                                                 color: Colors.black),
-                                            content: SizedBox(
-                                              height: 55,
-                                              child: TextFieldWidget(
-                                                  radius: 0,
-                                                  inputType:
-                                                      TextInputType.number,
-                                                  hint: data['number'],
-                                                  color: grey,
-                                                  height: 35,
-                                                  label: '',
-                                                  controller: numberController),
+                                            content: Form(
+                                              key: formKey,
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  TextFieldWidget(
+                                                    hint: '09XXXXXXXXX',
+                                                    inputType:
+                                                        TextInputType.number,
+                                                    label: 'Mobile Number',
+                                                    controller:
+                                                        numberController,
+                                                    validator: (value) {
+                                                      if (value == null ||
+                                                          value.isEmpty) {
+                                                        return 'Please enter a mobile number';
+                                                      } else if (value.length !=
+                                                              11 ||
+                                                          !value.startsWith(
+                                                              '09')) {
+                                                        return 'Please enter a valid mobile number';
+                                                      }
+
+                                                      return null;
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                             actions: [
                                               Row(
@@ -102,18 +122,15 @@ class DrawerWidget extends StatelessWidget {
                                                     onPressed: (() {
                                                       Navigator.pop(context);
                                                     }),
-                                                    child: TextBold(
+                                                    child: TextRegular(
                                                         text: 'Close',
-                                                        fontSize: 14,
+                                                        fontSize: 12,
                                                         color: grey),
                                                   ),
                                                   TextButton(
                                                     onPressed: (() async {
-                                                      if (numberController
-                                                              .text !=
-                                                          '') {
-                                                        numberController
-                                                            .clear();
+                                                      if (formKey.currentState!
+                                                          .validate()) {
                                                         await FirebaseFirestore
                                                             .instance
                                                             .collection('Users')
@@ -123,6 +140,7 @@ class DrawerWidget extends StatelessWidget {
                                                               numberController
                                                                   .text
                                                         });
+
                                                         Navigator.pop(context);
                                                       }
                                                     }),
@@ -209,7 +227,7 @@ class DrawerWidget extends StatelessWidget {
                     ),
                     onTap: () {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => MessagesTab()));
+                          builder: (context) => const MessagesTab()));
                     },
                   ),
                   ListTile(
