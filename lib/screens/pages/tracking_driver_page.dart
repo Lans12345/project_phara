@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
@@ -172,11 +171,6 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
   getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-
-    List<Placemark> p =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-
-    Placemark place = p[0];
 
     setState(() {
       lat = position.latitude;
