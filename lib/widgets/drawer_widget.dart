@@ -201,8 +201,7 @@ class DrawerWidget extends StatelessWidget {
                       child: CircleAvatar(
                         minRadius: 75,
                         maxRadius: 75,
-                        backgroundImage:
-                            const AssetImage('assets/images/profile.png'),
+                        backgroundImage: NetworkImage(data['profilePicture']),
                         child: Padding(
                           padding: const EdgeInsets.only(top: 30, left: 30),
                           child: Align(
