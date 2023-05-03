@@ -213,11 +213,24 @@ class SignupScreen extends StatelessWidget {
 
       signup(nameController.text, numberController.text, addressController.text,
           emailController.text);
+
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
-      showToast("Registered Succesfully!");
+
+      showToast("Registered Successfully!");
+
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const SplashToHomeScreen()));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        showToast('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        showToast('The account already exists for that email.');
+      } else if (e.code == 'invalid-email') {
+        showToast('The email address is not valid.');
+      } else {
+        showToast(e.toString());
+      }
     } on Exception catch (e) {
       showToast("An error occurred: $e");
     }
