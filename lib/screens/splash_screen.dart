@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:phara/plugins/my_location.dart';
-import 'package:phara/screens/auth/landing_screen.dart';
+import 'package:phara/screens/get_started_screen.dart';
 import 'package:phara/screens/home_screen.dart';
 import 'package:phara/widgets/text_widget.dart';
 
@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 if (snapshot.hasData) {
                   return const HomeScreen();
                 } else {
-                  return const LandingScreen();
+                  return const GetStartedScreen();
                 }
               }),
         ));
