@@ -25,12 +25,12 @@ class DrawerWidget extends StatefulWidget {
 }
 
 class _DrawerWidgetState extends State<DrawerWidget> {
+  final numberController = TextEditingController();
   late String fileName = '';
 
   late File imageFile;
 
   late String imageURL = '';
-  final numberController = TextEditingController();
 
   Future<void> uploadPicture(String inputSource) async {
     final picker = ImagePicker();
