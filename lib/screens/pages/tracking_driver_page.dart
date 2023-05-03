@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -13,6 +14,7 @@ import 'package:phara/widgets/text_widget.dart';
 
 import '../../plugins/my_location.dart';
 import '../../utils/colors.dart';
+import '../../utils/keys.dart';
 import '../home_screen.dart';
 
 class TrackingOfDriverPage extends StatefulWidget {
@@ -37,6 +39,11 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
       getDrivers();
     });
   }
+
+  List<LatLng> polylineCoordinates = [];
+
+  PolylinePoints polylinePoints = PolylinePoints();
+  String googleAPIKey = kGoogleApiKey;
 
   var hasLoaded = false;
 
@@ -201,20 +208,30 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
               'assets/images/driver.png',
             ),
             position: LatLng(doc['location']['lat'], doc['location']['long']));
-
+        PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+            googleAPIKey,
+            PointLatLng(position.latitude, position.longitude),
+            PointLatLng(doc['location']['lat'], doc['location']['long']));
+        if (result.points.isNotEmpty) {
+          polylineCoordinates = result.points
+              .map((point) => LatLng(point.latitude, point.longitude))
+              .toList();
+        }
         setState(() {
           _poly = Polyline(
               color: Colors.red,
               polylineId: const PolylineId('route'),
-              points: [
-                // User Location
-                LatLng(position.latitude, position.longitude),
-                LatLng(doc['location']['lat'], doc['location']['long']),
-              ],
+              points: polylineCoordinates,
               width: 4);
           markers.add(driverMarker);
           hasLoaded = true;
         });
+        mapController?.animateCamera(CameraUpdate.newCameraPosition(
+            CameraPosition(
+                bearing: 45,
+                tilt: 40,
+                target: LatLng(doc['location']['lat'], doc['location']['long']),
+                zoom: 18)));
       }
     });
   }
