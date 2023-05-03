@@ -59,6 +59,7 @@ dependencies:
   location: ^4.4.0
   url_launcher:
   connectivity_plus:
+  cached_network_image:
 
 dev_dependencies:
   flutter_test:

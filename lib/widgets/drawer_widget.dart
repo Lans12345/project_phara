@@ -196,13 +196,26 @@ class DrawerWidget extends StatelessWidget {
                         color: Colors.grey,
                       ),
                     ),
-                    currentAccountPicture: const Padding(
-                      padding: EdgeInsets.all(5.0),
+                    currentAccountPicture: Padding(
+                      padding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
                       child: CircleAvatar(
                         minRadius: 75,
                         maxRadius: 75,
                         backgroundImage:
-                            AssetImage('assets/images/profile.png'),
+                            const AssetImage('assets/images/profile.png'),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 30, left: 30),
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: IconButton(
+                              onPressed: () {
+                                // Image picker
+                              },
+                              icon: const Icon(Icons.camera_alt,
+                                  color: Colors.black),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
