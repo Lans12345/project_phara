@@ -105,13 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const Padding(
-                            padding: EdgeInsets.only(top: 50),
-                            child: Center(
-                                child: CircularProgressIndicator(
-                              color: Colors.black,
-                            )),
-                          );
+                          return const SizedBox();
                         }
 
                         final data = snapshot.requireData;
@@ -146,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Text('Something went wrong'));
                       } else if (snapshot.connectionState ==
                           ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const SizedBox();
                       }
                       dynamic data = snapshot.data;
 
@@ -284,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Text('Something went wrong'));
                       } else if (snapshot.connectionState ==
                           ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const SizedBox();
                       }
                       dynamic data = snapshot.data;
 
