@@ -61,6 +61,7 @@ dependencies:
   connectivity_plus:
   cached_network_image:
   custom_map_markers:
+  flutter_spinkit:
 
 dev_dependencies:
   flutter_test:

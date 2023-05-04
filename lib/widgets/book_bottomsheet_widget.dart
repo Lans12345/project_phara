@@ -285,11 +285,6 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                               await FirebaseFirestore.instance
                                                   .collection('Drivers')
                                                   .doc(widget.driverId)
-                                                  .update({'isActive': false});
-
-                                              await FirebaseFirestore.instance
-                                                  .collection('Drivers')
-                                                  .doc(widget.driverId)
                                                   .update({
                                                 'notif': FieldValue.arrayUnion([
                                                   {

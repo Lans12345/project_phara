@@ -6,6 +6,7 @@ import 'package:custom_map_markers/custom_map_markers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -383,7 +384,9 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         : const Scaffold(
             body: Center(
-              child: CircularProgressIndicator(),
+              child: SpinKitChasingDots(
+                color: grey,
+              ),
             ),
           );
   }
