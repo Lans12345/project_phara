@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 15,
                 ),
                 FloatingActionButton(
-                  backgroundColor: Colors.white,
+                  backgroundColor: Colors.white.withOpacity(0.5),
                   onPressed: (() {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (context) => const MessagesTab()));
@@ -150,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       List favs = oldfavs.reversed.toList();
                       return FloatingActionButton(
-                          backgroundColor: Colors.white,
+                          backgroundColor: Colors.white.withOpacity(0.5),
                           onPressed: (() {
                             if (favs.isNotEmpty) {
                               showDialog(
@@ -236,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 15,
                 ),
                 FloatingActionButton(
-                    backgroundColor: Colors.white,
+                    backgroundColor: Colors.white.withOpacity(0.5),
                     onPressed: (() {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => const TripsPage()));
@@ -249,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 15,
                 ),
                 FloatingActionButton(
-                    backgroundColor: Colors.white,
+                    backgroundColor: Colors.white.withOpacity(0.5),
                     onPressed: (() {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => const HomeScreen()));
@@ -349,9 +349,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     customMarkers: _customMarkers,
                     builder: (BuildContext context, Set<Marker>? markers1) {
                       if (markers1 == null) {
-                        return const Center(child: SizedBox());
+                        return const Center(
+                            child: SpinKitPulse(
+                          color: grey,
+                        ));
                       }
                       return GoogleMap(
+                        onCameraMove: (position) {
+                          print(position.zoom);
+                        },
                         zoomControlsEnabled: false,
                         buildingsEnabled: true,
                         compassEnabled: true,

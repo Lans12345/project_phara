@@ -107,11 +107,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         stream: userData,
         builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (!snapshot.hasData) {
-            return const Center(child: Text('Loading'));
+            return const SizedBox();
           } else if (snapshot.hasError) {
             return const Center(child: Text('Something went wrong'));
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const SizedBox();
           }
           dynamic data = snapshot.data;
           return SizedBox(

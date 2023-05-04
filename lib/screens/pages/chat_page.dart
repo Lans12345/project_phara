@@ -133,7 +133,8 @@ class _ChatPageState extends State<ChatPage> {
                           } else if (snapshot.connectionState ==
                               ConnectionState.waiting) {
                             return const Center(
-                                child: CircularProgressIndicator());
+                                child: SizedBox(
+                                    child: CircularProgressIndicator()));
                           }
 
                           try {
