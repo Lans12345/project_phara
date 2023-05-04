@@ -40,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
     getUserData();
     determinePosition();
     getLocation();
+    myLocationMarker(lat, long);
     getAllDrivers();
   }
 
@@ -134,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     builder:
                         (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                       if (!snapshot.hasData) {
-                        return const Center(child: Text('Loading'));
+                        return const SizedBox();
                       } else if (snapshot.hasError) {
                         return const Center(
                             child: Text('Something went wrong'));
@@ -272,7 +273,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     builder:
                         (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                       if (!snapshot.hasData) {
-                        return const Center(child: Text('Loading'));
+                        return const SizedBox();
                       } else if (snapshot.hasError) {
                         return const Center(
                             child: Text('Something went wrong'));
@@ -347,7 +348,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     customMarkers: _customMarkers,
                     builder: (BuildContext context, Set<Marker>? markers1) {
                       if (markers1 == null) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Center(child: SizedBox());
                       }
                       return GoogleMap(
                         zoomControlsEnabled: false,
@@ -413,7 +414,6 @@ class _HomeScreenState extends State<HomeScreen> {
       currentAddress =
           '${place.street}, ${place.subLocality}, ${place.locality}';
     });
-    myLocationMarker(lat, long);
   }
 
   getAllDrivers() async {
