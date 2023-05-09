@@ -11,6 +11,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:phara/data/distance_calculations.dart';
 import 'package:phara/data/user_stream.dart';
 import 'package:phara/plugins/my_location.dart';
 import 'package:phara/screens/pages/trips_page.dart';
@@ -470,6 +471,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                             : 'No ratings',
                                         fontSize: 14,
                                         color: Colors.amber),
+                                    TextRegular(
+                                        text:
+                                            '${calculateDistance(lat, long, doc['location']['lat'], doc['location']['long']).toStringAsFixed(2)} kms away',
+                                        fontSize: 12,
+                                        color: Colors.grey),
                                   ],
                                 ),
                               ],
@@ -533,8 +539,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       });
                 },
-                infoWindow: const InfoWindow(
-                  title: 'Driver',
+                infoWindow: InfoWindow(
+                  title: doc['name'],
+                  snippet:
+                      '${calculateDistance(lat, long, doc['location']['lat'], doc['location']['long']).toStringAsFixed(2)} km away',
                 ),
                 markerId: MarkerId(doc['name']),
                 position:
