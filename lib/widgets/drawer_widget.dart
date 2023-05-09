@@ -415,13 +415,27 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               ));
                     },
                   ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Center(
-                    child: TextRegular(
-                        text: 'PHara 2023', fontSize: 11, color: grey),
-                  ),
+                  // const Expanded(
+                  //   child: SizedBox(
+                  //     height: 50,
+                  //   ),
+                  // ),
+                  // Container(
+                  //   color: Colors.black,
+                  //   child: SafeArea(
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.center,
+                  //       children: [
+                  //         Image.asset(
+                  //           'assets/images/animation.gif',
+                  //           width: 60,
+                  //         ),
+                  //         TextBold(
+                  //             text: 'PHara', fontSize: 18, color: Colors.white),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
