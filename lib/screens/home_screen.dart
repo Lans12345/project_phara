@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
     getUserData();
     determinePosition();
     getLocation();
-    myLocationMarker(lat, long);
+
     getAllDrivers();
   }
 
@@ -369,6 +369,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         initialCameraPosition: camPosition,
                         onMapCreated: (GoogleMapController controller) {
                           _controller.complete(controller);
+                          myLocationMarker(lat, long);
                           setState(() {
                             mapController = controller;
                           });
@@ -402,7 +403,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _customMarkers.add(MarkerData(
         marker: Marker(
             infoWindow: const InfoWindow(
-              title: 'Your Current Location',
+              title: 'Your current location',
             ),
             markerId: const MarkerId('current Location'),
             position: LatLng(lat, long)),
@@ -413,16 +414,9 @@ class _HomeScreenState extends State<HomeScreen> {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
-    List<Placemark> p =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-
-    Placemark place = p[0];
-
     setState(() {
       lat = position.latitude;
       long = position.longitude;
-      currentAddress =
-          '${place.street}, ${place.subLocality}, ${place.locality}';
     });
   }
 
