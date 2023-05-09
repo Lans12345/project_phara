@@ -418,9 +418,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ));
                       }
                       return GoogleMap(
-                        onCameraMove: (position) {
-                          print(position.zoom);
-                        },
+                        mapToolbarEnabled: false,
                         zoomControlsEnabled: false,
                         buildingsEnabled: true,
                         compassEnabled: true,
