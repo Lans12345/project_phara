@@ -27,6 +27,7 @@ import 'package:uuid/uuid.dart';
 
 import '../services/providers/coordinates_provider.dart';
 import '../widgets/delegate/search_my_places.dart';
+import 'auth/login_screen.dart';
 import 'pages/messages_tab.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -352,8 +353,55 @@ class _HomeScreenState extends State<HomeScreen> {
                             ];
                           });
                     }),
-                const SizedBox(
-                  width: 10,
+                IconButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                              title: const Text(
+                                'Logout Confirmation',
+                                style: TextStyle(
+                                    fontFamily: 'QBold',
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              content: const Text(
+                                'Are you sure you want to Logout?',
+                                style: TextStyle(fontFamily: 'QRegular'),
+                              ),
+                              actions: <Widget>[
+                                MaterialButton(
+                                  onPressed: () async {
+                                    Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                LoginScreen()));
+                                    await FirebaseAuth.instance.signOut();
+                                  },
+                                  child: const Text(
+                                    'Continue',
+                                    style: TextStyle(
+                                        fontSize: 10,
+                                        color: grey,
+                                        fontFamily: 'QRegular',
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                MaterialButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                  child: const Text(
+                                    'Close',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontFamily: 'QBold',
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ],
+                            ));
+                  },
+                  icon: const Icon(Icons.logout),
                 ),
               ],
             ),
