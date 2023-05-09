@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 15,
                 ),
                 FloatingActionButton(
-                  backgroundColor: Colors.white.withOpacity(0.5),
+                  backgroundColor: Colors.white,
                   onPressed: (() {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (context) => const MessagesTab()));
@@ -153,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       List favs = oldfavs.reversed.toList();
                       return FloatingActionButton(
-                          backgroundColor: Colors.white.withOpacity(0.5),
+                          backgroundColor: Colors.white,
                           onPressed: (() {
                             if (favs.isNotEmpty) {
                               showDialog(
@@ -239,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 15,
                 ),
                 FloatingActionButton(
-                    backgroundColor: Colors.white.withOpacity(0.5),
+                    backgroundColor: Colors.white,
                     onPressed: (() {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => const TripsPage()));
@@ -252,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 15,
                 ),
                 FloatingActionButton(
-                    backgroundColor: Colors.white.withOpacity(0.5),
+                    backgroundColor: Colors.white,
                     onPressed: (() {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => const HomeScreen()));
