@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:badges/badges.dart' as b;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:custom_map_markers/custom_map_markers.dart';
@@ -267,7 +268,21 @@ class _HomeScreenState extends State<HomeScreen> {
             appBar: AppBar(
               foregroundColor: grey,
               backgroundColor: Colors.white,
-              title: TextBold(text: 'PHara', fontSize: 24, color: grey),
+              title: DefaultTextStyle(
+                style: const TextStyle(
+                  fontSize: 24.0,
+                  fontFamily: 'QBold',
+                ),
+                child: AnimatedTextKit(
+                  animatedTexts: [
+                    WavyAnimatedText('PHara',
+                        textStyle: const TextStyle(
+                            fontFamily: 'QBold', color: grey, fontSize: 24)),
+                  ],
+                  isRepeatingAnimation: true,
+                  repeatForever: true,
+                ),
+              ),
               actions: [
                 StreamBuilder<DocumentSnapshot>(
                     stream: FirebaseData().userData,
