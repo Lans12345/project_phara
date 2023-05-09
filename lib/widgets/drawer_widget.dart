@@ -116,326 +116,352 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           dynamic data = snapshot.data;
           return SizedBox(
             child: Drawer(
-              child: ListView(
-                padding: const EdgeInsets.only(top: 0),
-                children: <Widget>[
-                  UserAccountsDrawerHeader(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                    ),
-                    accountEmail: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              Icons.phone,
-                              color: Colors.grey,
-                              size: 15,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      child: ListView(
+                        padding: const EdgeInsets.only(top: 0),
+                        children: <Widget>[
+                          UserAccountsDrawerHeader(
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
                             ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Row(
+                            accountEmail: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                TextRegular(
-                                  text: data['number'],
-                                  fontSize: 14,
-                                  color: Colors.grey,
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.phone,
+                                      color: Colors.grey,
+                                      size: 15,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        TextRegular(
+                                          text: data['number'],
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: ((context) {
+                                                  final formKey =
+                                                      GlobalKey<FormState>();
+                                                  return AlertDialog(
+                                                    backgroundColor:
+                                                        Colors.grey[100],
+                                                    title: TextRegular(
+                                                        text:
+                                                            'New contact number',
+                                                        fontSize: 14,
+                                                        color: Colors.black),
+                                                    content: Form(
+                                                      key: formKey,
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          TextFieldWidget(
+                                                            hint: '09XXXXXXXXX',
+                                                            inputType:
+                                                                TextInputType
+                                                                    .number,
+                                                            label:
+                                                                'Mobile Number',
+                                                            controller:
+                                                                numberController,
+                                                            validator: (value) {
+                                                              if (value ==
+                                                                      null ||
+                                                                  value
+                                                                      .isEmpty) {
+                                                                return 'Please enter a mobile number';
+                                                              } else if (value
+                                                                          .length !=
+                                                                      11 ||
+                                                                  !value.startsWith(
+                                                                      '09')) {
+                                                                return 'Please enter a valid mobile number';
+                                                              }
+
+                                                              return null;
+                                                            },
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    actions: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          TextButton(
+                                                            onPressed: (() {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            }),
+                                                            child: TextRegular(
+                                                                text: 'Close',
+                                                                fontSize: 12,
+                                                                color: grey),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed:
+                                                                (() async {
+                                                              if (formKey
+                                                                  .currentState!
+                                                                  .validate()) {
+                                                                await FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        'Users')
+                                                                    .doc(data[
+                                                                        'id'])
+                                                                    .update({
+                                                                  'number':
+                                                                      numberController
+                                                                          .text
+                                                                });
+
+                                                                Navigator.pop(
+                                                                    context);
+                                                              }
+                                                            }),
+                                                            child: TextBold(
+                                                                text: 'Update',
+                                                                fontSize: 15,
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  );
+                                                }));
+                                          },
+                                          child: const Icon(
+                                            Icons.edit_outlined,
+                                            color: grey,
+                                            size: 16,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                                 const SizedBox(
-                                  width: 10,
+                                  height: 5,
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: ((context) {
-                                          final formKey =
-                                              GlobalKey<FormState>();
-                                          return AlertDialog(
-                                            backgroundColor: Colors.grey[100],
-                                            title: TextRegular(
-                                                text: 'New contact number',
-                                                fontSize: 14,
-                                                color: Colors.black),
-                                            content: Form(
-                                              key: formKey,
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  TextFieldWidget(
-                                                    hint: '09XXXXXXXXX',
-                                                    inputType:
-                                                        TextInputType.number,
-                                                    label: 'Mobile Number',
-                                                    controller:
-                                                        numberController,
-                                                    validator: (value) {
-                                                      if (value == null ||
-                                                          value.isEmpty) {
-                                                        return 'Please enter a mobile number';
-                                                      } else if (value.length !=
-                                                              11 ||
-                                                          !value.startsWith(
-                                                              '09')) {
-                                                        return 'Please enter a valid mobile number';
-                                                      }
-
-                                                      return null;
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            actions: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  TextButton(
-                                                    onPressed: (() {
-                                                      Navigator.pop(context);
-                                                    }),
-                                                    child: TextRegular(
-                                                        text: 'Close',
-                                                        fontSize: 12,
-                                                        color: grey),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: (() async {
-                                                      if (formKey.currentState!
-                                                          .validate()) {
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection('Users')
-                                                            .doc(data['id'])
-                                                            .update({
-                                                          'number':
-                                                              numberController
-                                                                  .text
-                                                        });
-
-                                                        Navigator.pop(context);
-                                                      }
-                                                    }),
-                                                    child: TextBold(
-                                                        text: 'Update',
-                                                        fontSize: 15,
-                                                        color: Colors.black),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          );
-                                        }));
-                                  },
-                                  child: const Icon(
-                                    Icons.edit_outlined,
-                                    color: grey,
-                                    size: 16,
-                                  ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const Icon(
+                                      Icons.email,
+                                      color: Colors.grey,
+                                      size: 15,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    TextRegular(
+                                      text: data['email'],
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              Icons.email,
-                              color: Colors.grey,
-                              size: 15,
+                            accountName: Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: TextBold(
+                                text: data['name'],
+                                fontSize: 18,
+                                color: Colors.grey,
+                              ),
                             ),
-                            const SizedBox(
-                              width: 10,
+                            currentAccountPicture: Padding(
+                              padding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
+                              child: CircleAvatar(
+                                minRadius: 75,
+                                maxRadius: 75,
+                                backgroundImage:
+                                    NetworkImage(data['profilePicture']),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 30, left: 30),
+                                  child: Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: IconButton(
+                                      onPressed: () {
+                                        // Image picker
+                                        uploadPicture('gallery');
+                                      },
+                                      icon: const Icon(Icons.camera_alt,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
-                            TextRegular(
-                              text: data['email'],
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.home),
+                            title: TextRegular(
+                              text: 'Home',
                               fontSize: 14,
                               color: Colors.grey,
                             ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    accountName: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: TextBold(
-                        text: data['name'],
-                        fontSize: 18,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    currentAccountPicture: Padding(
-                      padding: const EdgeInsets.fromLTRB(5, 5, 5, 10),
-                      child: CircleAvatar(
-                        minRadius: 75,
-                        maxRadius: 75,
-                        backgroundImage: NetworkImage(data['profilePicture']),
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 30, left: 30),
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: IconButton(
-                              onPressed: () {
-                                // Image picker
-                                uploadPicture('gallery');
-                              },
-                              icon: const Icon(Icons.camera_alt,
-                                  color: Colors.black),
-                            ),
+                            onTap: () {
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const HomeScreen()));
+                            },
                           ),
-                        ),
+                          ListTile(
+                            leading: const Icon(Icons.message_outlined),
+                            title: TextRegular(
+                              text: 'Messages',
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                            onTap: () {
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const MessagesTab()));
+                            },
+                          ),
+                          ListTile(
+                            leading:
+                                const Icon(Icons.collections_bookmark_outlined),
+                            title: TextRegular(
+                              text: 'Recent trips',
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                            onTap: () {
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) => const TripsPage()));
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(
+                              Icons.manage_accounts_outlined,
+                            ),
+                            title: TextRegular(
+                              text: 'Contact us',
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                            onTap: () {
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ContactusPage()));
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(
+                              Icons.info_outline_rounded,
+                            ),
+                            title: TextRegular(
+                              text: 'About us',
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                            onTap: () {
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const AboutusPage()));
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.logout),
+                            title: TextRegular(
+                              text: 'Logout',
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                        title: const Text(
+                                          'Logout Confirmation',
+                                          style: TextStyle(
+                                              fontFamily: 'QBold',
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        content: const Text(
+                                          'Are you sure you want to Logout?',
+                                          style:
+                                              TextStyle(fontFamily: 'QRegular'),
+                                        ),
+                                        actions: <Widget>[
+                                          MaterialButton(
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(true),
+                                            child: const Text(
+                                              'Close',
+                                              style: TextStyle(
+                                                  fontFamily: 'QRegular',
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          MaterialButton(
+                                            onPressed: () async {
+                                              await FirebaseAuth.instance
+                                                  .signOut();
+                                              Navigator.of(context)
+                                                  .pushReplacement(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              LoginScreen()));
+                                            },
+                                            child: const Text(
+                                              'Continue',
+                                              style: TextStyle(
+                                                  fontFamily: 'QRegular',
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ],
+                                      ));
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  ListTile(
-                    leading: const Icon(Icons.home),
-                    title: TextRegular(
-                      text: 'Home',
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const HomeScreen()));
-                    },
+                  Image.asset(
+                    'assets/images/animation.gif',
+                    width: 60,
+                    height: 60,
+                    color: grey.withOpacity(0.5),
                   ),
-                  ListTile(
-                    leading: const Icon(Icons.message_outlined),
-                    title: TextRegular(
-                      text: 'Messages',
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const MessagesTab()));
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.collections_bookmark_outlined),
-                    title: TextRegular(
-                      text: 'Recent trips',
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const TripsPage()));
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(
-                      Icons.manage_accounts_outlined,
-                    ),
-                    title: TextRegular(
-                      text: 'Contact us',
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const ContactusPage()));
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(
-                      Icons.info_outline_rounded,
-                    ),
-                    title: TextRegular(
-                      text: 'About us',
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const AboutusPage()));
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.logout),
-                    title: TextRegular(
-                      text: 'Logout',
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                                title: const Text(
-                                  'Logout Confirmation',
-                                  style: TextStyle(
-                                      fontFamily: 'QBold',
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                content: const Text(
-                                  'Are you sure you want to Logout?',
-                                  style: TextStyle(fontFamily: 'QRegular'),
-                                ),
-                                actions: <Widget>[
-                                  MaterialButton(
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(true),
-                                    child: const Text(
-                                      'Close',
-                                      style: TextStyle(
-                                          fontFamily: 'QRegular',
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  MaterialButton(
-                                    onPressed: () async {
-                                      await FirebaseAuth.instance.signOut();
-                                      Navigator.of(context).pushReplacement(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  LoginScreen()));
-                                    },
-                                    child: const Text(
-                                      'Continue',
-                                      style: TextStyle(
-                                          fontFamily: 'QRegular',
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ],
-                              ));
-                    },
-                  ),
-                  // const Expanded(
-                  //   child: SizedBox(
-                  //     height: 50,
-                  //   ),
-                  // ),
-                  // Container(
-                  //   color: Colors.black,
-                  //   child: SafeArea(
-                  //     child: Row(
-                  //       mainAxisAlignment: MainAxisAlignment.center,
-                  //       children: [
-                  //         Image.asset(
-                  //           'assets/images/animation.gif',
-                  //           width: 60,
-                  //         ),
-                  //         TextBold(
-                  //             text: 'PHara', fontSize: 18, color: Colors.white),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),

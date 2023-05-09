@@ -267,8 +267,7 @@ class _HomeScreenState extends State<HomeScreen> {
             appBar: AppBar(
               foregroundColor: grey,
               backgroundColor: Colors.white,
-              title:
-                  TextRegular(text: 'PHara', fontSize: 24, color: Colors.black),
+              title: TextBold(text: 'PHara', fontSize: 24, color: grey),
               actions: [
                 StreamBuilder<DocumentSnapshot>(
                     stream: FirebaseData().userData,
