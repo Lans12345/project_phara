@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:phara/screens/home_screen.dart';
 import 'package:phara/screens/pages/tracking_driver_page.dart';
 import 'package:phara/widgets/text_widget.dart';
 
@@ -194,7 +195,12 @@ class _TrackBookingBottomSheetWidgetState
                                 minWidth: 300,
                                 height: 50,
                                 color: Colors.red,
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const HomeScreen()));
+                                },
                                 child: SizedBox(
                                   width: 280,
                                   child: Row(
