@@ -14,7 +14,7 @@ class TripsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerWidget(),
+      drawer: const DrawerWidget(),
       appBar: AppbarWidget('Recent Trips'),
       body: StreamBuilder<DocumentSnapshot>(
           stream: FirebaseData().userData,
@@ -38,18 +38,14 @@ class TripsPage extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: grey.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.asset(
-                              'assets/images/rider.png',
-                              height: 100,
-                            ),
-                          ),
+                        CircleAvatar(
+                          minRadius: 37,
+                          maxRadius: 37,
+                          backgroundColor: Colors.black,
+                          child: TextBold(
+                              text: newhistory[index]['destination'][0],
+                              fontSize: 24,
+                              color: Colors.white),
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
