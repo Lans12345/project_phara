@@ -5,6 +5,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:phara/data/distance_calculations.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/appbar_widget.dart';
 import 'package:phara/widgets/button_widget.dart';
@@ -76,7 +77,7 @@ class DeliveryPageState extends State<DeliveryPage> {
         infoWindow: InfoWindow(title: 'Drop-off Location', snippet: drop)));
   }
 
-  late Polyline _poly;
+  late Polyline _poly = const Polyline(polylineId: PolylineId('asd'));
 
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
@@ -140,7 +141,12 @@ class DeliveryPageState extends State<DeliveryPage> {
                                       height: 5,
                                     ),
                                     TextBold(
-                                        text: 'Search locations',
+                                        text: pickup ==
+                                                    'Search Pick-up Location' ||
+                                                drop ==
+                                                    'Search Drop-off Location'
+                                            ? 'Search locations'
+                                            : 'Distance: ${calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude).toStringAsFixed(2)} km away',
                                         fontSize: 18,
                                         color: grey),
                                     const SizedBox(
@@ -480,6 +486,12 @@ class DeliveryPageState extends State<DeliveryPage> {
               ),
             ),
     );
+  }
+
+  @override
+  void dispose() {
+    mapController!.dispose();
+    super.dispose();
   }
 }
 
