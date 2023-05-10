@@ -741,7 +741,7 @@ class DeliveryPageState extends State<DeliveryPage> {
                                               ),
                                               TextRegular(
                                                   text:
-                                                      'Fare: ₱${(((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 12) + 45).toStringAsFixed(2)}',
+                                                      'Payment: ₱${(((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 12) + 45).toStringAsFixed(2)} + Fee (Item Size)',
                                                   fontSize: 15,
                                                   color: grey),
                                               const SizedBox(
