@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -75,6 +76,11 @@ class DeliveryPageState extends State<DeliveryPage> {
         infoWindow: InfoWindow(title: 'Drop-off Location', snippet: drop)));
   }
 
+  late Polyline _poly;
+
+  List<LatLng> polylineCoordinates = [];
+  PolylinePoints polylinePoints = PolylinePoints();
+
   late String pickup = 'Search Pick-up Location';
   late String drop = 'Search Drop-off Location';
 
@@ -91,6 +97,7 @@ class DeliveryPageState extends State<DeliveryPage> {
           ? Stack(
               children: [
                 GoogleMap(
+                  polylines: {_poly},
                   markers: markers,
                   mapToolbarEnabled: false,
                   zoomControlsEnabled: false,
@@ -312,6 +319,33 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                   .lat,
                                               detail.result.geometry!.location
                                                   .lng);
+                                        });
+
+                                        PolylineResult result =
+                                            await polylinePoints
+                                                .getRouteBetweenCoordinates(
+                                                    kGoogleApiKey,
+                                                    PointLatLng(pickUp.latitude,
+                                                        pickUp.longitude),
+                                                    PointLatLng(
+                                                        detail.result.geometry!
+                                                            .location.lat,
+                                                        detail.result.geometry!
+                                                            .location.lng));
+                                        if (result.points.isNotEmpty) {
+                                          polylineCoordinates = result.points
+                                              .map((point) => LatLng(
+                                                  point.latitude,
+                                                  point.longitude))
+                                              .toList();
+                                        }
+                                        setState(() {
+                                          _poly = Polyline(
+                                              color: Colors.red,
+                                              polylineId:
+                                                  const PolylineId('route'),
+                                              points: polylineCoordinates,
+                                              width: 4);
                                         });
 
                                         mapController!.animateCamera(
