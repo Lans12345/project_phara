@@ -834,13 +834,15 @@ class DeliveryPageState extends State<DeliveryPage> {
                                 color: Colors.black),
                             trailing: TextRegular(
                                 text:
-                                    '${calculateDistance(lat, long, data.docs[index]['location']['lat'], data.docs[index]['location']['long']).toStringAsFixed(2)} km away',
+                                    '${calculateDistance(lat, long, data.docs[index]['location']['lat'], data.docs[index]['location']['long']).toStringAsFixed(2)}km away',
                                 fontSize: 12,
                                 color: Colors.black),
                             subtitle: TextRegular(
-                                text: data.docs[index]['vehicle'],
+                                text: data.docs[index]['ratings'].length != 0
+                                    ? 'Rating: ${rating.toStringAsFixed(2)} ★'
+                                    : 'No ratings',
                                 fontSize: 12,
-                                color: Colors.grey),
+                                color: Colors.amber),
                           );
                         });
                   }),
