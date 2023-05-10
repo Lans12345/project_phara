@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -470,7 +471,85 @@ class DeliveryPageState extends State<DeliveryPage> {
                                             opacity: 1,
                                             label: 'Book Delivery',
                                             onPressed: () {
-                                              print(pickup);
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      title: TextBold(
+                                                          text: 'Choose driver',
+                                                          fontSize: 18,
+                                                          color: Colors.black),
+                                                      content: SizedBox(
+                                                        height: 250,
+                                                        child: StreamBuilder<
+                                                                QuerySnapshot>(
+                                                            stream: FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'Drivers')
+                                                                .where(
+                                                                    'isActive',
+                                                                    isEqualTo:
+                                                                        true)
+                                                                .snapshots(),
+                                                            builder: (context,
+                                                                snapshot) {
+                                                              final data = snapshot
+                                                                  .requireData;
+                                                              return ListView
+                                                                  .separated(
+                                                                      itemCount: data
+                                                                          .docs
+                                                                          .length,
+                                                                      separatorBuilder:
+                                                                          (context,
+                                                                              index) {
+                                                                        return const Divider();
+                                                                      },
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              index) {
+                                                                        return ListTile(
+                                                                          leading:
+                                                                              CircleAvatar(
+                                                                            backgroundImage:
+                                                                                NetworkImage(data.docs[index]['profilePicture']),
+                                                                            minRadius:
+                                                                                17.5,
+                                                                            maxRadius:
+                                                                                17.5,
+                                                                          ),
+                                                                          title: TextBold(
+                                                                              text: data.docs[index]['name'],
+                                                                              fontSize: 14,
+                                                                              color: Colors.black),
+                                                                          trailing: TextRegular(
+                                                                              text: '${calculateDistance(lat, long, data.docs[index]['location']['lat'], data.docs[index]['location']['long']).toStringAsFixed(2)} km away',
+                                                                              fontSize: 12,
+                                                                              color: Colors.black),
+                                                                          subtitle: TextRegular(
+                                                                              text: data.docs[index]['vehicle'],
+                                                                              fontSize: 12,
+                                                                              color: Colors.grey),
+                                                                        );
+                                                                      });
+                                                            }),
+                                                      ),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: TextRegular(
+                                                              text: 'Close',
+                                                              fontSize: 14,
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  });
                                             },
                                           )
                                         : const SizedBox(),
