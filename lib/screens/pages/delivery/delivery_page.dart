@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -810,6 +811,21 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                                               context);
                                                                           Navigator.of(context)
                                                                               .push(MaterialPageRoute(builder: (context) => const DeliveryHistoryPage()));
+
+                                                                              await FirebaseFirestore.instance
+      .collection('Users')
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .update({
+    'deliveryHistory': FieldValue.arrayUnion([
+      {
+        'origin': pickup,
+        'destination': drop,
+        'distance': calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude).toStringAsFixed(2),
+        'payment': (((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 12) + 45).toStringAsFixed(2),
+        'date': DateTime.now(),
+      }
+    ]),
+      });
                                                                         },
                                                                         child:
                                                                             const Text(

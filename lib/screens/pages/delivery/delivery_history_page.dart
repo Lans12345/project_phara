@@ -26,7 +26,7 @@ class DeliveryHistoryPage extends StatelessWidget {
             }
             dynamic data = snapshot.data;
 
-            List history = data['history'];
+            List history = data['deliveryHistory'];
             List newhistory = history.reversed.toList();
             return ListView.builder(
                 itemCount: newhistory.length,
@@ -64,7 +64,7 @@ class DeliveryHistoryPage extends StatelessWidget {
                                   color: grey),
                             ),
                             TextRegular(
-                                text: 'Fare: ₱${newhistory[index]['fare']}',
+                                text: 'Fare: ₱${newhistory[index]['payment']}',
                                 fontSize: 12,
                                 color: grey),
                             TextRegular(
@@ -81,7 +81,7 @@ class DeliveryHistoryPage extends StatelessWidget {
                                 .collection('Users')
                                 .doc(FirebaseAuth.instance.currentUser!.uid)
                                 .update({
-                              'history':
+                              'deliveryHistory':
                                   FieldValue.arrayRemove([newhistory[index]]),
                             });
                           }),
