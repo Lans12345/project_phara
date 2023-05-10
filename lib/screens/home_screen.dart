@@ -408,7 +408,7 @@ class _HomeScreenState extends State<HomeScreen> {
             body: Stack(
               children: [
                 CustomGoogleMapMarkerBuilder(
-                    screenshotDelay: const Duration(seconds: 5),
+                    screenshotDelay: const Duration(seconds: 2),
                     customMarkers: _customMarkers,
                     builder: (BuildContext context, Set<Marker>? markers1) {
                       if (markers1 == null) {
@@ -429,7 +429,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         initialCameraPosition: camPosition,
                         onMapCreated: (GoogleMapController controller) {
                           _controller.complete(controller);
-                          myLocationMarker(lat, long);
+
                           setState(() {
                             mapController = controller;
                           });
@@ -459,17 +459,6 @@ class _HomeScreenState extends State<HomeScreen> {
           );
   }
 
-  myLocationMarker(double lat, double lang) async {
-    _customMarkers.add(MarkerData(
-        marker: Marker(
-            infoWindow: const InfoWindow(
-              title: 'Your current location',
-            ),
-            markerId: const MarkerId('current Location'),
-            position: LatLng(lat, long)),
-        child: CustomMarker(profilePicture, Colors.red)));
-  }
-
   getLocation() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -481,6 +470,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   getAllDrivers() async {
+    _customMarkers.add(MarkerData(
+        marker: Marker(
+            infoWindow: const InfoWindow(
+              title: 'Your current location',
+            ),
+            markerId: const MarkerId('current Location'),
+            position: LatLng(lat, long)),
+        child: CustomMarker(profilePicture, Colors.red)));
     FirebaseFirestore.instance
         .collection('Drivers')
         .where('isActive', isEqualTo: true)
