@@ -34,7 +34,7 @@ class DeliveryPageState extends State<DeliveryPage> {
       setState(() {
         lat = value.latitude;
         long = value.longitude;
-        addMyMarker(lat, long);
+        hasLoaded = true;
       });
     });
   }
@@ -47,17 +47,6 @@ class DeliveryPageState extends State<DeliveryPage> {
   bool hasLoaded = false;
 
   Set<Marker> markers = {};
-
-  addMyMarker(lat1, long1) async {
-    markers.add(Marker(
-        icon: BitmapDescriptor.defaultMarker,
-        markerId: const MarkerId("currentLocation"),
-        position: LatLng(lat1, long1),
-        infoWindow: const InfoWindow(title: 'Your Current Location')));
-    setState(() {
-      hasLoaded = true;
-    });
-  }
 
   GoogleMapController? mapController;
 
@@ -812,20 +801,22 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                                           Navigator.of(context)
                                                                               .push(MaterialPageRoute(builder: (context) => const DeliveryHistoryPage()));
 
-                                                                              await FirebaseFirestore.instance
-      .collection('Users')
-      .doc(FirebaseAuth.instance.currentUser!.uid)
-      .update({
-    'deliveryHistory': FieldValue.arrayUnion([
-      {
-        'origin': pickup,
-        'destination': drop,
-        'distance': calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude).toStringAsFixed(2),
-        'payment': (((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 12) + 45).toStringAsFixed(2),
-        'date': DateTime.now(),
-      }
-    ]),
-      });
+                                                                          await FirebaseFirestore
+                                                                              .instance
+                                                                              .collection('Users')
+                                                                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                                                                              .update({
+                                                                            'deliveryHistory':
+                                                                                FieldValue.arrayUnion([
+                                                                              {
+                                                                                'origin': pickup,
+                                                                                'destination': drop,
+                                                                                'distance': calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude).toStringAsFixed(2),
+                                                                                'payment': (((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 12) + 45).toStringAsFixed(2),
+                                                                                'date': DateTime.now(),
+                                                                              }
+                                                                            ]),
+                                                                          });
                                                                         },
                                                                         child:
                                                                             const Text(

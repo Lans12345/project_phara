@@ -470,14 +470,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   getAllDrivers() async {
-    _customMarkers.add(MarkerData(
-        marker: Marker(
-            infoWindow: const InfoWindow(
-              title: 'Your current location',
-            ),
-            markerId: const MarkerId('current Location'),
-            position: LatLng(lat, long)),
-        child: CustomMarker(profilePicture, Colors.red)));
+    // _customMarkers.add(MarkerData(
+    //     marker: Marker(
+    //         infoWindow: const InfoWindow(
+    //           title: 'Your current location',
+    //         ),
+    //         markerId: const MarkerId('current Location'),
+    //         position: LatLng(lat, long)),
+    //     child: CustomMarker(profilePicture, Colors.red)));
     FirebaseFirestore.instance
         .collection('Drivers')
         .where('isActive', isEqualTo: true)
