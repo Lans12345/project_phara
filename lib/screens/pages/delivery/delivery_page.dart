@@ -8,7 +8,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:phara/data/distance_calculations.dart';
 import 'package:phara/utils/colors.dart';
-import 'package:phara/widgets/appbar_widget.dart';
 import 'package:phara/widgets/button_widget.dart';
 import 'package:phara/widgets/drawer_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
@@ -96,7 +95,19 @@ class DeliveryPageState extends State<DeliveryPage> {
     );
     return Scaffold(
       drawer: const DrawerWidget(),
-      appBar: AppbarWidget('Delivery'),
+      appBar: AppBar(
+        centerTitle: true,
+        foregroundColor: grey,
+        backgroundColor: Colors.white,
+        title: TextRegular(text: 'Delivery', fontSize: 24, color: grey),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.history,
+            color: grey,),
+          ),
+        ],
+      ),
       body: hasLoaded
           ? Stack(
               children: [
