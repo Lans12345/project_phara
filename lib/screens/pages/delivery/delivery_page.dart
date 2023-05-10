@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:phara/data/distance_calculations.dart';
 import 'package:phara/screens/pages/delivery/delivery_history_page.dart';
+import 'package:phara/services/add_delivery.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/button_widget.dart';
 import 'package:phara/widgets/drawer_widget.dart';
@@ -36,6 +37,26 @@ class DeliveryPageState extends State<DeliveryPage> {
         long = value.longitude;
         hasLoaded = true;
       });
+    });
+    getUserData();
+  }
+
+  String userName = '';
+  String userProfile = '';
+
+  getUserData() {
+    FirebaseFirestore.instance
+        .collection('Users')
+        .where('id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((QuerySnapshot querySnapshot) async {
+      for (var doc in querySnapshot.docs) {
+        setState(() {
+          userName = doc['name'];
+          userProfile = doc['profilePicture'];
+          hasLoaded = true;
+        });
+      }
     });
   }
 
@@ -800,23 +821,19 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                                               context);
                                                                           Navigator.of(context)
                                                                               .push(MaterialPageRoute(builder: (context) => const DeliveryHistoryPage()));
-
-                                                                          await FirebaseFirestore
-                                                                              .instance
-                                                                              .collection('Users')
-                                                                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                                                                              .update({
-                                                                            'deliveryHistory':
-                                                                                FieldValue.arrayUnion([
-                                                                              {
-                                                                                'origin': pickup,
-                                                                                'destination': drop,
-                                                                                'distance': calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude).toStringAsFixed(2),
-                                                                                'payment': (((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 12) + 45).toStringAsFixed(2),
-                                                                                'date': DateTime.now(),
-                                                                              }
-                                                                            ]),
-                                                                          });
+                                                                          addDelivery(
+                                                                              data.docs[index].id,
+                                                                              pickup,
+                                                                              drop,
+                                                                              calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude).toStringAsFixed(2),
+                                                                              (calculateTravelTime((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)), 26.8)).toStringAsFixed(2),
+                                                                              (((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 12) + 45).toStringAsFixed(2),
+                                                                              pickUp.latitude,
+                                                                              pickUp.longitude,
+                                                                              dropOff.latitude,
+                                                                              dropOff.longitude,
+                                                                              userName,
+                                                                              userProfile);
                                                                         },
                                                                         child:
                                                                             const Text(
