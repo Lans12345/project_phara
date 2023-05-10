@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -17,6 +16,7 @@ import 'package:phara/widgets/text_widget.dart';
 import 'package:phara/widgets/textfield_widget.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as path;
+import 'package:badges/badges.dart' as b;
 
 class DrawerWidget extends StatefulWidget {
   const DrawerWidget({super.key});
@@ -26,6 +26,12 @@ class DrawerWidget extends StatefulWidget {
 }
 
 class _DrawerWidgetState extends State<DrawerWidget> {
+  @override
+  void initState() {
+    super.initState();
+    getBadgeCount();
+  }
+
   final numberController = TextEditingController();
   late String fileName = '';
 
@@ -96,6 +102,21 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         print(err);
       }
     }
+  }
+
+  int messageBadge = 0;
+
+  getBadgeCount() {
+    FirebaseFirestore.instance
+        .collection('Messages')
+        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where('seen', isEqualTo: false)
+        .get()
+        .then((QuerySnapshot querySnapshot) async {
+      setState(() {
+        messageBadge = querySnapshot.docs.length;
+      });
+    });
   }
 
   @override
@@ -354,7 +375,15 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             },
                           ),
                           ListTile(
-                            leading: const Icon(Icons.message_outlined),
+                            leading: b.Badge(
+                                showBadge: messageBadge != 0,
+                                badgeContent: TextRegular(
+                                    text: messageBadge.toString(),
+                                    fontSize: 12,
+                                    color: Colors.white),
+                                badgeStyle:
+                                    b.BadgeStyle(badgeColor: Colors.red[600]!),
+                                child: const Icon(Icons.message_outlined)),
                             title: TextRegular(
                               text: 'Messages',
                               fontSize: 14,

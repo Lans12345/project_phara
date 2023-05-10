@@ -35,7 +35,6 @@ class DeliveryPageState extends State<DeliveryPage> {
       setState(() {
         lat = value.latitude;
         long = value.longitude;
-        hasLoaded = true;
       });
     });
     getUserData();
