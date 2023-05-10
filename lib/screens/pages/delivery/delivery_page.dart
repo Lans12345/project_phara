@@ -75,16 +75,15 @@ class DeliveryPageState extends State<DeliveryPage> {
         infoWindow: InfoWindow(title: 'Drop-off Location', snippet: drop)));
   }
 
-  CameraPosition kGooglePlex = const CameraPosition(
-    target: LatLng(8.4803, 124.6498),
-    zoom: 18,
-  );
-
   late String pickup = 'Search Pick-up Location';
   late String drop = 'Search Drop-off Location';
 
   @override
   Widget build(BuildContext context) {
+    CameraPosition kGooglePlex = CameraPosition(
+      target: LatLng(lat, long),
+      zoom: 18,
+    );
     return Scaffold(
       drawer: const DrawerWidget(),
       appBar: AppbarWidget('Delivery'),
