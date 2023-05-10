@@ -66,7 +66,8 @@ class DeliveryPageState extends State<DeliveryPage> {
         icon: BitmapDescriptor.defaultMarker,
         markerId: const MarkerId("pickup"),
         position: LatLng(lat1, long1),
-        infoWindow: InfoWindow(title: 'Pick-up Location', snippet: pickup)));
+        infoWindow:
+            InfoWindow(title: 'Pick-up Location', snippet: 'PU: $pickup')));
   }
 
   addMyMarker12(lat1, long1) async {
@@ -74,10 +75,11 @@ class DeliveryPageState extends State<DeliveryPage> {
         icon: BitmapDescriptor.defaultMarker,
         markerId: const MarkerId("dropOff"),
         position: LatLng(lat1, long1),
-        infoWindow: InfoWindow(title: 'Drop-off Location', snippet: drop)));
+        infoWindow:
+            InfoWindow(title: 'Drop-off Location', snippet: 'DO: $drop')));
   }
 
-  late Polyline _poly = const Polyline(polylineId: PolylineId('asd'));
+  late Polyline _poly = const Polyline(polylineId: PolylineId('new'));
 
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
@@ -209,7 +211,7 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                 18.0));
 
                                         setState(() {
-                                          pickup = 'PU: ${detail.result.name}';
+                                          pickup = detail.result.name;
                                           pickUp = LatLng(
                                               detail.result.geometry!.location
                                                   .lat,
@@ -259,7 +261,7 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                   BorderRadius.circular(100),
                                             ),
                                             label: TextRegular(
-                                                text: pickup,
+                                                text: 'PU: $pickup',
                                                 fontSize: 14,
                                                 color: Colors.black),
                                             border: InputBorder.none,
@@ -318,7 +320,7 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                 .result.geometry!.location.lng);
 
                                         setState(() {
-                                          drop = 'DO: ${detail.result.name}';
+                                          drop = detail.result.name;
 
                                           dropOff = LatLng(
                                               detail.result.geometry!.location
@@ -446,7 +448,7 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                   BorderRadius.circular(100),
                                             ),
                                             label: TextRegular(
-                                                text: drop,
+                                                text: 'DO: $drop',
                                                 fontSize: 14,
                                                 color: Colors.black),
                                             border: InputBorder.none,
@@ -467,7 +469,9 @@ class DeliveryPageState extends State<DeliveryPage> {
                                             radius: 100,
                                             opacity: 1,
                                             label: 'Book Delivery',
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              print(pickup);
+                                            },
                                           )
                                         : const SizedBox(),
                                   ],
