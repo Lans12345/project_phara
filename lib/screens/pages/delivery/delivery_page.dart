@@ -7,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:phara/data/distance_calculations.dart';
+import 'package:phara/screens/pages/delivery/delivery_history_page.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/button_widget.dart';
 import 'package:phara/widgets/drawer_widget.dart';
@@ -103,7 +104,10 @@ class DeliveryPageState extends State<DeliveryPage> {
         title: TextRegular(text: 'Delivery', fontSize: 24, color: grey),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const DeliveryHistoryPage()));
+            },
             icon: const Icon(
               Icons.history,
               color: grey,
