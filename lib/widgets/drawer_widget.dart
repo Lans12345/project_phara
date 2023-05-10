@@ -9,6 +9,7 @@ import 'package:phara/screens/auth/login_screen.dart';
 import 'package:phara/screens/home_screen.dart';
 import 'package:phara/screens/pages/aboutus_page.dart';
 import 'package:phara/screens/pages/contactus_page.dart';
+import 'package:phara/screens/pages/delivery/delivery_page.dart';
 import 'package:phara/screens/pages/messages_tab.dart';
 import 'package:phara/screens/pages/trips_page.dart';
 import 'package:phara/utils/colors.dart';
@@ -336,6 +337,20 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   MaterialPageRoute(
                                       builder: (context) =>
                                           const HomeScreen()));
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.delivery_dining_outlined),
+                            title: TextRegular(
+                              text: 'Delivery',
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                            onTap: () {
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const DeliveryPage()));
                             },
                           ),
                           ListTile(

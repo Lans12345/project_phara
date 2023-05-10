@@ -63,6 +63,7 @@ dependencies:
   custom_map_markers:
   flutter_spinkit:
   animated_text_kit:
+  
 
 dev_dependencies:
   flutter_test:
