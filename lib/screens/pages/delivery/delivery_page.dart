@@ -1,8 +1,17 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/appbar_widget.dart';
+import 'package:phara/widgets/button_widget.dart';
 import 'package:phara/widgets/drawer_widget.dart';
+import 'package:phara/widgets/text_widget.dart';
+import 'package:google_maps_webservice/places.dart' as location;
+import 'package:google_api_headers/google_api_headers.dart';
+import '../../../utils/keys.dart';
 
 class DeliveryPage extends StatefulWidget {
   const DeliveryPage({super.key});
@@ -12,27 +21,437 @@ class DeliveryPage extends StatefulWidget {
 }
 
 class DeliveryPageState extends State<DeliveryPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Geolocator.getCurrentPosition().then((value) {
+      setState(() {
+        lat = value.latitude;
+        long = value.longitude;
+        addMyMarker(lat, long);
+      });
+    });
+  }
+
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
+  double lat = 0;
+  double long = 0;
+  bool hasLoaded = false;
+
+  Set<Marker> markers = {};
+
+  addMyMarker(lat1, long1) async {
+    markers.add(Marker(
+        icon: BitmapDescriptor.defaultMarker,
+        markerId: const MarkerId("currentLocation"),
+        position: LatLng(lat1, long1),
+        infoWindow: const InfoWindow(title: 'Your Current Location')));
+    setState(() {
+      hasLoaded = true;
+    });
+  }
+
+  GoogleMapController? mapController;
+
+  late LatLng pickUp;
+  late LatLng dropOff;
+
+  addMyMarker1(lat1, long1) async {
+    markers.add(Marker(
+        icon: BitmapDescriptor.defaultMarker,
+        markerId: const MarkerId("pickup"),
+        position: LatLng(lat1, long1),
+        infoWindow: InfoWindow(title: 'Pick-up Location', snippet: pickup)));
+  }
+
+  addMyMarker12(lat1, long1) async {
+    markers.add(Marker(
+        icon: BitmapDescriptor.defaultMarker,
+        markerId: const MarkerId("dropOff"),
+        position: LatLng(lat1, long1),
+        infoWindow: InfoWindow(title: 'Drop-off Location', snippet: drop)));
+  }
+
+  CameraPosition kGooglePlex = const CameraPosition(
+    target: LatLng(8.4803, 124.6498),
+    zoom: 18,
   );
+
+  late String pickup = 'Search Pick-up Location';
+  late String drop = 'Search Drop-off Location';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const DrawerWidget(),
       appBar: AppbarWidget('Delivery'),
-      body: GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-      ),
-      // floatingActionButton: FloatingActionButton(onPressed: () async {
+      body: hasLoaded
+          ? Stack(
+              children: [
+                GoogleMap(
+                  markers: markers,
+                  mapToolbarEnabled: false,
+                  zoomControlsEnabled: false,
+                  buildingsEnabled: true,
+                  compassEnabled: true,
+                  myLocationButtonEnabled: true,
+                  myLocationEnabled: true,
+                  mapType: MapType.normal,
+                  initialCameraPosition: kGooglePlex,
+                  onMapCreated: (GoogleMapController controller) {
+                    mapController = controller;
+                    _controller.complete(controller);
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  child: DraggableScrollableSheet(
+                      initialChildSize: 0.34,
+                      minChildSize: 0.15,
+                      maxChildSize: 0.34,
+                      builder: (context, scrollController) {
+                        return Card(
+                          elevation: 3,
+                          child: Container(
+                            width: double.infinity,
+                            height: 220,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                              child: SingleChildScrollView(
+                                controller: scrollController,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    TextBold(
+                                        text: 'Search locations',
+                                        fontSize: 18,
+                                        color: grey),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        location.Prediction? p =
+                                            await PlacesAutocomplete.show(
+                                                mode: Mode.overlay,
+                                                context: context,
+                                                apiKey: kGoogleApiKey,
+                                                language: 'en',
+                                                strictbounds: false,
+                                                types: [""],
+                                                decoration: InputDecoration(
+                                                    hintText:
+                                                        'Search Pick-up Location',
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20),
+                                                            borderSide:
+                                                                const BorderSide(
+                                                                    color: Colors
+                                                                        .white))),
+                                                components: [
+                                                  location.Component(
+                                                      location
+                                                          .Component.country,
+                                                      "ph")
+                                                ]);
+
+                                        location.GoogleMapsPlaces places =
+                                            location.GoogleMapsPlaces(
+                                                apiKey: kGoogleApiKey,
+                                                apiHeaders:
+                                                    await const GoogleApiHeaders()
+                                                        .getHeaders());
+
+                                        location.PlacesDetailsResponse detail =
+                                            await places.getDetailsByPlaceId(
+                                                p!.placeId!);
+
+                                        addMyMarker1(
+                                            detail
+                                                .result.geometry!.location.lat,
+                                            detail
+                                                .result.geometry!.location.lng);
+
+                                        mapController!.animateCamera(
+                                            CameraUpdate.newLatLngZoom(
+                                                LatLng(
+                                                    detail.result.geometry!
+                                                        .location.lat,
+                                                    detail.result.geometry!
+                                                        .location.lng),
+                                                18.0));
+
+                                        setState(() {
+                                          pickup = 'PU: ${detail.result.name}';
+                                          pickUp = LatLng(
+                                              detail.result.geometry!.location
+                                                  .lat,
+                                              detail.result.geometry!.location
+                                                  .lng);
+                                        });
+                                      },
+                                      child: Container(
+                                        height: 35,
+                                        width: 300,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(100)),
+                                        child: TextFormField(
+                                          enabled: false,
+                                          decoration: InputDecoration(
+                                            prefixIcon: const Icon(
+                                              Icons.looks_one_outlined,
+                                              color: grey,
+                                            ),
+                                            suffixIcon: Icon(
+                                              Icons.my_location_outlined,
+                                              color: pickup ==
+                                                      'Search Pick-up Location'
+                                                  ? grey
+                                                  : Colors.red,
+                                            ),
+                                            fillColor: Colors.white,
+                                            filled: true,
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  width: 1, color: grey),
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            disabledBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  width: 1, color: grey),
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  width: 1,
+                                                  color: Colors.black),
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            label: TextRegular(
+                                                text: pickup,
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        location.Prediction? p =
+                                            await PlacesAutocomplete.show(
+                                                mode: Mode.overlay,
+                                                context: context,
+                                                apiKey: kGoogleApiKey,
+                                                language: 'en',
+                                                strictbounds: false,
+                                                types: [""],
+                                                decoration: InputDecoration(
+                                                    hintText:
+                                                        'Search Drop-off Location',
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20),
+                                                            borderSide:
+                                                                const BorderSide(
+                                                                    color: Colors
+                                                                        .white))),
+                                                components: [
+                                                  location.Component(
+                                                      location
+                                                          .Component.country,
+                                                      "ph")
+                                                ]);
+
+                                        location.GoogleMapsPlaces places =
+                                            location.GoogleMapsPlaces(
+                                                apiKey: kGoogleApiKey,
+                                                apiHeaders:
+                                                    await const GoogleApiHeaders()
+                                                        .getHeaders());
+
+                                        location.PlacesDetailsResponse detail =
+                                            await places.getDetailsByPlaceId(
+                                                p!.placeId!);
+
+                                        addMyMarker12(
+                                            detail
+                                                .result.geometry!.location.lat,
+                                            detail
+                                                .result.geometry!.location.lng);
+
+                                        setState(() {
+                                          drop = 'DO: ${detail.result.name}';
+
+                                          dropOff = LatLng(
+                                              detail.result.geometry!.location
+                                                  .lat,
+                                              detail.result.geometry!.location
+                                                  .lng);
+                                        });
+
+                                        mapController!.animateCamera(
+                                            CameraUpdate.newLatLngZoom(
+                                                LatLng(
+                                                    detail.result.geometry!
+                                                        .location.lat,
+                                                    detail.result.geometry!
+                                                        .location.lng),
+                                                18.0));
+
+                                        double miny = (pickUp.latitude <=
+                                                dropOff.latitude)
+                                            ? pickUp.latitude
+                                            : dropOff.latitude;
+                                        double minx = (pickUp.longitude <=
+                                                dropOff.longitude)
+                                            ? pickUp.longitude
+                                            : dropOff.longitude;
+                                        double maxy = (pickUp.latitude <=
+                                                dropOff.latitude)
+                                            ? dropOff.latitude
+                                            : pickUp.latitude;
+                                        double maxx = (pickUp.longitude <=
+                                                dropOff.longitude)
+                                            ? dropOff.longitude
+                                            : pickUp.longitude;
+
+                                        double southWestLatitude = miny;
+                                        double southWestLongitude = minx;
+
+                                        double northEastLatitude = maxy;
+                                        double northEastLongitude = maxx;
+
+                                        // Accommodate the two locations within the
+                                        // camera view of the map
+                                        mapController!.animateCamera(
+                                          CameraUpdate.newLatLngBounds(
+                                            LatLngBounds(
+                                              northeast: LatLng(
+                                                northEastLatitude,
+                                                northEastLongitude,
+                                              ),
+                                              southwest: LatLng(
+                                                southWestLatitude,
+                                                southWestLongitude,
+                                              ),
+                                            ),
+                                            100.0,
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        height: 35,
+                                        width: 300,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(100)),
+                                        child: TextFormField(
+                                          enabled: false,
+                                          decoration: InputDecoration(
+                                            prefixIcon: const Icon(
+                                              Icons.looks_two_outlined,
+                                              color: grey,
+                                            ),
+                                            suffixIcon: Icon(
+                                              Icons.sports_score_outlined,
+                                              color: drop ==
+                                                      'Search Drop-off Location'
+                                                  ? grey
+                                                  : Colors.red,
+                                            ),
+                                            fillColor: Colors.white,
+                                            filled: true,
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  width: 1, color: grey),
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            disabledBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  width: 1, color: grey),
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  width: 1,
+                                                  color: Colors.black),
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            label: TextRegular(
+                                                text: drop,
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    pickup != 'Search Pick-up Location' &&
+                                            drop != 'Search Drop-off Location'
+                                        ? ButtonWidget(
+                                            width: 250,
+                                            fontSize: 15,
+                                            color: Colors.green,
+                                            height: 40,
+                                            radius: 100,
+                                            opacity: 1,
+                                            label: 'Book Delivery',
+                                            onPressed: () {},
+                                          )
+                                        : const SizedBox(),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                ),
+              ],
+            )
+          : const Center(
+              child: SpinKitPulse(
+                color: grey,
+              ),
+            ),
+    );
+  }
+}
+
+
+ // floatingActionButton: FloatingActionButton(onPressed: () async {
       //   location.Prediction? p = await PlacesAutocomplete.show(
       //       context: context,
       //       apiKey: kGoogleApiKey,
@@ -53,6 +472,3 @@ class DeliveryPageState extends State<DeliveryPage> {
       //   location.PlacesDetailsResponse detail =
       //       await places.getDetailsByPlaceId(p!.placeId!);
       // }),
-    );
-  }
-}
