@@ -803,7 +803,14 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                                       ),
                                                                       MaterialButton(
                                                                         onPressed:
-                                                                            () async {},
+                                                                            () async {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                          Navigator.of(context)
+                                                                              .push(MaterialPageRoute(builder: (context) => const DeliveryHistoryPage()));
+                                                                        },
                                                                         child:
                                                                             const Text(
                                                                           'Continue',
