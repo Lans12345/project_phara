@@ -833,6 +833,36 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                                               dropOff.longitude,
                                                                               userName,
                                                                               userProfile);
+
+                                                                          await FirebaseFirestore
+                                                                              .instance
+                                                                              .collection('Users')
+                                                                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                                                                              .update({
+                                                                            'notif':
+                                                                                FieldValue.arrayUnion([
+                                                                              {
+                                                                                'notif': 'Youre delivery booking was succesfully sent!',
+                                                                                'read': false,
+                                                                                'date': DateTime.now(),
+                                                                              }
+                                                                            ]),
+                                                                          });
+
+                                                                          await FirebaseFirestore
+                                                                              .instance
+                                                                              .collection('Drivers')
+                                                                              .doc(data.docs[index].id)
+                                                                              .update({
+                                                                            'notif':
+                                                                                FieldValue.arrayUnion([
+                                                                              {
+                                                                                'notif': 'You received a new delivery booking!',
+                                                                                'read': false,
+                                                                                'date': DateTime.now(),
+                                                                              }
+                                                                            ]),
+                                                                          });
                                                                         },
                                                                         child:
                                                                             const Text(
