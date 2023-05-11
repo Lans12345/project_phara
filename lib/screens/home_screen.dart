@@ -278,7 +278,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   animatedTexts: [
                     WavyAnimatedText('PHara',
                         textStyle: const TextStyle(
-                            fontFamily: 'QBold', color: grey, fontSize: 24)),
+                            fontFamily: 'QBold',
+                            color: Colors.black,
+                            fontSize: 24)),
                   ],
                   isRepeatingAnimation: true,
                   repeatForever: true,
