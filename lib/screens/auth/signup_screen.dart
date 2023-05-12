@@ -9,6 +9,8 @@ import 'package:phara/widgets/text_widget.dart';
 import 'package:phara/widgets/textfield_widget.dart';
 import 'package:phara/widgets/toast_widget.dart';
 
+import '../terms_conditions_page.dart';
+
 class SignupScreen extends StatelessWidget {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -172,6 +174,31 @@ class SignupScreen extends StatelessWidget {
                           register(context);
                         }
                       }),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Center(
+                    child: TextRegular(
+                        text: 'Signing up means you agree to our',
+                        fontSize: 12,
+                        color: Colors.white),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                const TermsAndConditionsPage()));
+                      },
+                      child: TextBold(
+                          text: 'Terms and Conditions',
+                          fontSize: 14,
+                          color: Colors.white),
                     ),
                   ),
                   const SizedBox(

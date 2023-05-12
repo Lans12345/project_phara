@@ -525,17 +525,23 @@ class DeliveryPageState extends State<DeliveryPage> {
     showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: TextBold(
-                text: 'Choose driver', fontSize: 18, color: Colors.black),
-            content: SizedBox(
-              height: 250,
+          return Dialog(
+            child: SizedBox(
+              height: 350,
               child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('Drivers')
                       .where('isActive', isEqualTo: true)
                       .snapshots(),
                   builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(child: Text('Loading'));
+                    } else if (snapshot.hasError) {
+                      return const Center(child: Text('Something went wrong'));
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
                     final data = snapshot.requireData;
                     return ListView.separated(
                         itemCount: data.docs.length,
@@ -543,6 +549,7 @@ class DeliveryPageState extends State<DeliveryPage> {
                           return const Divider();
                         },
                         itemBuilder: (context, index) {
+                          print('yow ${data.docs.length} yow');
                           double rating = data.docs[index]['stars'] /
                               data.docs[index]['ratings'].length;
                           return ListTile(
@@ -911,15 +918,6 @@ class DeliveryPageState extends State<DeliveryPage> {
                         });
                   }),
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: TextRegular(
-                    text: 'Close', fontSize: 14, color: Colors.black),
-              ),
-            ],
           );
         });
   }
