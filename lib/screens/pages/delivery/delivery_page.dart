@@ -99,6 +99,9 @@ class DeliveryPageState extends State<DeliveryPage> {
   late String pickup = 'Search Pick-up Location';
   late String drop = 'Search Drop-off Location';
 
+  final receiverController = TextEditingController();
+  final receiverNumberController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     CameraPosition kGooglePlex = CameraPosition(
@@ -556,10 +559,11 @@ class DeliveryPageState extends State<DeliveryPage> {
                             onTap: () {
                               Navigator.pop(context);
                               showModalBottomSheet(
+                                  isScrollControlled: true,
                                   context: context,
                                   builder: (context) {
                                     return SizedBox(
-                                      height: 500,
+                                      height: 600,
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             20, 10, 20, 10),
@@ -647,8 +651,146 @@ class DeliveryPageState extends State<DeliveryPage> {
                                               const SizedBox(
                                                 height: 10,
                                               ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
                                               TextBold(
-                                                  text: 'Current Location',
+                                                  text: 'Receiver Details',
+                                                  fontSize: 15,
+                                                  color: grey),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Center(
+                                                child: SizedBox(
+                                                  width: 280,
+                                                  height: 42,
+                                                  child: TextFormField(
+                                                    controller:
+                                                        receiverController,
+                                                    style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontFamily: 'QRegular'),
+                                                    decoration: InputDecoration(
+                                                      prefixIcon: const Icon(
+                                                        Icons
+                                                            .account_circle_outlined,
+                                                        color: grey,
+                                                      ),
+                                                      fillColor: Colors.white,
+                                                      filled: true,
+                                                      hintText:
+                                                          'Name of Receiver',
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                width: 1,
+                                                                color: Colors
+                                                                    .black),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                      ),
+                                                      disabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                width: 1,
+                                                                color: Colors
+                                                                    .black),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                      ),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                width: 1,
+                                                                color: Colors
+                                                                    .black),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              Center(
+                                                child: SizedBox(
+                                                  width: 280,
+                                                  height: 60,
+                                                  child: TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    maxLength: 11,
+                                                    controller:
+                                                        receiverNumberController,
+                                                    style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontFamily: 'QRegular'),
+                                                    decoration: InputDecoration(
+                                                      prefixIcon: const Icon(
+                                                        Icons.phone,
+                                                        color: grey,
+                                                      ),
+                                                      fillColor: Colors.white,
+                                                      filled: true,
+                                                      hintText:
+                                                          'Contact Number of Receiver',
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                width: 1,
+                                                                color: Colors
+                                                                    .black),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                      ),
+                                                      disabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                width: 1,
+                                                                color: Colors
+                                                                    .black),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                      ),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                width: 1,
+                                                                color: Colors
+                                                                    .black),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              const Divider(
+                                                color: grey,
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              TextBold(
+                                                  text: 'Pickup Location',
                                                   fontSize: 15,
                                                   color: grey),
                                               const SizedBox(
