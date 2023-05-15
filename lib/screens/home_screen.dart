@@ -41,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    getMyBookings();
     getUserData();
     determinePosition();
     getLocation();
@@ -63,11 +64,26 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Set<Marker> markers = {};
 
+  List<String> driversId = [];
+
+  getMyBookings() async {
+    FirebaseFirestore.instance
+        .collection('Bookings')
+        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where('status', isEqualTo: 'Pending')
+        .get()
+        .then((QuerySnapshot querySnapshot) async {
+      for (var doc in querySnapshot.docs) {
+        driversId.add(doc['driverId']);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final CameraPosition camPosition = CameraPosition(
         target: LatLng(lat, long), zoom: 16, bearing: 45, tilt: 40);
-    return hasLoaded
+    return hasLoaded && lat != 0
         ? Scaffold(
             floatingActionButton: Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -454,7 +470,7 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         : const Scaffold(
             body: Center(
-              child: SpinKitChasingDots(
+              child: SpinKitPulse(
                 color: grey,
               ),
             ),
@@ -552,39 +568,46 @@ class _HomeScreenState extends State<HomeScreen> {
                                   height: 30,
                                   label: 'Book now',
                                   onPressed: () async {
-                                    List<Placemark> p =
-                                        await placemarkFromCoordinates(
-                                            lat, long);
+                                    if (driversId.contains(doc['id'])) {
+                                      Navigator.pop(context);
+                                      showToast(
+                                          "Youre booking for this drivers is still pending! Please wait for driver's response");
+                                    } else {
+                                      List<Placemark> p =
+                                          await placemarkFromCoordinates(
+                                              lat, long);
 
-                                    Placemark place = p[0];
+                                      Placemark place = p[0];
 
-                                    final sessionToken = const Uuid().v4();
+                                      final sessionToken = const Uuid().v4();
 
-                                    // ignore: use_build_context_synchronously
-                                    await showSearch(
-                                        context: context,
-                                        delegate:
-                                            LocationsSearch(sessionToken));
-
-                                    if (ref
-                                            .read(destinationProvider.notifier)
-                                            .state !=
-                                        'No address specified') {
                                       // ignore: use_build_context_synchronously
-                                      showModalBottomSheet(
-                                          isScrollControlled: true,
+                                      await showSearch(
                                           context: context,
-                                          builder: ((context) {
-                                            return BookBottomSheetWidget(
-                                              driverId: doc['id'],
-                                              coordinates: {
-                                                'lat': lat,
-                                                'long': long,
-                                                'pickupLocation':
-                                                    '${place.street}, ${place.locality}, ${place.administrativeArea}'
-                                              },
-                                            );
-                                          }));
+                                          delegate:
+                                              LocationsSearch(sessionToken));
+
+                                      if (ref
+                                              .read(
+                                                  destinationProvider.notifier)
+                                              .state !=
+                                          'No address specified') {
+                                        // ignore: use_build_context_synchronously
+                                        showModalBottomSheet(
+                                            isScrollControlled: true,
+                                            context: context,
+                                            builder: ((context) {
+                                              return BookBottomSheetWidget(
+                                                driverId: doc['id'],
+                                                coordinates: {
+                                                  'lat': lat,
+                                                  'long': long,
+                                                  'pickupLocation':
+                                                      '${place.street}, ${place.locality}, ${place.administrativeArea}'
+                                                },
+                                              );
+                                            }));
+                                      }
                                     }
                                   });
                             }),
