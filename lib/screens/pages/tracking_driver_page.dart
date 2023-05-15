@@ -195,12 +195,7 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
               title: doc['name'],
               snippet: doc['number'],
             ),
-            icon: await BitmapDescriptor.fromAssetImage(
-              const ImageConfiguration(
-                size: Size(12, 12),
-              ),
-              'assets/images/driver.png',
-            ),
+            icon: BitmapDescriptor.defaultMarker,
             position: LatLng(doc['location']['lat'], doc['location']['long']));
         PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
             googleAPIKey,
