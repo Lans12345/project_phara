@@ -142,6 +142,10 @@ class LocationsSearch extends SearchDelegate<Suggestion> {
                             return ListTile(
                               trailing: IconButton(
                                 onPressed: () async {
+                                  List<Location> location =
+                                      await locationFromAddress((snapshot1
+                                              .data![index1] as Suggestion)
+                                          .description);
                                   if (favs.contains(
                                       (snapshot1.data![index1] as Suggestion)
                                           .description)) {
@@ -162,8 +166,13 @@ class LocationsSearch extends SearchDelegate<Suggestion> {
                                             .instance.currentUser!.uid)
                                         .update({
                                       'favorites': FieldValue.arrayUnion([
-                                        (snapshot1.data![index1] as Suggestion)
-                                            .description
+                                        {
+                                          'name': (snapshot1.data![index1]
+                                                  as Suggestion)
+                                              .description,
+                                          'lat': location[0].latitude,
+                                          'long': location[0].longitude
+                                        }
                                       ]),
                                     });
                                   }
