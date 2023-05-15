@@ -15,7 +15,9 @@ Future<String> addDelivery(
     destinationLat,
     destinationLong,
     userName,
-    userProfile) async {
+    userProfile,
+    receiver,
+    receiverNumber) async {
   final docUser = FirebaseFirestore.instance.collection('Delivery').doc();
 
   final json = {
@@ -31,7 +33,9 @@ Future<String> addDelivery(
     'originCoordinates': {'lat': originLat, 'long': originLong},
     'destinationCoordinates': {'lat': destinationLat, 'long': destinationLong},
     'userName': userName,
-    'userProfile': userProfile
+    'userProfile': userProfile,
+    'receiver': receiver,
+    'receiverNumber': receiverNumber
   };
 
   await FirebaseFirestore.instance

@@ -16,6 +16,7 @@ import 'package:phara/widgets/drawer_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
 import 'package:google_maps_webservice/places.dart' as location;
 import 'package:google_api_headers/google_api_headers.dart';
+import 'package:phara/widgets/toast_widget.dart';
 import '../../../data/time_calculation.dart';
 import '../../../utils/keys.dart';
 
@@ -924,105 +925,102 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                     color: Colors.green,
                                                     label: 'Continue',
                                                     onPressed: (() {
-                                                      showDialog(
-                                                          context: context,
-                                                          builder:
-                                                              (context) =>
-                                                                  AlertDialog(
-                                                                    title:
-                                                                        const Text(
-                                                                      'Delivery Booking Confirmation',
-                                                                      style: TextStyle(
-                                                                          fontFamily:
-                                                                              'QBold',
-                                                                          fontWeight:
-                                                                              FontWeight.bold),
-                                                                    ),
-                                                                    content:
-                                                                        const Text(
-                                                                      'Confirm delivery booking?',
-                                                                      style: TextStyle(
-                                                                          fontFamily:
-                                                                              'QRegular'),
-                                                                    ),
-                                                                    actions: <
-                                                                        Widget>[
-                                                                      MaterialButton(
-                                                                        onPressed:
-                                                                            () =>
-                                                                                Navigator.of(context).pop(true),
-                                                                        child:
-                                                                            const Text(
-                                                                          'Close',
-                                                                          style: TextStyle(
-                                                                              color: Colors.grey,
-                                                                              fontFamily: 'QRegular',
-                                                                              fontWeight: FontWeight.bold),
-                                                                        ),
+                                                      if (receiverController
+                                                                  .text ==
+                                                              '' ||
+                                                          receiverNumberController
+                                                                  .text ==
+                                                              '') {
+                                                        showToast(
+                                                            'Add receiver details to procceed!');
+                                                      } else {
+                                                        showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (context) =>
+                                                                    AlertDialog(
+                                                                      title:
+                                                                          const Text(
+                                                                        'Delivery Booking Confirmation',
+                                                                        style: TextStyle(
+                                                                            fontFamily:
+                                                                                'QBold',
+                                                                            fontWeight:
+                                                                                FontWeight.bold),
                                                                       ),
-                                                                      MaterialButton(
-                                                                        onPressed:
-                                                                            () async {
-                                                                          Navigator.pop(
-                                                                              context);
-                                                                          Navigator.pop(
-                                                                              context);
-                                                                          Navigator.of(context)
-                                                                              .push(MaterialPageRoute(builder: (context) => const DeliveryHistoryPage()));
-                                                                          addDelivery(
-                                                                              data.docs[index].id,
-                                                                              pickup,
-                                                                              drop,
-                                                                              calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude).toStringAsFixed(2),
-                                                                              (calculateTravelTime((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)), 26.8)).toStringAsFixed(2),
-                                                                              (((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 12) + 45).toStringAsFixed(2),
-                                                                              pickUp.latitude,
-                                                                              pickUp.longitude,
-                                                                              dropOff.latitude,
-                                                                              dropOff.longitude,
-                                                                              userName,
-                                                                              userProfile);
-
-                                                                          await FirebaseFirestore
-                                                                              .instance
-                                                                              .collection('Users')
-                                                                              .doc(FirebaseAuth.instance.currentUser!.uid)
-                                                                              .update({
-                                                                            'notif':
-                                                                                FieldValue.arrayUnion([
-                                                                              {
-                                                                                'notif': 'Youre delivery booking was succesfully sent!',
-                                                                                'read': false,
-                                                                                'date': DateTime.now(),
-                                                                              }
-                                                                            ]),
-                                                                          });
-
-                                                                          await FirebaseFirestore
-                                                                              .instance
-                                                                              .collection('Drivers')
-                                                                              .doc(data.docs[index].id)
-                                                                              .update({
-                                                                            'notif':
-                                                                                FieldValue.arrayUnion([
-                                                                              {
-                                                                                'notif': 'You received a new delivery booking!',
-                                                                                'read': false,
-                                                                                'date': DateTime.now(),
-                                                                              }
-                                                                            ]),
-                                                                          });
-                                                                        },
-                                                                        child:
-                                                                            const Text(
-                                                                          'Continue',
-                                                                          style: TextStyle(
-                                                                              fontFamily: 'QBold',
-                                                                              fontWeight: FontWeight.w800),
-                                                                        ),
+                                                                      content:
+                                                                          const Text(
+                                                                        'Confirm delivery booking?',
+                                                                        style: TextStyle(
+                                                                            fontFamily:
+                                                                                'QRegular'),
                                                                       ),
-                                                                    ],
-                                                                  ));
+                                                                      actions: <
+                                                                          Widget>[
+                                                                        MaterialButton(
+                                                                          onPressed: () =>
+                                                                              Navigator.of(context).pop(true),
+                                                                          child:
+                                                                              const Text(
+                                                                            'Close',
+                                                                            style: TextStyle(
+                                                                                color: Colors.grey,
+                                                                                fontFamily: 'QRegular',
+                                                                                fontWeight: FontWeight.bold),
+                                                                          ),
+                                                                        ),
+                                                                        MaterialButton(
+                                                                          onPressed:
+                                                                              () async {
+                                                                            Navigator.pop(context);
+                                                                            Navigator.pop(context);
+                                                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const DeliveryHistoryPage()));
+                                                                            addDelivery(
+                                                                                data.docs[index].id,
+                                                                                pickup,
+                                                                                drop,
+                                                                                calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude).toStringAsFixed(2),
+                                                                                (calculateTravelTime((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)), 26.8)).toStringAsFixed(2),
+                                                                                (((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 12) + 45).toStringAsFixed(2),
+                                                                                pickUp.latitude,
+                                                                                pickUp.longitude,
+                                                                                dropOff.latitude,
+                                                                                dropOff.longitude,
+                                                                                userName,
+                                                                                userProfile,
+                                                                                receiverController.text,
+                                                                                receiverNumberController.text);
+
+                                                                            await FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).update({
+                                                                              'notif': FieldValue.arrayUnion([
+                                                                                {
+                                                                                  'notif': 'Youre delivery booking was succesfully sent!',
+                                                                                  'read': false,
+                                                                                  'date': DateTime.now(),
+                                                                                }
+                                                                              ]),
+                                                                            });
+
+                                                                            await FirebaseFirestore.instance.collection('Drivers').doc(data.docs[index].id).update({
+                                                                              'notif': FieldValue.arrayUnion([
+                                                                                {
+                                                                                  'notif': 'You received a new delivery booking!',
+                                                                                  'read': false,
+                                                                                  'date': DateTime.now(),
+                                                                                }
+                                                                              ]),
+                                                                            });
+                                                                          },
+                                                                          child:
+                                                                              const Text(
+                                                                            'Continue',
+                                                                            style:
+                                                                                TextStyle(fontFamily: 'QBold', fontWeight: FontWeight.w800),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ));
+                                                      }
                                                     })),
                                               ),
                                               const SizedBox(
