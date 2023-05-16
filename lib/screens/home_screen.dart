@@ -531,7 +531,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                         fontSize: 15,
                                         color: grey),
                                     TextRegular(
-                                        text: 'Vehicle: Sniper 150',
+                                        text: 'Vehicle: ${doc['vehicle']}',
+                                        fontSize: 14,
+                                        color: grey),
+                                    TextRegular(
+                                        text:
+                                            'Plate No.: ${doc['plateNumber']}',
                                         fontSize: 14,
                                         color: grey),
                                     TextRegular(

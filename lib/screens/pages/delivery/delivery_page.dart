@@ -628,6 +628,11 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                           fontSize: 14,
                                                           color: grey),
                                                       TextRegular(
+                                                          text:
+                                                              'Plate No.: ${data.docs[index]['plateNumber']}',
+                                                          fontSize: 14,
+                                                          color: grey),
+                                                      TextRegular(
                                                           text: data
                                                                       .docs[
                                                                           index]

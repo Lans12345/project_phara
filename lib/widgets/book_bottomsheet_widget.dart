@@ -120,7 +120,11 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                   fontSize: 15,
                                   color: grey),
                               TextRegular(
-                                  text: 'Vehicle: Sniper 150',
+                                  text: 'Vehicle: ${data['vehicle']}',
+                                  fontSize: 14,
+                                  color: grey),
+                              TextRegular(
+                                  text: 'Plate No.: ${data['plateNumber']}',
                                   fontSize: 14,
                                   color: grey),
                               TextRegular(
