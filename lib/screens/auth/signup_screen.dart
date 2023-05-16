@@ -43,7 +43,7 @@ class SignupScreen extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  TextBold(text: 'PHara', fontSize: 58, color: Colors.white),
+                  TextBold(text: 'PARA', fontSize: 58, color: Colors.white),
                   const SizedBox(
                     height: 25,
                   ),

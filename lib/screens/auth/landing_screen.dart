@@ -43,7 +43,7 @@ class _LandingScreenState extends State<LandingScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                TextBold(text: 'PHara', fontSize: 48, color: Colors.white),
+                TextBold(text: 'PARA', fontSize: 48, color: Colors.white),
                 TextRegular(
                     text: 'Making your travels more easier',
                     fontSize: 15,

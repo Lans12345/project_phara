@@ -31,7 +31,7 @@ class TermsAndConditionsPage extends StatelessWidget {
                 ),
                 SizedBox(height: 14.0),
                 Text(
-                  'Please read these terms and conditions carefully before using PHara. By using the application, you agree to be bound by these terms and conditions.',
+                  'Please read these terms and conditions carefully before using PARA. By using the application, you agree to be bound by these terms and conditions.',
                   style: TextStyle(fontSize: 14.0, fontFamily: 'QRegular'),
                 ),
                 SizedBox(height: 16.0),
@@ -43,7 +43,7 @@ class TermsAndConditionsPage extends StatelessWidget {
                       fontFamily: 'QBold'),
                 ),
                 Text(
-                  '1.1 PHara can only be used by individuals who are at least 18 years old and possess a valid motorcycle license.',
+                  '1.1 PARA can only be used by individuals who are at least 18 years old and possess a valid motorcycle license.',
                   style: TextStyle(fontSize: 14.0, fontFamily: 'QRegular'),
                 ),
                 SizedBox(height: 16.0),
@@ -55,7 +55,7 @@ class TermsAndConditionsPage extends StatelessWidget {
                       fontFamily: 'QBold'),
                 ),
                 Text(
-                  '2.1 Users can book a ride by providing their current location and desired destination through the PHara application.',
+                  '2.1 Users can book a ride by providing their current location and desired destination through the PARA application.',
                   style: TextStyle(fontSize: 14.0, fontFamily: 'QRegular'),
                 ),
                 Text(
@@ -71,7 +71,7 @@ class TermsAndConditionsPage extends StatelessWidget {
                       fontFamily: 'QBold'),
                 ),
                 Text(
-                  '3.1 Payments for the rides can be made through the available payment methods supported by PHara.',
+                  '3.1 Payments for the rides can be made through the available payment methods supported by PARA.',
                   style: TextStyle(fontSize: 14.0, fontFamily: 'QRegular'),
                 ),
                 SizedBox(height: 16.0),
@@ -99,15 +99,15 @@ class TermsAndConditionsPage extends StatelessWidget {
                       fontFamily: 'QBold'),
                 ),
                 Text(
-                  '5.1 PHara shall not be held liable for any damages, losses, or injuries arising from the use of the application or the services provided by the motorcycle drivers.',
+                  '5.1 PARA shall not be held liable for any damages, losses, or injuries arising from the use of the application or the services provided by the motorcycle drivers.',
                   style: TextStyle(fontSize: 14.0, fontFamily: 'QRegular'),
                 ),
                 Text(
-                  '5.2 PHara does not guarantee the availability of motorcycle drivers at all times. The application relies on the availability of independent motorcycle drivers, and their availability cannot be guaranteed.',
+                  '5.2 PARA does not guarantee the availability of motorcycle drivers at all times. The application relies on the availability of independent motorcycle drivers, and their availability cannot be guaranteed.',
                   style: TextStyle(fontSize: 14.0, fontFamily: 'QRegular'),
                 ),
                 Text(
-                  '5.3 PHara shall not be responsible for any delays, cancellations, or changes in the ride schedule caused by factors beyond its control, including but not limited to traffic conditions, weather conditions, or any other unforeseen circumstances.',
+                  '5.3 PARA shall not be responsible for any delays, cancellations, or changes in the ride schedule caused by factors beyond its control, including but not limited to traffic conditions, weather conditions, or any other unforeseen circumstances.',
                   style: TextStyle(fontSize: 14.0, fontFamily: 'QRegular'),
                 ),
                 SizedBox(height: 16.0),
@@ -119,7 +119,7 @@ class TermsAndConditionsPage extends StatelessWidget {
                       fontFamily: 'QBold'),
                 ),
                 Text(
-                  '6.1 PHara collects and processes user personal information in accordance with its Privacy Policy. By using the application, you consent to the collection and processing of your personal information as described in the Privacy Policy.',
+                  '6.1 PARA collects and processes user personal information in accordance with its Privacy Policy. By using the application, you consent to the collection and processing of your personal information as described in the Privacy Policy.',
                   style: TextStyle(fontSize: 14.0, fontFamily: 'QRegular'),
                 ),
                 SizedBox(height: 16.0),
@@ -131,7 +131,7 @@ class TermsAndConditionsPage extends StatelessWidget {
                       fontFamily: 'QBold'),
                 ),
                 Text(
-                  '7.1 The PHara application and all its content, including but not limited to logos, trademarks, and graphics, are the intellectual property of PHara. Users are prohibited from reproducing, distributing, or modifying any part of the application without prior written consent from PHara.',
+                  '7.1 The PARA application and all its content, including but not limited to logos, trademarks, and graphics, are the intellectual property of PARA. Users are prohibited from reproducing, distributing, or modifying any part of the application without prior written consent from PARA.',
                   style: TextStyle(fontSize: 14.0, fontFamily: 'QRegular'),
                 ),
                 SizedBox(height: 16.0),
@@ -143,7 +143,7 @@ class TermsAndConditionsPage extends StatelessWidget {
                       fontFamily: 'QBold'),
                 ),
                 Text(
-                  '8.1 These terms and conditions shall be governed by and construed in accordance with the laws of Philippines. Any disputes arising from the use of PHara shall be subject to the exclusive jurisdiction of the courts in Philippines.',
+                  '8.1 These terms and conditions shall be governed by and construed in accordance with the laws of Philippines. Any disputes arising from the use of PARA shall be subject to the exclusive jurisdiction of the courts in Philippines.',
                   style: TextStyle(fontSize: 14.0, fontFamily: 'QRegular'),
                 ),
                 SizedBox(height: 16.0),
@@ -155,7 +155,7 @@ class TermsAndConditionsPage extends StatelessWidget {
                       fontFamily: 'QBold'),
                 ),
                 Text(
-                  '9.1 PHara reserves the right to modify or update these terms and conditions at any time. Users will be notified of any changes through the application or via email. Continued use of the application after the modifications constitutes acceptance of the updated terms and conditions.',
+                  '9.1 PARA reserves the right to modify or update these terms and conditions at any time. Users will be notified of any changes through the application or via email. Continued use of the application after the modifications constitutes acceptance of the updated terms and conditions.',
                   style: TextStyle(fontSize: 14.0, fontFamily: 'QRegular'),
                 ),
                 SizedBox(height: 16.0),

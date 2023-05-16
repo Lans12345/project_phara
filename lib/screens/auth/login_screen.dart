@@ -36,7 +36,7 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(
                     height: 50,
                   ),
-                  TextBold(text: 'PHara', fontSize: 58, color: Colors.white),
+                  TextBold(text: 'PARA', fontSize: 58, color: Colors.white),
                   const SizedBox(
                     height: 75,
                   ),
@@ -224,7 +224,7 @@ class LoginScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextRegular(
-                          text: "New to PHara?",
+                          text: "New to PARA?",
                           fontSize: 12,
                           color: Colors.white),
                       TextButton(

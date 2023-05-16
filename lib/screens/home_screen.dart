@@ -292,7 +292,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: AnimatedTextKit(
                   animatedTexts: [
-                    WavyAnimatedText('PHara',
+                    WavyAnimatedText('PARA',
                         textStyle: const TextStyle(
                             fontFamily: 'QBold',
                             color: Colors.black,

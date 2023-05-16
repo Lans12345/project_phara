@@ -43,7 +43,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                           width: 50,
                         ),
                         TextBold(
-                            text: 'PHara', fontSize: 18, color: Colors.white),
+                            text: 'PARA', fontSize: 18, color: Colors.white),
                       ],
                     ),
                   ),
@@ -65,7 +65,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                 ),
                 TextRegular(
                     text:
-                        "Ride with ease and speed, experience the thrill of the road with PHara - your ultimate motorcycle ride-hailing app!",
+                        "Ride with ease and speed, experience the thrill of the road with PARA - your ultimate motorcycle ride-hailing app!",
                     fontSize: 14,
                     color: Colors.white),
                 const SizedBox(

@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      title: 'PHara',
+      title: 'PARA',
       home: const SplashScreen(),
     );
   }

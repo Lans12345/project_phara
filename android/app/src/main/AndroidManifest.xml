@@ -26,7 +26,7 @@
     </queries>
 
    <application
-        android:label="PHara"
+        android:label="PARA"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
