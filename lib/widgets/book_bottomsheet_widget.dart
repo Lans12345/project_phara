@@ -339,6 +339,8 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                                   userName,
                                                   userProfile);
                                               Navigator.pop(context);
+                                              Navigator.pop(context);
+                                              Navigator.pop(context);
 
                                               showModalBottomSheet(
                                                   isDismissible: false,
@@ -347,6 +349,12 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                                   builder: ((context) {
                                                     return TrackBookingBottomSheetWidget(
                                                       tripDetails: {
+                                                        'driverRatings': data[
+                                                                        'ratings']
+                                                                    .length !=
+                                                                0
+                                                            ? 'Rating: ${rating.toStringAsFixed(2)} ★'
+                                                            : 'No ratings',
                                                         'docId': docId,
                                                         'driverProfile': data[
                                                             'profilePicture'],

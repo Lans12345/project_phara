@@ -33,6 +33,7 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
     super.initState();
     determinePosition();
     getLocation();
+    getDriverData();
 
     Timer.periodic(const Duration(seconds: 5), (timer) {
       getDrivers();
@@ -55,26 +56,30 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
 
   late double lat = 0;
   late double long = 0;
+  late String vehicle = '';
+  late String plateNumber = '';
+
+  getDriverData() {
+    FirebaseFirestore.instance
+        .collection('Drivers')
+        .where('id', isEqualTo: widget.tripDetails['driverId'])
+        .get()
+        .then((QuerySnapshot querySnapshot) async {
+      for (var doc in querySnapshot.docs) {
+        setState(() {
+          vehicle = doc['vehicle'];
+          plateNumber = doc['plateNumber'];
+          hasLoaded = true;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final CameraPosition camPosition = CameraPosition(
         target: LatLng(lat, long), zoom: 16, bearing: 45, tilt: 40);
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.white,
-          onPressed: (() {
-            mapController?.animateCamera(CameraUpdate.newCameraPosition(
-                CameraPosition(
-                    bearing: 45,
-                    tilt: 40,
-                    target: LatLng(lat, long),
-                    zoom: 16)));
-          }),
-          child: const Icon(
-            Icons.my_location_rounded,
-            color: Colors.red,
-          )),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
@@ -128,7 +133,7 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
                   zoomControlsEnabled: false,
                   buildingsEnabled: true,
                   compassEnabled: true,
-                  myLocationButtonEnabled: false,
+                  myLocationButtonEnabled: true,
                   myLocationEnabled: true,
                   markers: markers,
                   mapType: MapType.normal,
@@ -140,25 +145,78 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
                     });
                   },
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: grey.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      height: 50,
-                      width: 200,
-                      child: Center(
-                        child: TextRegular(
-                            text: 'Driver on the way',
-                            fontSize: 18,
-                            color: Colors.white),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Expanded(
+                      child: SizedBox(),
+                    ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Card(
+                          child: Container(
+                            height: 150,
+                            width: 320,
+                            decoration:
+                                const BoxDecoration(color: Colors.white),
+                            child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        CircleAvatar(
+                                          minRadius: 50,
+                                          maxRadius: 50,
+                                          backgroundImage: NetworkImage(widget
+                                              .tripDetails['driverProfile']),
+                                        ),
+                                        const SizedBox(
+                                          width: 15,
+                                        ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            TextBold(
+                                                text:
+                                                    'Name: ${widget.tripDetails['driverName']}',
+                                                fontSize: 15,
+                                                color: grey),
+                                            TextRegular(
+                                                text: 'Vehicle: $vehicle',
+                                                fontSize: 14,
+                                                color: grey),
+                                            TextRegular(
+                                                text: 'Plate No.: $plateNumber',
+                                                fontSize: 14,
+                                                color: grey),
+                                            TextRegular(
+                                                text: widget.tripDetails[
+                                                            'driverRatings'] !=
+                                                        'No ratings'
+                                                    ? '${widget.tripDetails['driverRatings']} ★'
+                                                    : widget.tripDetails[
+                                                        'driverRatings'],
+                                                fontSize: 14,
+                                                color: Colors.amber),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ]),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ],
             )
@@ -213,7 +271,6 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
               points: polylineCoordinates,
               width: 4);
           markers.add(driverMarker);
-          hasLoaded = true;
         });
         mapController?.animateCamera(CameraUpdate.newCameraPosition(
             CameraPosition(
