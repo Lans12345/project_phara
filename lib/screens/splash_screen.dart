@@ -76,10 +76,10 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
               Image.asset(
                 'assets/images/animation.gif',
-                width: 350,
+                width: 250,
               ),
               const SizedBox(
-                height: 50,
+                height: 100,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 100, right: 100),
