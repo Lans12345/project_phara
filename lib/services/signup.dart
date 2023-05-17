@@ -18,7 +18,8 @@ Future signup(name, number, address, email) async {
     'favorites': [],
     'notif': [],
     'profilePicture': 'https://cdn-icons-png.flaticon.com/256/149/149071.png',
-    'deliveryHistory': []
+    'deliveryHistory': [],
+    'discount': 0
   };
 
   await docUser.set(json);
