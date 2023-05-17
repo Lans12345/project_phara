@@ -238,7 +238,7 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                       ),
                       TextRegular(
                           text:
-                              'Fare: ₱${(((calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)) * 12) + 45).toStringAsFixed(2)}',
+                              'Fare: ₱${(((calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)) * 12) + 40).toStringAsFixed(2)}',
                           fontSize: 15,
                           color: grey),
                       const SizedBox(

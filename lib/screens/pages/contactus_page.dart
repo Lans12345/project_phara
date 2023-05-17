@@ -11,7 +11,7 @@ class ContactusPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerWidget(),
+      drawer: const DrawerWidget(),
       appBar: AppbarWidget('Contact Us'),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -33,9 +33,7 @@ class ContactusPage extends StatelessWidget {
                   width: 20,
                 ),
                 TextRegular(
-                    text: 'sampleemailaddress@gmail.com',
-                    fontSize: 16,
-                    color: grey),
+                    text: 'algovision123@gmail.com', fontSize: 16, color: grey),
               ],
             ),
             const SizedBox(
@@ -58,7 +56,7 @@ class ContactusPage extends StatelessWidget {
                   width: 20,
                 ),
                 TextRegular(
-                    text: 'facebook.com/sample', fontSize: 16, color: grey),
+                    text: 'facebook.com/algovision', fontSize: 16, color: grey),
               ],
             ),
             const SizedBox(
@@ -80,7 +78,7 @@ class ContactusPage extends StatelessWidget {
                 const SizedBox(
                   width: 20,
                 ),
-                TextRegular(text: '+63090901231', fontSize: 16, color: grey),
+                TextRegular(text: '+639639530422', fontSize: 16, color: grey),
               ],
             ),
             const SizedBox(
