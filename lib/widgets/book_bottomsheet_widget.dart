@@ -331,7 +331,7 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                                               ref.read(longProvider.notifier).state)),
                                                           26.8))
                                                       .toStringAsFixed(2),
-                                                  (((calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)) * 12) + 45).toStringAsFixed(2),
+                                                  (((calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)) * 12) + 40).toStringAsFixed(2),
                                                   widget.coordinates['lat'],
                                                   widget.coordinates['long'],
                                                   ref.read(latProvider.notifier).state,
@@ -397,7 +397,7 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                                                             .read(longProvider.notifier)
                                                                             .state)) *
                                                                     12) +
-                                                                45)
+                                                                40)
                                                             .toStringAsFixed(2)
                                                       },
                                                     );
