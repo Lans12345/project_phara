@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:phara/plugins/my_location.dart';
 import 'package:phara/screens/get_started_screen.dart';
 import 'package:phara/screens/home_screen.dart';
 import 'package:phara/widgets/text_widget.dart';
@@ -24,14 +23,12 @@ class _SplashScreenState extends State<SplashScreen> {
     // TODO: implement initState
     super.initState();
 
-    determinePosition();
     Timer(const Duration(seconds: 5), () async {
       bool serviceEnabled;
 
       // Test if location services are enabled.
       serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        await Geolocator.requestPermission();
         Fluttertoast.showToast(
           toastLength: Toast.LENGTH_LONG,
           msg:

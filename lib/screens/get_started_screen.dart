@@ -4,6 +4,7 @@ import 'package:phara/widgets/button_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
 
 import '../utils/colors.dart';
+import '../widgets/normal_dialog.dart';
 
 class GetStartedScreen extends StatefulWidget {
   const GetStartedScreen({super.key});
@@ -42,8 +43,6 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                           'assets/images/animation.gif',
                           width: 50,
                         ),
-                        TextBold(
-                            text: 'PARA', fontSize: 18, color: Colors.white),
                       ],
                     ),
                   ),
@@ -78,8 +77,23 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                     opacity: 1,
                     label: 'Get Started',
                     onPressed: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const LandingScreen()));
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return NormalDialog(
+                                label:
+                                    "PARA collects location data to enable user tracking for the transaction of ride to be proccessed even when the app is closed or not in use.",
+                                buttonColor: Colors.red,
+                                buttonText: 'I understand',
+                                icon: Icons.warning,
+                                onPressed: () {
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const LandingScreen()));
+                                },
+                                iconColor: Colors.red);
+                          });
                     },
                   ),
                 ),
