@@ -189,6 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     return AlertDialog(
                                       content: SizedBox(
                                         height: 100,
+                                        width: 500,
                                         child: Center(
                                           child: ListView.builder(
                                               itemCount: favs.length,
