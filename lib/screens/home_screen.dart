@@ -23,6 +23,7 @@ import 'package:phara/widgets/custom_marker.dart';
 import 'package:phara/widgets/drawer_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
 import 'package:phara/widgets/toast_widget.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:uuid/uuid.dart';
 
 import '../services/providers/coordinates_provider.dart';
@@ -66,6 +67,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<String> driversId = [];
 
+  final keyOne = GlobalKey();
+  final key2 = GlobalKey();
+  final key3 = GlobalKey();
+  final key4 = GlobalKey();
+  final key5 = GlobalKey();
+  final key6 = GlobalKey();
+
   getMyBookings() async {
     FirebaseFirestore.instance
         .collection('Bookings')
@@ -78,6 +86,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
   }
+
+  bool shown = false;
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +150,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               text: data.docs.length.toString(),
                               fontSize: 12,
                               color: Colors.white),
-                          child: const Icon(
+                          child: Icon(
+                            key: key2,
                             Icons.message_outlined,
                             color: grey,
                           ),
@@ -245,7 +256,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 text: favs.length.toString(),
                                 fontSize: 12,
                                 color: Colors.white),
-                            child: const Icon(
+                            child: Icon(
+                              key: key3,
                               Icons.star_border_rounded,
                               color: grey,
                             ),
@@ -260,7 +272,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => const TripsPage()));
                     }),
-                    child: const Icon(
+                    child: Icon(
+                      key: key4,
                       Icons.collections_bookmark_outlined,
                       color: grey,
                     )),
@@ -273,7 +286,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => const HomeScreen()));
                     }),
-                    child: const Icon(
+                    child: Icon(
+                      key: key5,
                       Icons.refresh,
                       color: grey,
                     )),
@@ -329,7 +343,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontSize: 12,
                               color: Colors.white,
                             ),
-                            child: const Icon(Icons.notifications_rounded),
+                            child:
+                                Icon(key: keyOne, Icons.notifications_rounded),
                           ),
                           itemBuilder: (context) {
                             return [
@@ -435,23 +450,30 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: grey,
                         ));
                       }
-                      return GoogleMap(
-                        mapToolbarEnabled: false,
-                        zoomControlsEnabled: false,
-                        buildingsEnabled: true,
-                        compassEnabled: true,
-                        myLocationButtonEnabled: true,
-                        myLocationEnabled: true,
-                        markers: markers1,
-                        mapType: MapType.normal,
-                        initialCameraPosition: camPosition,
-                        onMapCreated: (GoogleMapController controller) {
-                          _controller.complete(controller);
+                      return Stack(
+                        children: [
+                          GoogleMap(
+                            mapToolbarEnabled: false,
+                            zoomControlsEnabled: false,
+                            buildingsEnabled: true,
+                            compassEnabled: true,
+                            myLocationButtonEnabled: true,
+                            myLocationEnabled: true,
+                            markers: markers1,
+                            mapType: MapType.normal,
+                            initialCameraPosition: camPosition,
+                            onMapCreated: (GoogleMapController controller) {
+                              if (!shown) {
+                                _createTutorial();
+                              }
+                              _controller.complete(controller);
 
-                          setState(() {
-                            mapController = controller;
-                          });
-                        },
+                              setState(() {
+                                mapController = controller;
+                              });
+                            },
+                          ),
+                        ],
                       );
                     }),
                 Center(
@@ -658,5 +680,132 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement dispose
     super.dispose();
     mapController!.dispose();
+  }
+
+  Future<void> _createTutorial() async {
+    final targets = [
+      TargetFocus(
+        identify: 'notif',
+        keyTarget: keyOne,
+        alignSkip: Alignment.topCenter,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) => SafeArea(
+              child: TextRegular(
+                text:
+                    "Stay in the loop! Get real-time updates on your booking status through our notifications",
+                fontSize: 18,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+      TargetFocus(
+        identify: 'messages',
+        keyTarget: key2,
+        alignSkip: Alignment.topCenter,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) => SafeArea(
+              child: TextRegular(
+                text:
+                    "Stay connected with PARA! Use our messaging feature to easily communicate and exchange messages with drivers, keeping you in touch and engaged at all times.",
+                fontSize: 18,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+      TargetFocus(
+        identify: 'favs',
+        keyTarget: key3,
+        alignSkip: Alignment.topCenter,
+        contents: [
+          TargetContent(
+            align: ContentAlign.top,
+            builder: (context, controller) => SafeArea(
+              child: TextRegular(
+                text:
+                    "Discover and access your favorite places with ease! PARA's Favorites feature lets you save and conveniently access your preferred locations, ensuring you can quickly navigate to the places you love with just a few taps.",
+                fontSize: 18,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+      TargetFocus(
+        identify: 'trips',
+        keyTarget: key4,
+        alignSkip: Alignment.topCenter,
+        contents: [
+          TargetContent(
+            align: ContentAlign.top,
+            builder: (context, controller) => SafeArea(
+              child: TextRegular(
+                text:
+                    "Relive your past adventures with PARA's Trips or History feature! Easily access and review your previous trips, allowing you to reminisce, track your travel history, and plan future journeys based on your favorite destinations.",
+                fontSize: 18,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+      TargetFocus(
+        identify: 'refresh',
+        keyTarget: key5,
+        alignSkip: Alignment.topCenter,
+        contents: [
+          TargetContent(
+            align: ContentAlign.top,
+            builder: (context, controller) => SafeArea(
+              child: TextRegular(
+                text:
+                    "Stay up-to-date with the latest available drivers! Just tap the Refresh button in PARA to instantly get the most current list of drivers, ensuring you have access to a wide selection and can quickly find a driver that suits your needs.",
+                fontSize: 18,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+      TargetFocus(
+        identify: 'map',
+        keyTarget: key6,
+        alignSkip: Alignment.topCenter,
+        contents: [
+          TargetContent(
+              align: ContentAlign.bottom,
+              builder: (context, controller) {
+                return SafeArea(
+                  child: TextRegular(
+                    text:
+                        "Discover available drivers on the map! In PARA, drivers are represented by markers, making it easy for you to locate and select the driver of your choice. Simply click on a driver's marker to book your ride, ensuring a seamless and personalized experience to get you to your destination.",
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                );
+              }),
+        ],
+      ),
+    ];
+
+    final tutorial = TutorialCoachMark(
+      hideSkip: true,
+      targets: targets,
+    );
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      tutorial.show(context: context);
+    });
+
+    setState(() {
+      shown = true;
+    });
   }
 }

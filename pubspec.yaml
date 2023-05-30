@@ -64,6 +64,7 @@ dependencies:
   flutter_spinkit:
   animated_text_kit:
   showcaseview:
+  tutorial_coach_mark:
   
 
 dev_dependencies:
