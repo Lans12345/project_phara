@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:phara/data/distance_calculations.dart';
@@ -86,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  bool shown = false;
+  final box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -460,7 +461,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mapType: MapType.normal,
                         initialCameraPosition: camPosition,
                         onMapCreated: (GoogleMapController controller) {
-                          if (!shown) {
+                          if (!box.read('shown')) {
                             _createTutorial();
                           }
                           _controller.complete(controller);
@@ -780,8 +781,6 @@ class _HomeScreenState extends State<HomeScreen> {
       tutorial.show(context: context);
     });
 
-    setState(() {
-      shown = true;
-    });
+    box.write('shown', true);
   }
 }

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:phara/screens/get_started_screen.dart';
 import 'package:phara/screens/home_screen.dart';
 import 'package:phara/widgets/text_widget.dart';
@@ -18,6 +19,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final box = GetStorage();
   @override
   void initState() {
     // TODO: implement initState
@@ -43,6 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 if (snapshot.hasData) {
                   return const HomeScreen();
                 } else {
+                  box.write('shown', false);
                   return const GetStartedScreen();
                 }
               }),
