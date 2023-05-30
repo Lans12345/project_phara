@@ -404,6 +404,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               actions: <Widget>[
                                 MaterialButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                  child: const Text(
+                                    'Close',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                        fontFamily: 'QBold',
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                MaterialButton(
                                   onPressed: () async {
                                     Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
@@ -417,18 +429,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         fontSize: 10,
                                         color: grey,
                                         fontFamily: 'QRegular',
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                MaterialButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(true),
-                                  child: const Text(
-                                    'Close',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                        fontFamily: 'QBold',
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
