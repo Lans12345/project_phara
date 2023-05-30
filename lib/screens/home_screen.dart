@@ -473,6 +473,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               });
                             },
                           ),
+                          shown == false
+                              ? Center(
+                                  child: Icon(
+                                    key: key6,
+                                    Icons.location_history_rounded,
+                                    size: 42,
+                                  ),
+                                )
+                              : const SizedBox(),
                         ],
                       );
                     }),
