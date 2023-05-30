@@ -45,7 +45,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 if (snapshot.hasData) {
                   return const HomeScreen();
                 } else {
-                  box.write('shown', false);
                   return const GetStartedScreen();
                 }
               }),

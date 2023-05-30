@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:phara/screens/auth/login_screen.dart';
 import 'package:phara/screens/splashtohome_screen.dart';
 import 'package:phara/services/signup.dart';
@@ -233,6 +234,8 @@ class SignupScreen extends StatelessWidget {
     );
   }
 
+  final box = GetStorage();
+
   register(context) async {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -248,6 +251,9 @@ class SignupScreen extends StatelessWidget {
 
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const SplashToHomeScreen()));
+
+      box.write('shown', false);
+      box.write('shownDeliver', false);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         showToast('The password provided is too weak.');

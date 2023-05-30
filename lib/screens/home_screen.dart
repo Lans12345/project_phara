@@ -461,7 +461,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         mapType: MapType.normal,
                         initialCameraPosition: camPosition,
                         onMapCreated: (GoogleMapController controller) {
-                          if (!box.read('shown')) {
+                          if (box.read('shown') == false ||
+                              box.read('shown') == null) {
                             _createTutorial();
                           }
                           _controller.complete(controller);
