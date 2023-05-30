@@ -72,7 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final key3 = GlobalKey();
   final key4 = GlobalKey();
   final key5 = GlobalKey();
-  final key6 = GlobalKey();
 
   getMyBookings() async {
     FirebaseFirestore.instance
@@ -450,39 +449,26 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: grey,
                         ));
                       }
-                      return Stack(
-                        children: [
-                          GoogleMap(
-                            mapToolbarEnabled: false,
-                            zoomControlsEnabled: false,
-                            buildingsEnabled: true,
-                            compassEnabled: true,
-                            myLocationButtonEnabled: true,
-                            myLocationEnabled: true,
-                            markers: markers1,
-                            mapType: MapType.normal,
-                            initialCameraPosition: camPosition,
-                            onMapCreated: (GoogleMapController controller) {
-                              if (!shown) {
-                                _createTutorial();
-                              }
-                              _controller.complete(controller);
+                      return GoogleMap(
+                        mapToolbarEnabled: false,
+                        zoomControlsEnabled: false,
+                        buildingsEnabled: true,
+                        compassEnabled: true,
+                        myLocationButtonEnabled: true,
+                        myLocationEnabled: true,
+                        markers: markers1,
+                        mapType: MapType.normal,
+                        initialCameraPosition: camPosition,
+                        onMapCreated: (GoogleMapController controller) {
+                          if (!shown) {
+                            _createTutorial();
+                          }
+                          _controller.complete(controller);
 
-                              setState(() {
-                                mapController = controller;
-                              });
-                            },
-                          ),
-                          shown == false
-                              ? Center(
-                                  child: Icon(
-                                    key: key6,
-                                    Icons.location_history_rounded,
-                                    size: 42,
-                                  ),
-                                )
-                              : const SizedBox(),
-                        ],
+                          setState(() {
+                            mapController = controller;
+                          });
+                        },
                       );
                     }),
                 Center(
@@ -781,25 +767,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-        ],
-      ),
-      TargetFocus(
-        identify: 'map',
-        keyTarget: key6,
-        alignSkip: Alignment.topCenter,
-        contents: [
-          TargetContent(
-              align: ContentAlign.bottom,
-              builder: (context, controller) {
-                return SafeArea(
-                  child: TextRegular(
-                    text:
-                        "Discover available drivers on the map! In PARA, drivers are represented by markers, making it easy for you to locate and select the driver of your choice. Simply click on a driver's marker to book your ride, ensuring a seamless and personalized experience to get you to your destination.",
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),
-                );
-              }),
         ],
       ),
     ];
