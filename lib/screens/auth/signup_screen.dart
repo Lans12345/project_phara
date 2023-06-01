@@ -108,8 +108,9 @@ class SignupScreen extends StatelessWidget {
                       if (value == null || value.isEmpty) {
                         return 'Please enter an email address';
                       }
-                      final emailRegex =
-                          RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                      final emailRegex = RegExp(
+                          r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$');
+
                       if (!emailRegex.hasMatch(value)) {
                         return 'Please enter a valid email address';
                       }
