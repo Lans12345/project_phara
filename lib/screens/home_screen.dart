@@ -484,15 +484,67 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       );
                     }),
-                Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      SizedBox(
-                        height: 25,
-                      ),
-                    ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          elevation: 0,
+                          color: Colors.white.withOpacity(0.3),
+                          child: SizedBox(
+                            height: 35,
+                            width: 200,
+                            child: Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.account_circle_outlined,
+                                    color: Colors.green,
+                                    size: 18,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  StreamBuilder<QuerySnapshot>(
+                                      stream: FirebaseFirestore.instance
+                                          .collection('Drivers')
+                                          .where('isActive', isEqualTo: true)
+                                          .snapshots(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<QuerySnapshot>
+                                              snapshot) {
+                                        if (snapshot.hasError) {
+                                          print('error');
+                                          return const Center(
+                                              child: Text('Error'));
+                                        }
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const SizedBox();
+                                        }
+
+                                        final data = snapshot.requireData;
+                                        return TextRegular(
+                                          text: data.docs.isNotEmpty
+                                              ? '${data.docs.length} Riders on Duty'
+                                              : 'No Riders Available',
+                                          fontSize: 12,
+                                          color: Colors.green,
+                                        );
+                                      }),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 )
               ],
