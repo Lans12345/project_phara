@@ -65,6 +65,7 @@ dependencies:
   animated_text_kit:
   showcaseview:
   tutorial_coach_mark:
+  avatar_glow:
   
 
 dev_dependencies:
