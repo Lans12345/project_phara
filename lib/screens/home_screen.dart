@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:badges/badges.dart' as b;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:custom_map_markers/custom_map_markers.dart';
@@ -150,10 +151,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               text: data.docs.length.toString(),
                               fontSize: 12,
                               color: Colors.white),
-                          child: Icon(
-                            key: key2,
-                            Icons.message_outlined,
-                            color: grey,
+                          child: AvatarGlow(
+                            animate: data.docs.isNotEmpty,
+                            glowColor: Colors.red,
+                            endRadius: 60.0,
+                            duration: const Duration(milliseconds: 2000),
+                            repeatPauseDuration:
+                                const Duration(milliseconds: 100),
+                            repeat: true,
+                            child: Icon(
+                              key: key2,
+                              Icons.message_outlined,
+                              color: grey,
+                            ),
                           ),
                         );
                       }),
