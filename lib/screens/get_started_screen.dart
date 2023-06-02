@@ -51,7 +51,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                   child: SizedBox(),
                 ),
                 const Text(
-                  'Making your travels more easier.',
+                  'Making your travels much easier.',
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'QBold',
