@@ -925,7 +925,7 @@ class DeliveryPageState extends State<DeliveryPage> {
                                               ),
                                               TextRegular(
                                                   text:
-                                                      'Payment: ₱${(((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 12) + 45).toStringAsFixed(2)} + Fee (Item Size)',
+                                                      'Payment: ₱${(((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 10) + 40).toStringAsFixed(2)} + Fee (Item Size)',
                                                   fontSize: 15,
                                                   color: grey),
                                               const SizedBox(
@@ -1001,7 +1001,7 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                                                 drop,
                                                                                 calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude).toStringAsFixed(2),
                                                                                 (calculateTravelTime((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)), 26.8)).toStringAsFixed(2),
-                                                                                (((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 12) + 45).toStringAsFixed(2),
+                                                                                (((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 10) + 40).toStringAsFixed(2),
                                                                                 pickUp.latitude,
                                                                                 pickUp.longitude,
                                                                                 dropOff.latitude,
