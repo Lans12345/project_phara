@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   FirebaseAuth.instance.currentUser!.uid) {
             InAppNotifications.show(
               onTap: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => const MessagesTab()));
               },
               duration: const Duration(seconds: 5),
