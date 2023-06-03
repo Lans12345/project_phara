@@ -66,6 +66,7 @@ dependencies:
   showcaseview:
   tutorial_coach_mark:
   avatar_glow:
+  flutter_inapp_notifications:
   
 
 dev_dependencies:

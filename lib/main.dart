@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inapp_notifications/flutter_inapp_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phara/screens/splash_screen.dart';
 import 'package:wakelock/wakelock.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'PARA',
       home: const SplashScreen(),
+      builder: InAppNotifications.init(),
     );
   }
 }

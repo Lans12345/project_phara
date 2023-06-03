@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:custom_map_markers/custom_map_markers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inapp_notifications/flutter_inapp_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoding/geocoding.dart';
@@ -49,6 +50,63 @@ class _HomeScreenState extends State<HomeScreen> {
     getLocation();
 
     getAllDrivers();
+
+    FirebaseFirestore.instance
+        .collection('Bookings')
+        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .snapshots()
+        .listen((event) {
+      for (var element in event.docChanges) {
+        if (element.type == DocumentChangeType.modified) {
+          InAppNotifications.show(
+            title: 'Your Booking Response was ${event.docs[0]['status']}',
+            leading: Image.asset('assets/images/logo.png'),
+            description:
+                'The rider has responded to your booking!\nView your notifications for more details',
+          );
+        }
+      }
+    });
+
+    FirebaseFirestore.instance
+        .collection('Delivery')
+        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .snapshots()
+        .listen((event) {
+      for (var element in event.docChanges) {
+        if (element.type == DocumentChangeType.modified) {
+          InAppNotifications.show(
+            title: 'Your Delivery Booking was ${event.docs[0]['status']}',
+            leading: Image.asset('assets/images/logo.png'),
+            description:
+                'The rider has responded to your delivery booking!\nView your notifications for more details',
+          );
+        }
+      }
+    });
+
+    FirebaseFirestore.instance
+        .collection('Messages')
+        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .snapshots()
+        .listen((event) {
+      for (var element in event.docChanges) {
+        if (element.type == DocumentChangeType.modified) {
+          if (event.docs[0]['seen'] == false) {
+            InAppNotifications.show(
+              onTap: () {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const MessagesTab()));
+              },
+              duration: const Duration(seconds: 15),
+              title: '${event.docs[0]['driverName']} has sent you a message!',
+              leading: Image.network(event.docs[0]['driverProfile']),
+              description: event.docs[0]['lastMessage'],
+            );
+          }
+        }
+      }
+    });
   }
 
   final Completer<GoogleMapController> _controller =
