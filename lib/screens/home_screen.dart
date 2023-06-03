@@ -91,17 +91,22 @@ class _HomeScreenState extends State<HomeScreen> {
         .snapshots()
         .listen((event) {
       for (var element in event.docChanges) {
+        print(element.doc['messages'].length);
+
         if (element.type == DocumentChangeType.modified) {
-          if (event.docs[0]['seen'] == false) {
+          if (element.doc['seen'] == false &&
+              element.doc['messages'][element.doc['messages'].length - 1]
+                      ['sender'] !=
+                  FirebaseAuth.instance.currentUser!.uid) {
             InAppNotifications.show(
               onTap: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => const MessagesTab()));
               },
-              duration: const Duration(seconds: 15),
-              title: '${event.docs[0]['driverName']} has sent you a message!',
-              leading: Image.network(event.docs[0]['driverProfile']),
-              description: event.docs[0]['lastMessage'],
+              duration: const Duration(seconds: 5),
+              title: '${element.doc['driverName']} has sent you a message!',
+              leading: Image.network(element.doc['driverProfile']),
+              description: element.doc['lastMessage'],
             );
           }
         }
