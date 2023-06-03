@@ -468,6 +468,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: grey,
                         ));
                       }
+
                       return GoogleMap(
                         mapToolbarEnabled: false,
                         zoomControlsEnabled: false,
@@ -478,7 +479,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         markers: markers1,
                         mapType: MapType.normal,
                         initialCameraPosition: camPosition,
-                        onMapCreated: (GoogleMapController controller) {
+                        onMapCreated: (controller) {
                           if (box.read('shown') == false ||
                               box.read('shown') == null) {
                             _createTutorial();
