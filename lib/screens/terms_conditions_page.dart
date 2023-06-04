@@ -167,7 +167,7 @@ class TermsAndConditionsPage extends StatelessWidget {
                       fontFamily: 'QBold'),
                 ),
                 Text(
-                  '10.1 If you have any questions or concerns regarding these terms and conditions, please contact us at phara.algovision@gmail.com',
+                  '10.1 If you have any questions or concerns regarding these terms and conditions, please contact us at algovision123@gmail.com',
                   style: TextStyle(fontSize: 14.0, fontFamily: 'QRegular'),
                 ),
               ],

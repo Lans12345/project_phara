@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:phara/screens/home_screen.dart';
 
 import '../plugins/my_location.dart';
@@ -14,6 +15,7 @@ class SplashToHomeScreen extends StatefulWidget {
 }
 
 class _SplashToHomeScreenState extends State<SplashToHomeScreen> {
+  final box = GetStorage();
   @override
   void initState() {
     // TODO: implement initState

@@ -32,7 +32,7 @@ class _LandingScreenState extends State<LandingScreen> {
         decoration: const BoxDecoration(
             color: grey,
             image: DecorationImage(
-                opacity: 150,
+                opacity: 180,
                 image: AssetImage('assets/images/background.png'),
                 fit: BoxFit.cover)),
         child: SizedBox(
@@ -45,7 +45,7 @@ class _LandingScreenState extends State<LandingScreen> {
               children: [
                 TextBold(text: 'PARA', fontSize: 48, color: Colors.white),
                 TextRegular(
-                    text: 'Making your travels more easier',
+                    text: 'Making your travels much easier',
                     fontSize: 15,
                     color: Colors.white),
                 const SizedBox(

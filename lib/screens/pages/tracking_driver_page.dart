@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import 'package:phara/screens/pages/chat_page.dart';
+import 'package:phara/utils/const.dart';
 import 'package:phara/widgets/text_widget.dart';
 
 import '../../plugins/my_location.dart';
@@ -112,8 +113,9 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
+              Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ChatPage(
+                        useCase: ChatpageUsecase.trackDriver,
                         driverName: widget.tripDetails['driverName'],
                         driverId: widget.tripDetails['driverId'],
                       )));

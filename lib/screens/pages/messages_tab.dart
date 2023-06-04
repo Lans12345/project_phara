@@ -158,7 +158,13 @@ class _MessagesTabState extends State<MessagesTab> {
                                   children: [
                                     data.docs[index]['seen'] == true
                                         ? Text(
-                                            data.docs[index]['lastMessage'],
+                                            data.docs[index]['lastMessage']
+                                                        .toString()
+                                                        .length >
+                                                    21
+                                                ? '${data.docs[index]['lastMessage'].toString().substring(0, 21)}...'
+                                                : data.docs[index]
+                                                    ['lastMessage'],
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: const TextStyle(
@@ -167,7 +173,13 @@ class _MessagesTabState extends State<MessagesTab> {
                                                 fontFamily: 'QRegular'),
                                           )
                                         : Text(
-                                            data.docs[index]['lastMessage'],
+                                            data.docs[index]['lastMessage']
+                                                        .toString()
+                                                        .length >
+                                                    21
+                                                ? '${data.docs[index]['lastMessage'].toString().substring(0, 21)}...'
+                                                : data.docs[index]
+                                                    ['lastMessage'],
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: const TextStyle(

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:phara/screens/auth/signup_screen.dart';
 import 'package:phara/screens/splashtohome_screen.dart';
 import 'package:phara/utils/colors.dart';
@@ -249,12 +250,16 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
+  final box = GetStorage();
+
   login(context) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const SplashToHomeScreen()));
+      box.write('shown', false);
+      box.write('shownDeliver', false);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         showToast("No user found with that email.");

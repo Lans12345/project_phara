@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:phara/screens/pages/messages_tab.dart';
 import 'package:phara/services/add_messages.dart';
+import 'package:phara/utils/const.dart';
 import 'package:phara/widgets/text_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -12,7 +13,12 @@ import '../../utils/colors.dart';
 class ChatPage extends StatefulWidget {
   final String driverId;
   final String driverName;
-  const ChatPage({super.key, required this.driverId, required this.driverName});
+  final ChatpageUsecase useCase;
+  const ChatPage(
+      {super.key,
+      required this.driverId,
+      required this.driverName,
+      this.useCase = ChatpageUsecase.messages});
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
@@ -83,6 +89,16 @@ class _ChatPageState extends State<ChatPage> {
       onWillPop: onWillPop,
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+              onPressed: () {
+                if (widget.useCase == ChatpageUsecase.messages) {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => const MessagesTab()));
+                } else {
+                  Navigator.pop(context);
+                }
+              },
+              icon: const Icon(Icons.arrow_back)),
           centerTitle: true,
           foregroundColor: grey,
           backgroundColor: Colors.white,

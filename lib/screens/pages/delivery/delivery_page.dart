@@ -6,6 +6,7 @@ import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:phara/data/distance_calculations.dart';
 import 'package:phara/screens/pages/delivery/delivery_history_page.dart';
@@ -17,6 +18,7 @@ import 'package:phara/widgets/text_widget.dart';
 import 'package:google_maps_webservice/places.dart' as location;
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:phara/widgets/toast_widget.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import '../../../data/time_calculation.dart';
 import '../../../utils/keys.dart';
 
@@ -103,6 +105,12 @@ class DeliveryPageState extends State<DeliveryPage> {
   final receiverController = TextEditingController();
   final receiverNumberController = TextEditingController();
 
+  final box = GetStorage();
+
+  final keyOne = GlobalKey();
+  final keyTwo = GlobalKey();
+  final keyThree = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     CameraPosition kGooglePlex = CameraPosition(
@@ -122,7 +130,8 @@ class DeliveryPageState extends State<DeliveryPage> {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const DeliveryHistoryPage()));
             },
-            icon: const Icon(
+            icon: Icon(
+              key: keyThree,
               Icons.history,
               color: grey,
             ),
@@ -144,6 +153,10 @@ class DeliveryPageState extends State<DeliveryPage> {
                   mapType: MapType.normal,
                   initialCameraPosition: kGooglePlex,
                   onMapCreated: (GoogleMapController controller) {
+                    if (box.read('shownDeliver') == false ||
+                        box.read('shownDeliver') == null) {
+                      _createTutorial();
+                    }
                     mapController = controller;
                     _controller.complete(controller);
                   },
@@ -261,7 +274,8 @@ class DeliveryPageState extends State<DeliveryPage> {
                                         child: TextFormField(
                                           enabled: false,
                                           decoration: InputDecoration(
-                                            prefixIcon: const Icon(
+                                            prefixIcon: Icon(
+                                              key: keyOne,
                                               Icons.looks_one_outlined,
                                               color: grey,
                                             ),
@@ -448,7 +462,8 @@ class DeliveryPageState extends State<DeliveryPage> {
                                         child: TextFormField(
                                           enabled: false,
                                           decoration: InputDecoration(
-                                            prefixIcon: const Icon(
+                                            prefixIcon: Icon(
+                                              key: keyTwo,
                                               Icons.looks_two_outlined,
                                               color: grey,
                                             ),
@@ -910,7 +925,7 @@ class DeliveryPageState extends State<DeliveryPage> {
                                               ),
                                               TextRegular(
                                                   text:
-                                                      'Payment: ₱${(((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 12) + 45).toStringAsFixed(2)} + Fee (Item Size)',
+                                                      'Payment: ₱${(((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 10) + 40).toStringAsFixed(2)} + Fee (Item Size)',
                                                   fontSize: 15,
                                                   color: grey),
                                               const SizedBox(
@@ -986,7 +1001,7 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                                                 drop,
                                                                                 calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude).toStringAsFixed(2),
                                                                                 (calculateTravelTime((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)), 26.8)).toStringAsFixed(2),
-                                                                                (((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 12) + 45).toStringAsFixed(2),
+                                                                                (((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 10) + 40).toStringAsFixed(2),
                                                                                 pickUp.latitude,
                                                                                 pickUp.longitude,
                                                                                 dropOff.latitude,
@@ -1071,6 +1086,75 @@ class DeliveryPageState extends State<DeliveryPage> {
   void dispose() {
     mapController!.dispose();
     super.dispose();
+  }
+
+  Future<void> _createTutorial() async {
+    final targets = [
+      TargetFocus(
+        identify: 'pickup',
+        keyTarget: keyOne,
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+            align: ContentAlign.top,
+            builder: (context, controller) => SafeArea(
+              child: TextRegular(
+                text:
+                    "Ready for delivery? Let us know where to pick up your goods!",
+                fontSize: 18,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+      TargetFocus(
+        identify: 'dropoff',
+        keyTarget: keyTwo,
+        alignSkip: Alignment.topLeft,
+        contents: [
+          TargetContent(
+            align: ContentAlign.top,
+            builder: (context, controller) => SafeArea(
+              child: TextRegular(
+                text: "Specify the destination for your goods' safe arrival!",
+                fontSize: 18,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+      TargetFocus(
+        identify: 'history',
+        keyTarget: keyThree,
+        alignSkip: Alignment.topCenter,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) => SafeArea(
+              child: TextRegular(
+                text:
+                    "Track your delivery history and review past orders with ease! Access your complete delivery history to stay organized and keep a record of your successful shipments using our intuitive history feature in the app.",
+                fontSize: 18,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ];
+
+    final tutorial = TutorialCoachMark(
+      hideSkip: true,
+      targets: targets,
+    );
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      tutorial.show(context: context);
+    });
+
+    box.write('shownDeliver', true);
   }
 }
 

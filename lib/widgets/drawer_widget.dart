@@ -19,7 +19,9 @@ import 'package:path/path.dart' as path;
 import 'package:badges/badges.dart' as b;
 
 class DrawerWidget extends StatefulWidget {
-  const DrawerWidget({super.key});
+  final GlobalKey? key6;
+
+  const DrawerWidget({super.key, this.key6});
 
   @override
   State<DrawerWidget> createState() => _DrawerWidgetState();
@@ -138,6 +140,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           dynamic data = snapshot.data;
           return SizedBox(
             child: Drawer(
+              key: widget.key6,
               child: Column(
                 children: [
                   Expanded(

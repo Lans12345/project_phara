@@ -29,7 +29,8 @@ Future<String> addBooking(
     'originCoordinates': {'lat': originLat, 'long': originLong},
     'destinationCoordinates': {'lat': destinationLat, 'long': destinationLong},
     'userName': userName,
-    'userProfile': userProfile
+    'userProfile': userProfile,
+    'type': 'ride'
   };
 
   await FirebaseFirestore.instance

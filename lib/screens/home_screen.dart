@@ -1,15 +1,18 @@
 import 'dart:async';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:badges/badges.dart' as b;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:custom_map_markers/custom_map_markers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inapp_notifications/flutter_inapp_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:phara/data/distance_calculations.dart';
@@ -23,11 +26,11 @@ import 'package:phara/widgets/custom_marker.dart';
 import 'package:phara/widgets/drawer_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
 import 'package:phara/widgets/toast_widget.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:uuid/uuid.dart';
 
 import '../services/providers/coordinates_provider.dart';
 import '../widgets/delegate/search_my_places.dart';
-import 'auth/login_screen.dart';
 import 'pages/messages_tab.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -47,6 +50,68 @@ class _HomeScreenState extends State<HomeScreen> {
     getLocation();
 
     getAllDrivers();
+
+    FirebaseFirestore.instance
+        .collection('Bookings')
+        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .snapshots()
+        .listen((event) {
+      for (var element in event.docChanges) {
+        if (element.type == DocumentChangeType.modified) {
+          InAppNotifications.show(
+            title: 'Your Booking Response was ${event.docs[0]['status']}',
+            leading: Image.asset('assets/images/logo.png'),
+            description:
+                'The rider has responded to your booking!\nView your notifications for more details',
+          );
+        }
+      }
+    });
+
+    FirebaseFirestore.instance
+        .collection('Delivery')
+        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .snapshots()
+        .listen((event) {
+      for (var element in event.docChanges) {
+        if (element.type == DocumentChangeType.modified) {
+          InAppNotifications.show(
+            title: 'Your Delivery Booking was ${event.docs[0]['status']}',
+            leading: Image.asset('assets/images/logo.png'),
+            description:
+                'The rider has responded to your delivery booking!\nView your notifications for more details',
+          );
+        }
+      }
+    });
+
+    FirebaseFirestore.instance
+        .collection('Messages')
+        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .snapshots()
+        .listen((event) {
+      for (var element in event.docChanges) {
+        print(element.doc['messages'].length);
+
+        if (element.type == DocumentChangeType.modified) {
+          if (element.doc['seen'] == false &&
+              element.doc['messages'][element.doc['messages'].length - 1]
+                      ['sender'] !=
+                  FirebaseAuth.instance.currentUser!.uid) {
+            InAppNotifications.show(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const MessagesTab()));
+              },
+              duration: const Duration(seconds: 5),
+              title: '${element.doc['driverName']} has sent you a message!',
+              leading: Image.network(element.doc['driverProfile']),
+              description: element.doc['lastMessage'],
+            );
+          }
+        }
+      }
+    });
   }
 
   final Completer<GoogleMapController> _controller =
@@ -66,6 +131,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<String> driversId = [];
 
+  final keyOne = GlobalKey();
+  final key2 = GlobalKey();
+  final key3 = GlobalKey();
+  final key4 = GlobalKey();
+  final key5 = GlobalKey();
+
   getMyBookings() async {
     FirebaseFirestore.instance
         .collection('Bookings')
@@ -78,6 +149,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
   }
+
+  final box = GetStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -140,9 +213,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               text: data.docs.length.toString(),
                               fontSize: 12,
                               color: Colors.white),
-                          child: const Icon(
-                            Icons.message_outlined,
-                            color: grey,
+                          child: AvatarGlow(
+                            animate: data.docs.isNotEmpty,
+                            glowColor: Colors.red,
+                            endRadius: 60.0,
+                            duration: const Duration(milliseconds: 2000),
+                            repeatPauseDuration:
+                                const Duration(milliseconds: 100),
+                            repeat: true,
+                            child: Icon(
+                              key: key2,
+                              Icons.message_outlined,
+                              color: grey,
+                            ),
                           ),
                         );
                       }),
@@ -178,6 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     return AlertDialog(
                                       content: SizedBox(
                                         height: 100,
+                                        width: 500,
                                         child: Center(
                                           child: ListView.builder(
                                               itemCount: favs.length,
@@ -245,7 +329,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 text: favs.length.toString(),
                                 fontSize: 12,
                                 color: Colors.white),
-                            child: const Icon(
+                            child: Icon(
+                              key: key3,
                               Icons.star_border_rounded,
                               color: grey,
                             ),
@@ -260,7 +345,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => const TripsPage()));
                     }),
-                    child: const Icon(
+                    child: Icon(
+                      key: key4,
                       Icons.collections_bookmark_outlined,
                       color: grey,
                     )),
@@ -273,7 +359,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => const HomeScreen()));
                     }),
-                    child: const Icon(
+                    child: Icon(
+                      key: key5,
                       Icons.refresh,
                       color: grey,
                     )),
@@ -329,7 +416,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontSize: 12,
                               color: Colors.white,
                             ),
-                            child: const Icon(Icons.notifications_rounded),
+                            child:
+                                Icon(key: keyOne, Icons.notifications_rounded),
                           ),
                           itemBuilder: (context) {
                             return [
@@ -371,56 +459,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ];
                           });
                     }),
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                              title: const Text(
-                                'Logout Confirmation',
-                                style: TextStyle(
-                                    fontFamily: 'QBold',
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              content: const Text(
-                                'Are you sure you want to Logout?',
-                                style: TextStyle(fontFamily: 'QRegular'),
-                              ),
-                              actions: <Widget>[
-                                MaterialButton(
-                                  onPressed: () async {
-                                    Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                LoginScreen()));
-                                    await FirebaseAuth.instance.signOut();
-                                  },
-                                  child: const Text(
-                                    'Continue',
-                                    style: TextStyle(
-                                        fontSize: 10,
-                                        color: grey,
-                                        fontFamily: 'QRegular',
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                MaterialButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(true),
-                                  child: const Text(
-                                    'Close',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                        fontFamily: 'QBold',
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ],
-                            ));
-                  },
-                  icon: const Icon(Icons.logout),
-                ),
               ],
             ),
             body: Stack(
@@ -435,6 +473,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: grey,
                         ));
                       }
+
                       return GoogleMap(
                         mapToolbarEnabled: false,
                         zoomControlsEnabled: false,
@@ -445,7 +484,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         markers: markers1,
                         mapType: MapType.normal,
                         initialCameraPosition: camPosition,
-                        onMapCreated: (GoogleMapController controller) {
+                        onMapCreated: (controller) {
+                          if (box.read('shown') == false ||
+                              box.read('shown') == null) {
+                            _createTutorial();
+                          }
                           _controller.complete(controller);
 
                           setState(() {
@@ -454,15 +497,67 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       );
                     }),
-                Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      SizedBox(
-                        height: 25,
-                      ),
-                    ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          elevation: 0,
+                          color: Colors.white.withOpacity(0.3),
+                          child: SizedBox(
+                            height: 35,
+                            width: 200,
+                            child: Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.account_circle_outlined,
+                                    color: Colors.green,
+                                    size: 18,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  StreamBuilder<QuerySnapshot>(
+                                      stream: FirebaseFirestore.instance
+                                          .collection('Drivers')
+                                          .where('isActive', isEqualTo: true)
+                                          .snapshots(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<QuerySnapshot>
+                                              snapshot) {
+                                        if (snapshot.hasError) {
+                                          print('error');
+                                          return const Center(
+                                              child: Text('Error'));
+                                        }
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const SizedBox();
+                                        }
+
+                                        final data = snapshot.requireData;
+                                        return TextRegular(
+                                          text: data.docs.isNotEmpty
+                                              ? '${data.docs.length} Riders on Duty'
+                                              : 'No Riders Available',
+                                          fontSize: 12,
+                                          color: Colors.green,
+                                        );
+                                      }),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 )
               ],
@@ -658,5 +753,111 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement dispose
     super.dispose();
     mapController!.dispose();
+  }
+
+  Future<void> _createTutorial() async {
+    final targets = [
+      TargetFocus(
+        identify: 'notif',
+        keyTarget: keyOne,
+        alignSkip: Alignment.topCenter,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) => SafeArea(
+              child: TextRegular(
+                text:
+                    "Stay in the loop! Get real-time updates on your booking status through our notifications",
+                fontSize: 18,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+      TargetFocus(
+        identify: 'messages',
+        keyTarget: key2,
+        alignSkip: Alignment.topCenter,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) => SafeArea(
+              child: TextRegular(
+                text:
+                    "Stay connected with PARA! Use our messaging feature to easily communicate and exchange messages with drivers, keeping you in touch and engaged at all times.",
+                fontSize: 18,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+      TargetFocus(
+        identify: 'favs',
+        keyTarget: key3,
+        alignSkip: Alignment.topCenter,
+        contents: [
+          TargetContent(
+            align: ContentAlign.top,
+            builder: (context, controller) => SafeArea(
+              child: TextRegular(
+                text:
+                    "Discover and access your favorite places with ease! PARA's Favorites feature lets you save and conveniently access your preferred locations, ensuring you can quickly navigate to the places you love with just a few taps.",
+                fontSize: 18,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+      TargetFocus(
+        identify: 'trips',
+        keyTarget: key4,
+        alignSkip: Alignment.topCenter,
+        contents: [
+          TargetContent(
+            align: ContentAlign.top,
+            builder: (context, controller) => SafeArea(
+              child: TextRegular(
+                text:
+                    "Relive your past adventures with PARA's Trips or History feature! Easily access and review your previous trips, allowing you to reminisce, track your travel history, and plan future journeys based on your favorite destinations.",
+                fontSize: 18,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+      TargetFocus(
+        identify: 'refresh',
+        keyTarget: key5,
+        alignSkip: Alignment.topCenter,
+        contents: [
+          TargetContent(
+            align: ContentAlign.top,
+            builder: (context, controller) => SafeArea(
+              child: TextRegular(
+                text:
+                    "Stay up-to-date with the latest available drivers! Just tap the Refresh button in PARA to instantly get the most current list of drivers, ensuring you have access to a wide selection and can quickly find a driver that suits your needs.",
+                fontSize: 18,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ];
+
+    final tutorial = TutorialCoachMark(
+      hideSkip: true,
+      targets: targets,
+    );
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      tutorial.show(context: context);
+    });
+
+    box.write('shown', true);
   }
 }
