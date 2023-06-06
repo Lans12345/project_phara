@@ -621,19 +621,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    TextBold(
-                                        text: 'Name: ${doc['name']}',
-                                        fontSize: 15,
-                                        color: grey),
-                                    TextRegular(
-                                        text: 'Vehicle: ${doc['vehicle']}',
-                                        fontSize: 14,
-                                        color: grey),
-                                    TextRegular(
-                                        text:
-                                            'Plate No.: ${doc['plateNumber']}',
-                                        fontSize: 14,
-                                        color: grey),
+                                    SizedBox(
+                                      width: 140,
+                                      child: TextBold(
+                                          text: 'Name: ${doc['name']}',
+                                          fontSize: 15,
+                                          color: grey),
+                                    ),
+                                    SizedBox(
+                                      width: 140,
+                                      child: TextRegular(
+                                          text: 'Vehicle: ${doc['vehicle']}',
+                                          fontSize: 14,
+                                          color: grey),
+                                    ),
+                                    SizedBox(
+                                      width: 140,
+                                      child: TextRegular(
+                                          text:
+                                              'Plate No.: ${doc['plateNumber']}',
+                                          fontSize: 14,
+                                          color: grey),
+                                    ),
                                     TextRegular(
                                         text: doc['ratings'].length != 0
                                             ? 'Rating: ${(doc['stars'] / doc['ratings'].length).toStringAsFixed(2)} ★'
