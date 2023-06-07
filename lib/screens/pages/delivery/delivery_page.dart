@@ -104,6 +104,7 @@ class DeliveryPageState extends State<DeliveryPage> {
 
   final receiverController = TextEditingController();
   final receiverNumberController = TextEditingController();
+  final itemController = TextEditingController();
 
   final box = GetStorage();
 
@@ -632,11 +633,14 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: [
-                                                      TextBold(
-                                                          text:
-                                                              'Name: ${data.docs[index]['name']}',
-                                                          fontSize: 15,
-                                                          color: grey),
+                                                      SizedBox(
+                                                        width: 200,
+                                                        child: TextBold(
+                                                            text:
+                                                                'Name: ${data.docs[index]['name']}',
+                                                            fontSize: 15,
+                                                            color: grey),
+                                                      ),
                                                       TextRegular(
                                                           text:
                                                               'Vehicle: ${data.docs[index]['vehicle']}',
@@ -668,9 +672,6 @@ class DeliveryPageState extends State<DeliveryPage> {
                                               ),
                                               const Divider(
                                                 color: grey,
-                                              ),
-                                              const SizedBox(
-                                                height: 10,
                                               ),
                                               const SizedBox(
                                                 height: 10,
@@ -764,6 +765,78 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                       filled: true,
                                                       hintText:
                                                           'Contact Number of Receiver',
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                width: 1,
+                                                                color: Colors
+                                                                    .black),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                      ),
+                                                      disabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                width: 1,
+                                                                color: Colors
+                                                                    .black),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                      ),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                width: 1,
+                                                                color: Colors
+                                                                    .black),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              const Divider(
+                                                color: grey,
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              TextBold(
+                                                  text: 'Item Details',
+                                                  fontSize: 15,
+                                                  color: grey),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Center(
+                                                child: SizedBox(
+                                                  width: 280,
+                                                  height: 60,
+                                                  child: TextFormField(
+                                                    controller: itemController,
+                                                    style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontFamily: 'QRegular'),
+                                                    decoration: InputDecoration(
+                                                      prefixIcon: const Icon(
+                                                        Icons
+                                                            .add_shopping_cart_rounded,
+                                                        color: grey,
+                                                      ),
+                                                      fillColor: Colors.white,
+                                                      filled: true,
+                                                      hintText:
+                                                          'Item to Deliver',
                                                       enabledBorder:
                                                           OutlineInputBorder(
                                                         borderSide:
@@ -910,7 +983,7 @@ class DeliveryPageState extends State<DeliveryPage> {
                                               TextRegular(
                                                   text:
                                                       'Distance: ${(calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude).toStringAsFixed(2))} km',
-                                                  fontSize: 15,
+                                                  fontSize: 18,
                                                   color: grey),
                                               const SizedBox(
                                                 height: 5,
@@ -918,15 +991,15 @@ class DeliveryPageState extends State<DeliveryPage> {
                                               TextRegular(
                                                   text:
                                                       'Estimated time: ${(calculateTravelTime((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)), 26.8)).toStringAsFixed(2)} hr/s',
-                                                  fontSize: 15,
+                                                  fontSize: 18,
                                                   color: grey),
                                               const SizedBox(
                                                 height: 5,
                                               ),
                                               TextRegular(
                                                   text:
-                                                      'Payment: ₱${(((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 10) + 40).toStringAsFixed(2)} + Fee (Item Size)',
-                                                  fontSize: 15,
+                                                      'Payment: ₱${(((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 10) + 20).toStringAsFixed(2)} + Fee (Item Size)',
+                                                  fontSize: 18,
                                                   color: grey),
                                               const SizedBox(
                                                 height: 10,
@@ -1001,7 +1074,7 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                                                 drop,
                                                                                 calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude).toStringAsFixed(2),
                                                                                 (calculateTravelTime((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)), 26.8)).toStringAsFixed(2),
-                                                                                (((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 10) + 40).toStringAsFixed(2),
+                                                                                (((calculateDistance(pickUp.latitude, pickUp.longitude, dropOff.latitude, dropOff.longitude)) * 10) + 20).toStringAsFixed(2),
                                                                                 pickUp.latitude,
                                                                                 pickUp.longitude,
                                                                                 dropOff.latitude,
@@ -1009,7 +1082,8 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                                                 userName,
                                                                                 userProfile,
                                                                                 receiverController.text,
-                                                                                receiverNumberController.text);
+                                                                                receiverNumberController.text,
+                                                                                itemController.text);
 
                                                                             await FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).update({
                                                                               'notif': FieldValue.arrayUnion([

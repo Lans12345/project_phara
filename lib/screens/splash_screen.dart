@@ -2,12 +2,9 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:phara/screens/get_started_screen.dart';
-import 'package:phara/screens/home_screen.dart';
-import 'package:phara/widgets/text_widget.dart';
+import 'package:phara/screens/splashtohome_screen.dart';
 
 import '../utils/colors.dart';
 
@@ -26,30 +23,17 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     Timer(const Duration(seconds: 5), () async {
-      bool serviceEnabled;
-
-      // Test if location services are enabled.
-      serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        Fluttertoast.showToast(
-          toastLength: Toast.LENGTH_LONG,
-          msg:
-              'Cannot proceed without your location being enabled, turn on your location and open the app again',
-        );
-        return Future.error('Location services are disabled.');
-      } else {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => StreamBuilder<User?>(
-              stream: FirebaseAuth.instance.authStateChanges(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return const HomeScreen();
-                } else {
-                  return const GetStartedScreen();
-                }
-              }),
-        ));
-      }
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => StreamBuilder<User?>(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return const SplashToHomeScreen();
+              } else {
+                return const GetStartedScreen();
+              }
+            }),
+      ));
     });
   }
 
@@ -69,10 +53,6 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextBold(text: 'Welcome', fontSize: 32, color: Colors.white),
-              const SizedBox(
-                height: 20,
-              ),
               Image.asset(
                 'assets/images/animation.gif',
                 width: 250,

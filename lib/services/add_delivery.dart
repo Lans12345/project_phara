@@ -17,7 +17,8 @@ Future<String> addDelivery(
     userName,
     userProfile,
     receiver,
-    receiverNumber) async {
+    receiverNumber,
+    item) async {
   final docUser = FirebaseFirestore.instance.collection('Delivery').doc();
 
   final json = {
@@ -35,7 +36,8 @@ Future<String> addDelivery(
     'userName': userName,
     'userProfile': userProfile,
     'receiver': receiver,
-    'receiverNumber': receiverNumber
+    'receiverNumber': receiverNumber,
+    'item': item,
   };
 
   await FirebaseFirestore.instance

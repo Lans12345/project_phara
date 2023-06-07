@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:phara/screens/auth/landing_screen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
+import 'package:phara/screens/home_screen.dart';
 import 'package:phara/widgets/button_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
 
 import '../utils/colors.dart';
-import '../widgets/normal_dialog.dart';
 
-class GetStartedScreen extends StatefulWidget {
-  const GetStartedScreen({super.key});
+class PermissionScreen extends StatefulWidget {
+  const PermissionScreen({super.key});
 
   @override
-  State<GetStartedScreen> createState() => _GetStartedScreenState();
+  State<PermissionScreen> createState() => _PermissionScreenState();
 }
 
-class _GetStartedScreenState extends State<GetStartedScreen> {
+class _PermissionScreenState extends State<PermissionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +53,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                   child: SizedBox(),
                 ),
                 const Text(
-                  'Making your travels much easier.',
+                  'Enable Location Services',
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'QBold',
@@ -64,8 +66,8 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                 ),
                 TextRegular(
                     text:
-                        "Ride with ease and speed, experience the thrill of the road with PARA - your ultimate motorcycle ride-hailing app!",
-                    fontSize: 14,
+                        "Let PARA access your location to find nearby drivers.",
+                    fontSize: 18,
                     color: Colors.white),
                 const SizedBox(
                   height: 20,
@@ -75,25 +77,33 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                     radius: 100,
                     color: Colors.black,
                     opacity: 1,
-                    label: 'Get Started',
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return NormalDialog(
-                                label:
-                                    "PARA collects location data to enable user tracking for the transaction of ride to be proccessed even when the app is closed or not in use.",
-                                buttonColor: Colors.red,
-                                buttonText: 'I understand',
-                                icon: Icons.warning,
-                                onPressed: () {
-                                  Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const LandingScreen()));
-                                },
-                                iconColor: Colors.red);
-                          });
+                    label: 'Enable Location Services',
+                    onPressed: () async {
+                      Location location = Location();
+                      bool locationServices = await location.serviceEnabled();
+
+                      bool serviceEnabled =
+                          await Geolocator.isLocationServiceEnabled();
+
+                      LocationPermission permission =
+                          await Geolocator.requestPermission();
+
+                      if (permission == LocationPermission.denied &&
+                          serviceEnabled == false) {
+                        Fluttertoast.showToast(
+                          gravity: ToastGravity.TOP,
+                          toastLength: Toast.LENGTH_LONG,
+                          msg:
+                              'Cannot proceed without your location services being disabled, turn on your location services.',
+                        );
+                      } else {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => const HomeScreen()));
+                        Fluttertoast.showToast(
+                          toastLength: Toast.LENGTH_LONG,
+                          msg: 'Location Services Enabled',
+                        );
+                      }
                     },
                   ),
                 ),

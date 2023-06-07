@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:phara/screens/home_screen.dart';
+import 'package:phara/screens/permission_screen.dart';
 
 import '../plugins/my_location.dart';
 import '../utils/colors.dart';
@@ -22,8 +25,23 @@ class _SplashToHomeScreenState extends State<SplashToHomeScreen> {
     super.initState();
     determinePosition();
     Timer(const Duration(seconds: 5), () async {
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomeScreen()));
+      bool serviceEnabled;
+
+      // Test if location services are enabled.
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const PermissionScreen()));
+        Fluttertoast.showToast(
+          toastLength: Toast.LENGTH_LONG,
+          msg:
+              'Cannot proceed without your location being enabled, turn on your location!',
+        );
+        return Future.error('Location services are disabled.');
+      } else {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const HomeScreen()));
+      }
     });
   }
 

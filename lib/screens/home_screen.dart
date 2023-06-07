@@ -156,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final CameraPosition camPosition = CameraPosition(
         target: LatLng(lat, long), zoom: 16, bearing: 45, tilt: 40);
-    return hasLoaded && lat != 0
+    return hasLoaded && lat != 0 && long != 0
         ? Scaffold(
             floatingActionButton: Column(
               mainAxisAlignment: MainAxisAlignment.end,

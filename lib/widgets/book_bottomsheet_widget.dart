@@ -223,7 +223,7 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                       TextRegular(
                           text:
                               'Distance: ${(calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)).toStringAsFixed(2)} km',
-                          fontSize: 15,
+                          fontSize: 18,
                           color: grey),
                       const SizedBox(
                         height: 5,
@@ -231,15 +231,15 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                       TextRegular(
                           text:
                               'Estimated time: ${(calculateTravelTime((calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)), 26.8)).toStringAsFixed(2)} hr/s',
-                          fontSize: 15,
+                          fontSize: 18,
                           color: grey),
                       const SizedBox(
                         height: 5,
                       ),
                       TextRegular(
                           text:
-                              'Fare: ₱${(((calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)) * 10) + 40).toStringAsFixed(2)}',
-                          fontSize: 15,
+                              'Fare: ₱${(((calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)) * 10) + 20).toStringAsFixed(2)}',
+                          fontSize: 18,
                           color: grey),
                       const SizedBox(
                         height: 10,
@@ -331,7 +331,7 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                                               ref.read(longProvider.notifier).state)),
                                                           26.8))
                                                       .toStringAsFixed(2),
-                                                  (((calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)) * 10) + 40).toStringAsFixed(2),
+                                                  (((calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)) * 10) + 20).toStringAsFixed(2),
                                                   widget.coordinates['lat'],
                                                   widget.coordinates['long'],
                                                   ref.read(latProvider.notifier).state,
