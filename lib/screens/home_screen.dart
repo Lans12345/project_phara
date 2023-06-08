@@ -746,8 +746,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 infoWindow: InfoWindow(
                   title: doc['name'],
-                  snippet:
-                      '${calculateDistance(lat, long, doc['location']['lat'], doc['location']['long']).toStringAsFixed(2)} km away',
+                  snippet: '${doc['vehicle']}',
                 ),
                 markerId: MarkerId(doc['name']),
                 position:
