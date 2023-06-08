@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
       for (var element in event.docChanges) {
         if (element.type == DocumentChangeType.modified) {
           InAppNotifications.show(
-            title: 'Your Delivery Booking was ${event.docs[0]['status']}',
+            title: 'Your Delivery Booking was ${element.doc['status']}',
             leading: Image.asset('assets/images/logo.png'),
             description:
                 'The rider has responded to your delivery booking!\nView your notifications for more details',
