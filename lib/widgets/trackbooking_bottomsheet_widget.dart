@@ -173,9 +173,12 @@ class _TrackBookingBottomSheetWidgetState
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Image.asset(
-                                    'assets/images/animation.gif',
-                                    width: 50,
+                                  Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Image.asset(
+                                      'assets/images/animation.gif',
+                                      width: 50,
+                                    ),
                                   ),
                                   const SizedBox(
                                     width: 10,
@@ -206,9 +209,12 @@ class _TrackBookingBottomSheetWidgetState
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Image.asset(
-                                        'assets/images/animation.gif',
-                                        width: 50,
+                                      Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: Image.asset(
+                                          'assets/images/animation.gif',
+                                          width: 50,
+                                        ),
                                       ),
                                       const SizedBox(
                                         width: 10,

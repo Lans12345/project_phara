@@ -11,6 +11,8 @@ import 'package:location/location.dart' as loc;
 import 'package:phara/screens/pages/chat_page.dart';
 import 'package:phara/utils/const.dart';
 import 'package:phara/widgets/text_widget.dart';
+import 'package:phara/widgets/textfield_widget.dart';
+import 'package:phara/widgets/toast_widget.dart';
 
 import '../../plugins/my_location.dart';
 import '../../utils/colors.dart';
@@ -75,6 +77,8 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
       }
     });
   }
+
+  final feedbackController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -284,6 +288,8 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
     });
   }
 
+  double rating = 5;
+
   ratingsDialog() {
     showDialog(
         barrierDismissible: false,
@@ -292,51 +298,81 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
           return AlertDialog(
             title: TextRegular(
                 text: 'Rate your experience',
-                fontSize: 14,
+                fontSize: 18,
                 color: Colors.black),
-            content: SizedBox(
-              height: 50,
-              child: Center(
-                child: RatingBar.builder(
-                  initialRating: 5,
-                  minRating: 1,
-                  direction: Axis.horizontal,
-                  allowHalfRating: false,
-                  itemCount: 5,
-                  itemPadding: const EdgeInsets.symmetric(horizontal: 0.0),
-                  itemBuilder: (context, _) => const Icon(
-                    Icons.star,
-                    color: Colors.amber,
-                  ),
-                  onRatingUpdate: (rating) async {
-                    int stars = 0;
-
-                    await FirebaseFirestore.instance
-                        .collection('Drivers')
-                        .where('id', isEqualTo: widget.tripDetails['driverId'])
-                        .get()
-                        .then((QuerySnapshot querySnapshot) {
-                      for (var doc in querySnapshot.docs) {
-                        setState(() {
-                          stars = doc['stars'];
-                        });
-                      }
-                    });
-                    await FirebaseFirestore.instance
-                        .collection('Drivers')
-                        .doc(widget.tripDetails['driverId'])
-                        .update({
-                      'ratings': FieldValue.arrayUnion(
-                          [FirebaseAuth.instance.currentUser!.uid]),
-                      'stars': stars + rating.toInt()
-                    });
-                  },
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFieldWidget(
+                    borderColor: Colors.black,
+                    hintColor: Colors.amber,
+                    color: Colors.black,
+                    label: 'Feedback to Driver',
+                    controller: feedbackController),
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
+                Center(
+                  child: RatingBar.builder(
+                    initialRating: rating,
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: false,
+                    itemCount: 5,
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 0.0),
+                    itemBuilder: (context, _) => const Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    onRatingUpdate: (newRating) async {
+                      setState(() {
+                        rating = newRating;
+                      });
+                    },
+                  ),
+                ),
+              ],
             ),
             actions: [
               TextButton(
-                onPressed: () {
+                onPressed: () async {
+                  int stars = 0;
+
+                  await FirebaseFirestore.instance
+                      .collection('Drivers')
+                      .where('id', isEqualTo: widget.tripDetails['driverId'])
+                      .get()
+                      .then((QuerySnapshot querySnapshot) {
+                    for (var doc in querySnapshot.docs) {
+                      setState(() {
+                        stars = doc['stars'];
+                      });
+                    }
+                  });
+                  await FirebaseFirestore.instance
+                      .collection('Drivers')
+                      .doc(widget.tripDetails['driverId'])
+                      .update({
+                    'ratings': FieldValue.arrayUnion(
+                        [FirebaseAuth.instance.currentUser!.uid]),
+                    'stars': stars + rating.toInt()
+                  });
+
+                  await FirebaseFirestore.instance
+                      .collection('Drivers')
+                      .doc(widget.tripDetails['driverId'])
+                      .update({
+                    'comments': FieldValue.arrayUnion([
+                      {
+                        'myName': widget.tripDetails['userName'],
+                        'stars': rating.toInt(),
+                        'feedback': feedbackController.text,
+                        'dateTime': DateTime.now(),
+                      }
+                    ]),
+                  });
+
+                  showToast('Thankyou for your booking!');
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (context) => const HomeScreen()));
                 },

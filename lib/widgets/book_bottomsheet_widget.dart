@@ -349,6 +349,7 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                                   builder: ((context) {
                                                     return TrackBookingBottomSheetWidget(
                                                       tripDetails: {
+                                                        'userName': userName,
                                                         'driverRatings': data[
                                                                         'ratings']
                                                                     .length !=

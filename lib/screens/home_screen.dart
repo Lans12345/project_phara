@@ -18,6 +18,7 @@ import 'package:intl/intl.dart';
 import 'package:phara/data/distance_calculations.dart';
 import 'package:phara/data/user_stream.dart';
 import 'package:phara/plugins/my_location.dart';
+import 'package:phara/screens/pages/driver_profile_page.dart';
 import 'package:phara/screens/pages/trips_page.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/book_bottomsheet_widget.dart';
@@ -59,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
       for (var element in event.docChanges) {
         if (element.type == DocumentChangeType.modified) {
           InAppNotifications.show(
-            title: 'Your Booking Response was ${event.docs[0]['status']}',
+            title: 'Your Booking Response was ${element.doc['status']}',
             leading: Image.asset('assets/images/logo.png'),
             description:
                 'The rider has responded to your booking!\nView your notifications for more details',
@@ -608,11 +609,30 @@ class _HomeScreenState extends State<HomeScreen> {
                               Column(mainAxisSize: MainAxisSize.min, children: [
                             Row(
                               children: [
-                                CircleAvatar(
-                                  minRadius: 50,
-                                  maxRadius: 50,
-                                  backgroundImage:
-                                      NetworkImage(doc['profilePicture']),
+                                Column(
+                                  children: [
+                                    CircleAvatar(
+                                      minRadius: 50,
+                                      maxRadius: 50,
+                                      backgroundImage:
+                                          NetworkImage(doc['profilePicture']),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    DriverProfilePage(
+                                                      driverId: doc.id,
+                                                    )));
+                                      },
+                                      child: TextBold(
+                                        text: 'View Profile',
+                                        fontSize: 12,
+                                        color: Colors.green,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 const SizedBox(
                                   width: 15,

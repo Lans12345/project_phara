@@ -12,6 +12,8 @@ class TextFieldWidget extends StatefulWidget {
   final TextInputType? inputType;
   late bool? showEye;
   late Color? color;
+  late Color? borderColor;
+  late Color? hintColor;
   late double? radius;
   final String? Function(String?)? validator; // Add validator parameter
 
@@ -26,6 +28,8 @@ class TextFieldWidget extends StatefulWidget {
     this.width = double.infinity,
     this.height = 40,
     this.maxLine = 1,
+    this.hintColor = Colors.white,
+    this.borderColor = Colors.transparent,
     this.showEye = false,
     this.color = Colors.white,
     this.radius = 5,
@@ -44,7 +48,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextRegular(text: widget.label, fontSize: 12, color: Colors.white),
+        TextRegular(text: widget.label, fontSize: 12, color: widget.hintColor!),
         const SizedBox(
           height: 5,
         ),
@@ -68,20 +72,20 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             hintText: widget.hint,
             border: InputBorder.none,
             disabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.transparent,
+              borderSide: BorderSide(
+                color: widget.borderColor!,
               ),
               borderRadius: BorderRadius.circular(5),
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.transparent,
+              borderSide: BorderSide(
+                color: widget.borderColor!,
               ),
               borderRadius: BorderRadius.circular(5),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.transparent,
+              borderSide: BorderSide(
+                color: widget.borderColor!,
               ),
               borderRadius: BorderRadius.circular(5),
             ),
