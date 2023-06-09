@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:location/location.dart';
+
 import 'package:phara/screens/home_screen.dart';
 import 'package:phara/widgets/button_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
@@ -79,9 +79,6 @@ class _PermissionScreenState extends State<PermissionScreen> {
                     opacity: 1,
                     label: 'Enable Location Services',
                     onPressed: () async {
-                      Location location = Location();
-                      bool locationServices = await location.serviceEnabled();
-
                       bool serviceEnabled =
                           await Geolocator.isLocationServiceEnabled();
 
