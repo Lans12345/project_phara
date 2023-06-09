@@ -53,8 +53,8 @@ Future<String> addDelivery(
             .toStringAsFixed(2),
         'payment': (((calculateDistance(originLat, originLong, destinationLat,
                         destinationLong)) *
-                    12) +
-                40)
+                    8) +
+                20)
             .toStringAsFixed(2),
         'date': DateTime.now(),
       }

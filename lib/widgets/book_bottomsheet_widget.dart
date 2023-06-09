@@ -398,7 +398,7 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                                                             .read(longProvider.notifier)
                                                                             .state)) *
                                                                     12) +
-                                                                40)
+                                                                20)
                                                             .toStringAsFixed(2)
                                                       },
                                                     );
