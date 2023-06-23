@@ -203,9 +203,61 @@ class _MessagesTabState extends State<MessagesTab> {
                                             color: Colors.black),
                                   ],
                                 ),
-                                trailing: const Icon(
-                                  Icons.arrow_right,
-                                  color: grey,
+                                trailing: IconButton(
+                                  onPressed: () async {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                              title: const Text(
+                                                'Delete Confirmation',
+                                                style: TextStyle(
+                                                    fontFamily: 'QBold',
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              content: const Text(
+                                                'Are you sure you want to delete this conversation?',
+                                                style: TextStyle(
+                                                    fontFamily: 'QRegular'),
+                                              ),
+                                              actions: <Widget>[
+                                                MaterialButton(
+                                                  onPressed: () =>
+                                                      Navigator.of(context)
+                                                          .pop(true),
+                                                  child: const Text(
+                                                    'Close',
+                                                    style: TextStyle(
+                                                        fontFamily: 'QRegular',
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                                MaterialButton(
+                                                  onPressed: () async {
+                                                    Navigator.pop(context);
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection('Messages')
+                                                        .doc(
+                                                            data.docs[index].id)
+                                                        .delete();
+                                                  },
+                                                  child: const Text(
+                                                    'Continue',
+                                                    style: TextStyle(
+                                                        fontFamily: 'QRegular',
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ],
+                                            ));
+                                  },
+                                  icon: const Icon(
+                                    Icons.delete_outline_rounded,
+                                    color: Colors.red,
+                                  ),
                                 ),
                               ));
                         })),
