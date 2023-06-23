@@ -168,6 +168,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Geolocator.getCurrentPosition().then((position) {
+      FirebaseFirestore.instance
+          .collection('Users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .update({
+        'location': {'lat': position.latitude, 'long': position.longitude},
+      });
+    }).catchError((error) {
+      print('Error getting location: $error');
+    });
     final CameraPosition camPosition = CameraPosition(
         target: LatLng(lat, long), zoom: 16, bearing: 45, tilt: 40);
     return hasLoaded && lat != 0 && long != 0
