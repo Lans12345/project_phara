@@ -53,6 +53,10 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           height: 5,
         ),
         TextFormField(
+          style: const TextStyle(
+            fontFamily: 'QRegular',
+            fontSize: 14,
+          ),
           textCapitalization: widget.textCapitalization!,
           keyboardType: widget.inputType,
           decoration: InputDecoration(
@@ -95,9 +99,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
               ),
               borderRadius: BorderRadius.circular(5),
             ),
-            errorStyle: const TextStyle(
-              fontFamily: 'QBold',
-            ),
+            errorStyle: const TextStyle(fontFamily: 'QBold', fontSize: 12),
             focusedErrorBorder: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: Colors.red,
