@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:badges/badges.dart' as b;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -394,6 +393,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: DrawerWidget(),
             ),
             appBar: AppBar(
+              centerTitle: true,
               foregroundColor: grey,
               backgroundColor: Colors.white,
               title: DefaultTextStyle(
@@ -401,16 +401,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   fontSize: 24.0,
                   fontFamily: 'QBold',
                 ),
-                child: AnimatedTextKit(
-                  animatedTexts: [
-                    WavyAnimatedText('PARA',
-                        textStyle: const TextStyle(
-                            fontFamily: 'QBold',
-                            color: Colors.black,
-                            fontSize: 24)),
-                  ],
-                  isRepeatingAnimation: true,
-                  repeatForever: true,
+                child: TextBold(
+                  text: 'HOME',
+                  fontSize: 24,
+                  color: Colors.black,
                 ),
               ),
               actions: [
