@@ -14,11 +14,11 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intl/intl.dart';
 import 'package:phara/data/distance_calculations.dart';
 import 'package:phara/data/user_stream.dart';
 import 'package:phara/plugins/my_location.dart';
 import 'package:phara/screens/pages/driver_profile_page.dart';
+import 'package:phara/screens/pages/notif_page.dart';
 import 'package:phara/screens/pages/trips_page.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/book_bottomsheet_widget.dart';
@@ -409,8 +409,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       List oldnotifs = data['notif'];
 
                       List notifs = oldnotifs.reversed.toList();
-                      return PopupMenuButton(
-                          icon: b.Badge(
+                      return IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => const NotifTab()));
+                        },
+                        icon: b.Badge(
                             showBadge: notifs.isNotEmpty,
                             badgeContent: TextRegular(
                               text: data['notif'].length.toString(),
@@ -418,47 +423,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: Colors.white,
                             ),
                             child:
-                                Icon(key: keyOne, Icons.notifications_rounded),
-                          ),
-                          itemBuilder: (context) {
-                            return [
-                              for (int i = 0; i < notifs.length; i++)
-                                PopupMenuItem(
-                                    child: ListTile(
-                                  title: TextRegular(
-                                      text: notifs[i]['notif'],
-                                      fontSize: 14,
-                                      color: Colors.black),
-                                  subtitle: TextRegular(
-                                      text: DateFormat.yMMMd()
-                                          .add_jm()
-                                          .format(notifs[i]['date'].toDate()),
-                                      fontSize: 10,
-                                      color: grey),
-                                  leading: const Icon(
-                                    Icons.notifications_active_outlined,
-                                    color: grey,
-                                  ),
-                                  trailing: IconButton(
-                                    onPressed: () async {
-                                      await FirebaseFirestore.instance
-                                          .collection('Users')
-                                          .doc(FirebaseAuth
-                                              .instance.currentUser!.uid)
-                                          .update({
-                                        'notif':
-                                            FieldValue.arrayRemove([notifs[i]]),
-                                      });
-                                      Navigator.pop(context);
-                                    },
-                                    icon: const Icon(
-                                      Icons.delete_outline_rounded,
-                                      color: grey,
-                                    ),
-                                  ),
-                                )),
-                            ];
-                          });
+                                Icon(key: keyOne, Icons.notifications_rounded)),
+                      );
                     }),
               ],
             ),
