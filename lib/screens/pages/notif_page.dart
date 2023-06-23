@@ -6,7 +6,6 @@ import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/text_widget.dart';
 import 'package:intl/intl.dart' show DateFormat, toBeginningOfSentenceCase;
 import '../../data/user_stream.dart';
-import '../../widgets/appbar_widget.dart';
 import '../../widgets/drawer_widget.dart';
 
 class NotifTab extends StatefulWidget {
@@ -21,7 +20,63 @@ class _NotifTabState extends State<NotifTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const DrawerWidget(),
-      appBar: AppbarWidget('Notifications'),
+      appBar: AppBar(
+        centerTitle: true,
+        foregroundColor: grey,
+        backgroundColor: Colors.white,
+        title: TextRegular(text: 'Notifications', fontSize: 24, color: grey),
+        actions: [
+          IconButton(
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                        title: const Text(
+                          'Clear All Notification',
+                          style: TextStyle(
+                              fontFamily: 'QBold', fontWeight: FontWeight.bold),
+                        ),
+                        content: const Text(
+                          'Are you sure you want to clear all notification?',
+                          style: TextStyle(fontFamily: 'QRegular'),
+                        ),
+                        actions: <Widget>[
+                          MaterialButton(
+                            onPressed: () => Navigator.of(context).pop(true),
+                            child: const Text(
+                              'Close',
+                              style: TextStyle(
+                                  fontFamily: 'QRegular',
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          MaterialButton(
+                            onPressed: () async {
+                              Navigator.pop(context);
+                              await FirebaseFirestore.instance
+                                  .collection('Users')
+                                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                                  .update({
+                                'notif': [],
+                              });
+                            },
+                            child: const Text(
+                              'Continue',
+                              style: TextStyle(
+                                  fontFamily: 'QRegular',
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ));
+            },
+            icon: const Icon(
+              Icons.clear,
+              color: Colors.red,
+            ),
+          ),
+        ],
+      ),
       body: Column(
         children: [
           const SizedBox(
