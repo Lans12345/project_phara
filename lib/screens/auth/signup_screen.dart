@@ -129,12 +129,7 @@ class SignupScreen extends StatelessWidget {
                       if (value.length < 8) {
                         return 'Password must be at least 8 characters long';
                       }
-                      final hasUppercase = value.contains(RegExp(r'[A-Z]'));
-                      final hasLowercase = value.contains(RegExp(r'[a-z]'));
-                      final hasNumber = value.contains(RegExp(r'[0-9]'));
-                      if (!hasUppercase || !hasLowercase || !hasNumber) {
-                        return 'Password must contain at least one uppercase letter, one lowercase letter, and one number';
-                      }
+
                       return null;
                     },
                   ),
