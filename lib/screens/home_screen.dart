@@ -52,6 +52,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
     getAllDrivers();
 
+    Timer.periodic(const Duration(minutes: 5), (timer) {
+      Geolocator.getCurrentPosition().then((position) {
+        FirebaseFirestore.instance
+            .collection('Users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .update({
+          'location': {'lat': position.latitude, 'long': position.longitude},
+        });
+      }).catchError((error) {
+        print('Error getting location: $error');
+      });
+    });
+
     FirebaseFirestore.instance
         .collection('Bookings')
         .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)

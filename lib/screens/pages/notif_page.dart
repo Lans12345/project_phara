@@ -100,8 +100,11 @@ class _NotifTabState extends State<NotifTab> {
                 List notif = oldfavs.reversed.toList();
                 return Expanded(
                   child: SizedBox(
-                    child: ListView.builder(
-                        itemCount: data.docs.length,
+                    child: ListView.separated(
+                        separatorBuilder: (context, index) {
+                          return const Divider();
+                        },
+                        itemCount: notif.length,
                         itemBuilder: ((context, index) {
                           return Padding(
                               padding: const EdgeInsets.all(5),
