@@ -3,34 +3,24 @@ import 'dart:async';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:badges/badges.dart' as b;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:custom_map_markers/custom_map_markers.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inapp_notifications/flutter_inapp_notifications.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:phara/data/distance_calculations.dart';
 import 'package:phara/data/user_stream.dart';
 import 'package:phara/plugins/my_location.dart';
-import 'package:phara/screens/pages/driver_profile_page.dart';
 import 'package:phara/screens/pages/notif_page.dart';
 import 'package:phara/screens/pages/trips_page.dart';
 import 'package:phara/utils/colors.dart';
-import 'package:phara/widgets/book_bottomsheet_widget.dart';
-import 'package:phara/widgets/button_widget.dart';
-import 'package:phara/widgets/custom_marker.dart';
 import 'package:phara/widgets/drawer_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
 import 'package:phara/widgets/toast_widget.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
-import 'package:uuid/uuid.dart';
 
-import '../services/providers/coordinates_provider.dart';
-import '../widgets/delegate/search_my_places.dart';
 import 'pages/messages_tab.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -48,8 +38,6 @@ class _HomeScreenState extends State<HomeScreen> {
     getUserData();
     determinePosition();
     getLocation();
-
-    getAllDrivers();
 
     Timer.periodic(const Duration(minutes: 5), (timer) {
       Geolocator.getCurrentPosition().then((position) {
@@ -131,7 +119,6 @@ class _HomeScreenState extends State<HomeScreen> {
       Completer<GoogleMapController>();
 
   late String currentAddress;
-  late final List<MarkerData> _customMarkers = [];
 
   late double lat = 0;
   late double long = 0;
@@ -184,20 +171,20 @@ class _HomeScreenState extends State<HomeScreen> {
             floatingActionButton: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                // FloatingActionButton(
-                //     backgroundColor: Colors.white,
-                //     onPressed: (() {
-                //       mapController?.animateCamera(
-                //           CameraUpdate.newCameraPosition(CameraPosition(
-                //               bearing: 45,
-                //               tilt: 40,
-                //               target: LatLng(lat, long),
-                //               zoom: 16)));
-                //     }),
-                //     child: const Icon(
-                //       Icons.my_location_rounded,
-                //       color: Colors.red,
-                //     )),
+                FloatingActionButton(
+                    backgroundColor: Colors.white,
+                    onPressed: (() {
+                      mapController?.animateCamera(
+                          CameraUpdate.newCameraPosition(CameraPosition(
+                              bearing: 45,
+                              tilt: 40,
+                              target: LatLng(lat, long),
+                              zoom: 16)));
+                    }),
+                    child: const Icon(
+                      Icons.my_location_rounded,
+                      color: Colors.red,
+                    )),
                 const SizedBox(
                   height: 15,
                 ),
@@ -447,40 +434,27 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             body: Stack(
               children: [
-                CustomGoogleMapMarkerBuilder(
-                    screenshotDelay: const Duration(seconds: 2),
-                    customMarkers: _customMarkers,
-                    builder: (BuildContext context, Set<Marker>? markers1) {
-                      if (markers1 == null) {
-                        return const Center(
-                            child: SpinKitPulse(
-                          color: grey,
-                        ));
-                      }
+                GoogleMap(
+                  mapToolbarEnabled: false,
+                  zoomControlsEnabled: false,
+                  buildingsEnabled: true,
+                  compassEnabled: true,
+                  myLocationEnabled: true,
+                  markers: markers,
+                  mapType: MapType.normal,
+                  initialCameraPosition: camPosition,
+                  onMapCreated: (controller) {
+                    if (box.read('shown') == false ||
+                        box.read('shown') == null) {
+                      _createTutorial();
+                    }
+                    _controller.complete(controller);
 
-                      return GoogleMap(
-                        mapToolbarEnabled: false,
-                        zoomControlsEnabled: false,
-                        buildingsEnabled: true,
-                        compassEnabled: true,
-                        myLocationButtonEnabled: true,
-                        myLocationEnabled: true,
-                        markers: markers1,
-                        mapType: MapType.normal,
-                        initialCameraPosition: camPosition,
-                        onMapCreated: (controller) {
-                          if (box.read('shown') == false ||
-                              box.read('shown') == null) {
-                            _createTutorial();
-                          }
-                          _controller.complete(controller);
-
-                          setState(() {
-                            mapController = controller;
-                          });
-                        },
-                      );
-                    }),
+                    setState(() {
+                      mapController = controller;
+                    });
+                  },
+                ),
                 Padding(
                   padding: const EdgeInsets.only(top: 15),
                   child: Center(
@@ -563,182 +537,6 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       lat = position.latitude;
       long = position.longitude;
-    });
-  }
-
-  getAllDrivers() async {
-    // _customMarkers.add(MarkerData(
-    //     marker: Marker(
-    //         infoWindow: const InfoWindow(
-    //           title: 'Your current location',
-    //         ),
-    //         markerId: const MarkerId('current Location'),
-    //         position: LatLng(lat, long)),
-    //     child: CustomMarker(profilePicture, Colors.red)));
-    FirebaseFirestore.instance
-        .collection('Drivers')
-        .where('isActive', isEqualTo: true)
-        .get()
-        .then((QuerySnapshot querySnapshot) async {
-      for (var doc in querySnapshot.docs) {
-        _customMarkers.add(MarkerData(
-            marker: Marker(
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          content:
-                              Column(mainAxisSize: MainAxisSize.min, children: [
-                            Row(
-                              children: [
-                                Column(
-                                  children: [
-                                    CircleAvatar(
-                                      minRadius: 50,
-                                      maxRadius: 50,
-                                      backgroundImage:
-                                          NetworkImage(doc['profilePicture']),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DriverProfilePage(
-                                                      driverId: doc.id,
-                                                    )));
-                                      },
-                                      child: TextBold(
-                                        text: 'View Profile',
-                                        fontSize: 12,
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  width: 15,
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: 140,
-                                      child: TextBold(
-                                          text: 'Name: ${doc['name']}',
-                                          fontSize: 15,
-                                          color: grey),
-                                    ),
-                                    SizedBox(
-                                      width: 140,
-                                      child: TextRegular(
-                                          text: 'Vehicle: ${doc['vehicle']}',
-                                          fontSize: 14,
-                                          color: grey),
-                                    ),
-                                    SizedBox(
-                                      width: 140,
-                                      child: TextRegular(
-                                          text:
-                                              'Plate No.: ${doc['plateNumber']}',
-                                          fontSize: 14,
-                                          color: grey),
-                                    ),
-                                    TextRegular(
-                                        text: doc['ratings'].length != 0
-                                            ? 'Rating: ${(doc['stars'] / doc['ratings'].length).toStringAsFixed(2)} ★'
-                                            : 'No ratings',
-                                        fontSize: 14,
-                                        color: Colors.amber),
-                                    TextRegular(
-                                        text:
-                                            '${calculateDistance(lat, long, doc['location']['lat'], doc['location']['long']).toStringAsFixed(2)} kms away',
-                                        fontSize: 12,
-                                        color: Colors.grey),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ]),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: TextRegular(
-                                  text: 'Close', fontSize: 12, color: grey),
-                            ),
-                            Consumer(builder: (context, ref, child) {
-                              return ButtonWidget(
-                                  opacity: 1,
-                                  color: Colors.green,
-                                  radius: 5,
-                                  fontSize: 14,
-                                  width: 100,
-                                  height: 30,
-                                  label: 'Book now',
-                                  onPressed: () async {
-                                    if (driversId.contains(doc['id'])) {
-                                      Navigator.pop(context);
-                                      showToast(
-                                          "Youre booking for this drivers is still pending! Please wait for driver's response");
-                                    } else {
-                                      List<Placemark> p =
-                                          await placemarkFromCoordinates(
-                                              lat, long);
-
-                                      Placemark place = p[0];
-
-                                      final sessionToken = const Uuid().v4();
-
-                                      // ignore: use_build_context_synchronously
-                                      await showSearch(
-                                          context: context,
-                                          delegate:
-                                              LocationsSearch(sessionToken));
-
-                                      if (ref
-                                              .read(
-                                                  destinationProvider.notifier)
-                                              .state !=
-                                          'No address specified') {
-                                        // ignore: use_build_context_synchronously
-                                        showModalBottomSheet(
-                                            isScrollControlled: true,
-                                            context: context,
-                                            builder: ((context) {
-                                              return BookBottomSheetWidget(
-                                                driverId: doc['id'],
-                                                coordinates: {
-                                                  'lat': lat,
-                                                  'long': long,
-                                                  'pickupLocation':
-                                                      '${place.street}, ${place.locality}, ${place.administrativeArea}'
-                                                },
-                                              );
-                                            }));
-                                      }
-                                    }
-                                  });
-                            }),
-                          ],
-                        );
-                      });
-                },
-                infoWindow: InfoWindow(
-                  title: doc['name'],
-                  snippet: '${doc['vehicle']}',
-                ),
-                markerId: MarkerId(doc['name']),
-                position:
-                    LatLng(doc['location']['lat'], doc['location']['long'])),
-            child: CustomMarker(doc['profilePicture'], Colors.black)));
-      }
-    });
-
-    setState(() {
       hasLoaded = true;
     });
   }

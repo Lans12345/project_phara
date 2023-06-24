@@ -66,6 +66,8 @@ dependencies:
   tutorial_coach_mark:
   avatar_glow:
   flutter_inapp_notifications:
+  firebase_auth_oauth:
+  flutter_speed_dial:
   
 
 dev_dependencies:
