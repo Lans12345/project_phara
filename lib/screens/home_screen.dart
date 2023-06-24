@@ -289,66 +289,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 15),
-                  child: Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          elevation: 0,
-                          color: Colors.white.withOpacity(0.3),
-                          child: SizedBox(
-                            height: 35,
-                            width: 200,
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(
-                                    Icons.account_circle_outlined,
-                                    color: Colors.green,
-                                    size: 18,
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  StreamBuilder<QuerySnapshot>(
-                                      stream: FirebaseFirestore.instance
-                                          .collection('Drivers')
-                                          .where('isActive', isEqualTo: true)
-                                          .snapshots(),
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot<QuerySnapshot>
-                                              snapshot) {
-                                        if (snapshot.hasError) {
-                                          print('error');
-                                          return const Center(
-                                              child: Text('Error'));
-                                        }
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return const SizedBox();
-                                        }
-
-                                        final data = snapshot.requireData;
-                                        return TextRegular(
-                                          text: data.docs.isNotEmpty
-                                              ? '${data.docs.length} Riders on Duty'
-                                              : 'No Riders Available',
-                                          fontSize: 12,
-                                          color: Colors.green,
-                                        );
-                                      }),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  padding: const EdgeInsets.only(top: 7.5, right: 10),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: dialWidget(),
                   ),
                 ),
                 Padding(
@@ -359,10 +303,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 5),
-                          child: dialWidget(),
-                        ),
                         Card(
                           color: Colors.white,
                           shape: RoundedRectangleBorder(
@@ -888,212 +828,223 @@ class _HomeScreenState extends State<HomeScreen> {
   // }
 
   Widget dialWidget() {
-    return SpeedDial(
-      onOpen: () {
-        setState(() {
-          dialColor = Colors.red;
-        });
-      },
-      backgroundColor: Colors.white,
-      animatedIcon: AnimatedIcons.menu_close,
-      animatedIconTheme: IconThemeData(color: dialColor),
-      iconTheme: const IconThemeData(
-        color: Colors.black,
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(100),
       ),
-      closeManually: false,
-      children: [
-        SpeedDialChild(
-            onTap: () {
-              mapController?.animateCamera(CameraUpdate.newCameraPosition(
-                  CameraPosition(
-                      bearing: 45,
-                      tilt: 40,
-                      target: LatLng(lat, long),
-                      zoom: 16)));
-            },
-            label: 'My Location',
-            labelStyle: const TextStyle(
-                fontFamily: 'QBold', fontSize: 12, color: Colors.red),
-            child: const Icon(
-              Icons.my_location_rounded,
-              color: Colors.red,
-            )),
-        SpeedDialChild(
-          onTap: () {
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const MessagesTab()));
-          },
-          label: 'Messages',
-          labelStyle: const TextStyle(
-              fontFamily: 'QBold', fontSize: 12, color: Colors.black),
-          child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('Messages')
-                  .where('userId',
-                      isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                  .where('seen', isEqualTo: false)
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  print('error');
-                  return const Center(child: Text('Error'));
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SizedBox();
-                }
-
-                final data = snapshot.requireData;
-                return b.Badge(
-                  showBadge: data.docs.isNotEmpty,
-                  badgeAnimation: const b.BadgeAnimation.fade(),
-                  badgeStyle: const b.BadgeStyle(
-                    badgeColor: Colors.red,
-                  ),
-                  badgeContent: TextRegular(
-                      text: data.docs.length.toString(),
-                      fontSize: 12,
-                      color: Colors.white),
-                  child: AvatarGlow(
-                    animate: data.docs.isNotEmpty,
-                    glowColor: Colors.red,
-                    endRadius: 60.0,
-                    duration: const Duration(milliseconds: 2000),
-                    repeatPauseDuration: const Duration(milliseconds: 100),
-                    repeat: true,
-                    child: const Icon(
-                      Icons.message_outlined,
-                      color: grey,
-                    ),
-                  ),
-                );
-              }),
+      child: SpeedDial(
+        elevation: 0,
+        buttonSize: const Size(35, 35),
+        direction: SpeedDialDirection.down,
+        onOpen: () {
+          setState(() {
+            dialColor = Colors.red;
+          });
+        },
+        backgroundColor: Colors.white,
+        animatedIcon: AnimatedIcons.menu_close,
+        animatedIconTheme: IconThemeData(color: dialColor),
+        iconTheme: const IconThemeData(
+          color: Colors.black,
         ),
-        SpeedDialChild(
-          label: 'Favorites',
-          labelStyle: const TextStyle(
-              fontFamily: 'QBold', fontSize: 12, color: Colors.black),
-          child: StreamBuilder<DocumentSnapshot>(
-              stream: FirebaseData().userData,
-              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                if (!snapshot.hasData) {
-                  return const SizedBox();
-                } else if (snapshot.hasError) {
-                  return const Center(child: Text('Something went wrong'));
-                } else if (snapshot.connectionState ==
-                    ConnectionState.waiting) {
-                  return const SizedBox();
-                }
-                dynamic data = snapshot.data;
+        closeManually: false,
+        children: [
+          SpeedDialChild(
+              onTap: () {
+                mapController?.animateCamera(CameraUpdate.newCameraPosition(
+                    CameraPosition(
+                        bearing: 45,
+                        tilt: 40,
+                        target: LatLng(lat, long),
+                        zoom: 16)));
+              },
+              label: 'My Location',
+              labelStyle: const TextStyle(
+                  fontFamily: 'QBold', fontSize: 12, color: Colors.red),
+              child: const Icon(
+                Icons.my_location_rounded,
+                color: Colors.red,
+              )),
+          SpeedDialChild(
+            onTap: () {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const MessagesTab()));
+            },
+            label: 'Messages',
+            labelStyle: const TextStyle(
+                fontFamily: 'QBold', fontSize: 12, color: Colors.black),
+            child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('Messages')
+                    .where('userId',
+                        isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                    .where('seen', isEqualTo: false)
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    print('error');
+                    return const Center(child: Text('Error'));
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const SizedBox();
+                  }
 
-                List oldfavs = data['favorites'];
-
-                List favs = oldfavs.reversed.toList();
-                return FloatingActionButton(
-                    backgroundColor: Colors.white,
-                    onPressed: (() {
-                      if (favs.isNotEmpty) {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                content: SizedBox(
-                                  height: 100,
-                                  width: 500,
-                                  child: Center(
-                                    child: ListView.builder(
-                                        itemCount: favs.length,
-                                        itemBuilder: (context, index) {
-                                          return Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                10, 5, 10, 5),
-                                            child: ListTile(
-                                              title: TextRegular(
-                                                  text: favs[index],
-                                                  fontSize: 14,
-                                                  color: Colors.black),
-                                              trailing: IconButton(
-                                                onPressed: () async {
-                                                  await FirebaseFirestore
-                                                      .instance
-                                                      .collection('Users')
-                                                      .doc(FirebaseAuth.instance
-                                                          .currentUser!.uid)
-                                                      .update({
-                                                    'favorites':
-                                                        FieldValue.arrayRemove(
-                                                            [favs[index]]),
-                                                  });
-                                                  Navigator.pop(context);
-                                                },
-                                                icon: const Icon(
-                                                  Icons.star_rounded,
-                                                  color: Colors.amber,
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        }),
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: TextRegular(
-                                        text: 'Close',
-                                        fontSize: 14,
-                                        color: grey),
-                                  ),
-                                ],
-                              );
-                            });
-                      } else {
-                        showToast('Your favorites are empty');
-                      }
-                    }),
-                    child: b.Badge(
-                      showBadge: favs.isNotEmpty,
-                      badgeStyle: b.BadgeStyle(
-                        badgeColor: Colors.amber[700]!,
-                      ),
-                      badgeContent: TextRegular(
-                          text: favs.length.toString(),
-                          fontSize: 12,
-                          color: Colors.white),
+                  final data = snapshot.requireData;
+                  return b.Badge(
+                    showBadge: data.docs.isNotEmpty,
+                    badgeAnimation: const b.BadgeAnimation.fade(),
+                    badgeStyle: const b.BadgeStyle(
+                      badgeColor: Colors.red,
+                    ),
+                    badgeContent: TextRegular(
+                        text: data.docs.length.toString(),
+                        fontSize: 12,
+                        color: Colors.white),
+                    child: AvatarGlow(
+                      animate: data.docs.isNotEmpty,
+                      glowColor: Colors.red,
+                      endRadius: 60.0,
+                      duration: const Duration(milliseconds: 2000),
+                      repeatPauseDuration: const Duration(milliseconds: 100),
+                      repeat: true,
                       child: const Icon(
-                        Icons.star_border_rounded,
+                        Icons.message_outlined,
                         color: grey,
                       ),
-                    ));
-              }),
-        ),
-        SpeedDialChild(
-            onTap: () {
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const HomeScreen()));
-            },
-            label: 'Refresh',
+                    ),
+                  );
+                }),
+          ),
+          SpeedDialChild(
+            label: 'Favorites',
             labelStyle: const TextStyle(
                 fontFamily: 'QBold', fontSize: 12, color: Colors.black),
-            child: const Icon(
-              Icons.refresh,
-              color: grey,
-            )),
-        SpeedDialChild(
-            onTap: () {
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const TripsPage()));
-            },
-            label: 'History',
-            labelStyle: const TextStyle(
-                fontFamily: 'QBold', fontSize: 12, color: Colors.black),
-            child: const Icon(
-              Icons.collections_bookmark_outlined,
-              color: grey,
-            )),
-      ],
+            child: StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseData().userData,
+                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                    return const SizedBox();
+                  } else if (snapshot.hasError) {
+                    return const Center(child: Text('Something went wrong'));
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return const SizedBox();
+                  }
+                  dynamic data = snapshot.data;
+
+                  List oldfavs = data['favorites'];
+
+                  List favs = oldfavs.reversed.toList();
+                  return FloatingActionButton(
+                      backgroundColor: Colors.white,
+                      onPressed: (() {
+                        if (favs.isNotEmpty) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  content: SizedBox(
+                                    height: 100,
+                                    width: 500,
+                                    child: Center(
+                                      child: ListView.builder(
+                                          itemCount: favs.length,
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      10, 5, 10, 5),
+                                              child: ListTile(
+                                                title: TextRegular(
+                                                    text: favs[index],
+                                                    fontSize: 14,
+                                                    color: Colors.black),
+                                                trailing: IconButton(
+                                                  onPressed: () async {
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection('Users')
+                                                        .doc(FirebaseAuth
+                                                            .instance
+                                                            .currentUser!
+                                                            .uid)
+                                                        .update({
+                                                      'favorites': FieldValue
+                                                          .arrayRemove(
+                                                              [favs[index]]),
+                                                    });
+                                                    Navigator.pop(context);
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.star_rounded,
+                                                    color: Colors.amber,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }),
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: TextRegular(
+                                          text: 'Close',
+                                          fontSize: 14,
+                                          color: grey),
+                                    ),
+                                  ],
+                                );
+                              });
+                        } else {
+                          showToast('Your favorites are empty');
+                        }
+                      }),
+                      child: b.Badge(
+                        showBadge: favs.isNotEmpty,
+                        badgeStyle: b.BadgeStyle(
+                          badgeColor: Colors.amber[700]!,
+                        ),
+                        badgeContent: TextRegular(
+                            text: favs.length.toString(),
+                            fontSize: 12,
+                            color: Colors.white),
+                        child: const Icon(
+                          Icons.star_border_rounded,
+                          color: grey,
+                        ),
+                      ));
+                }),
+          ),
+          SpeedDialChild(
+              onTap: () {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const HomeScreen()));
+              },
+              label: 'Refresh',
+              labelStyle: const TextStyle(
+                  fontFamily: 'QBold', fontSize: 12, color: Colors.black),
+              child: const Icon(
+                Icons.refresh,
+                color: grey,
+              )),
+          SpeedDialChild(
+              onTap: () {
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const TripsPage()));
+              },
+              label: 'History',
+              labelStyle: const TextStyle(
+                  fontFamily: 'QBold', fontSize: 12, color: Colors.black),
+              child: const Icon(
+                Icons.collections_bookmark_outlined,
+                color: grey,
+              )),
+        ],
+      ),
     );
   }
 }
