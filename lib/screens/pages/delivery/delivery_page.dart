@@ -81,8 +81,7 @@ class DeliveryPageState extends State<DeliveryPage> {
         icon: BitmapDescriptor.defaultMarker,
         markerId: const MarkerId("pickup"),
         position: LatLng(lat1, long1),
-        infoWindow:
-            InfoWindow(title: 'Pick-up Location', snippet: 'PU: $pickup')));
+        infoWindow: const InfoWindow(title: 'Pick-up Location')));
   }
 
   addMyMarker12(lat1, long1) async {
@@ -90,8 +89,7 @@ class DeliveryPageState extends State<DeliveryPage> {
         icon: BitmapDescriptor.defaultMarker,
         markerId: const MarkerId("dropOff"),
         position: LatLng(lat1, long1),
-        infoWindow:
-            InfoWindow(title: 'Drop-off Location', snippet: 'DO: $drop')));
+        infoWindow: const InfoWindow(title: 'Drop-off Location')));
   }
 
   late Polyline _poly = const Polyline(polylineId: PolylineId('new'));
@@ -107,10 +105,6 @@ class DeliveryPageState extends State<DeliveryPage> {
   final itemController = TextEditingController();
 
   final box = GetStorage();
-
-  final keyOne = GlobalKey();
-  final keyTwo = GlobalKey();
-  final keyThree = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -131,8 +125,7 @@ class DeliveryPageState extends State<DeliveryPage> {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const DeliveryHistoryPage()));
             },
-            icon: Icon(
-              key: keyThree,
+            icon: const Icon(
               Icons.history,
               color: grey,
             ),
@@ -154,10 +147,6 @@ class DeliveryPageState extends State<DeliveryPage> {
                   mapType: MapType.normal,
                   initialCameraPosition: kGooglePlex,
                   onMapCreated: (GoogleMapController controller) {
-                    if (box.read('shownDeliver') == false ||
-                        box.read('shownDeliver') == null) {
-                      _createTutorial();
-                    }
                     mapController = controller;
                     _controller.complete(controller);
                   },
@@ -275,8 +264,7 @@ class DeliveryPageState extends State<DeliveryPage> {
                                         child: TextFormField(
                                           enabled: false,
                                           decoration: InputDecoration(
-                                            prefixIcon: Icon(
-                                              key: keyOne,
+                                            prefixIcon: const Icon(
                                               Icons.looks_one_outlined,
                                               color: grey,
                                             ),
@@ -463,8 +451,7 @@ class DeliveryPageState extends State<DeliveryPage> {
                                         child: TextFormField(
                                           enabled: false,
                                           decoration: InputDecoration(
-                                            prefixIcon: Icon(
-                                              key: keyTwo,
+                                            prefixIcon: const Icon(
                                               Icons.looks_two_outlined,
                                               color: grey,
                                             ),
@@ -1162,74 +1149,74 @@ class DeliveryPageState extends State<DeliveryPage> {
     super.dispose();
   }
 
-  Future<void> _createTutorial() async {
-    final targets = [
-      TargetFocus(
-        identify: 'pickup',
-        keyTarget: keyOne,
-        alignSkip: Alignment.topRight,
-        contents: [
-          TargetContent(
-            align: ContentAlign.top,
-            builder: (context, controller) => SafeArea(
-              child: TextRegular(
-                text:
-                    "Ready for delivery? Let us know where to pick up your goods!",
-                fontSize: 18,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
-      TargetFocus(
-        identify: 'dropoff',
-        keyTarget: keyTwo,
-        alignSkip: Alignment.topLeft,
-        contents: [
-          TargetContent(
-            align: ContentAlign.top,
-            builder: (context, controller) => SafeArea(
-              child: TextRegular(
-                text: "Specify the destination for your goods' safe arrival!",
-                fontSize: 18,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
-      TargetFocus(
-        identify: 'history',
-        keyTarget: keyThree,
-        alignSkip: Alignment.topCenter,
-        contents: [
-          TargetContent(
-            align: ContentAlign.bottom,
-            builder: (context, controller) => SafeArea(
-              child: TextRegular(
-                text:
-                    "Track your delivery history and review past orders with ease! Access your complete delivery history to stay organized and keep a record of your successful shipments using our intuitive history feature in the app.",
-                fontSize: 18,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
-    ];
+  // Future<void> _createTutorial() async {
+  //   final targets = [
+  //     TargetFocus(
+  //       identify: 'pickup',
+  //       keyTarget: keyOne,
+  //       alignSkip: Alignment.topRight,
+  //       contents: [
+  //         TargetContent(
+  //           align: ContentAlign.top,
+  //           builder: (context, controller) => SafeArea(
+  //             child: TextRegular(
+  //               text:
+  //                   "Ready for delivery? Let us know where to pick up your goods!",
+  //               fontSize: 18,
+  //               color: Colors.white,
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //     TargetFocus(
+  //       identify: 'dropoff',
+  //       keyTarget: keyTwo,
+  //       alignSkip: Alignment.topLeft,
+  //       contents: [
+  //         TargetContent(
+  //           align: ContentAlign.top,
+  //           builder: (context, controller) => SafeArea(
+  //             child: TextRegular(
+  //               text: "Specify the destination for your goods' safe arrival!",
+  //               fontSize: 18,
+  //               color: Colors.white,
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //     TargetFocus(
+  //       identify: 'history',
+  //       keyTarget: keyThree,
+  //       alignSkip: Alignment.topCenter,
+  //       contents: [
+  //         TargetContent(
+  //           align: ContentAlign.bottom,
+  //           builder: (context, controller) => SafeArea(
+  //             child: TextRegular(
+  //               text:
+  //                   "Track your delivery history and review past orders with ease! Access your complete delivery history to stay organized and keep a record of your successful shipments using our intuitive history feature in the app.",
+  //               fontSize: 18,
+  //               color: Colors.white,
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   ];
 
-    final tutorial = TutorialCoachMark(
-      hideSkip: true,
-      targets: targets,
-    );
+  //   final tutorial = TutorialCoachMark(
+  //     hideSkip: true,
+  //     targets: targets,
+  //   );
 
-    Future.delayed(const Duration(milliseconds: 500), () {
-      tutorial.show(context: context);
-    });
+  //   Future.delayed(const Duration(milliseconds: 500), () {
+  //     tutorial.show(context: context);
+  //   });
 
-    box.write('shownDeliver', true);
-  }
+  //   box.write('shownDeliver', true);
+  // }
 }
 
 

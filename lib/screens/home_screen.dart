@@ -3,7 +3,10 @@ import 'dart:async';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:badges/badges.dart' as b;
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:google_maps_webservice/places.dart' as location;
+import 'package:google_api_headers/google_api_headers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inapp_notifications/flutter_inapp_notifications.dart';
@@ -19,8 +22,10 @@ import 'package:phara/screens/pages/trips_page.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/drawer_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
-import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
+import '../data/distance_calculations.dart';
+import '../utils/keys.dart';
+import '../widgets/button_widget.dart';
 import '../widgets/toast_widget.dart';
 import 'pages/messages_tab.dart';
 
@@ -116,6 +121,49 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  late LatLng dropOff;
+
+  addMyMarker1(lat1, long1) async {
+    markers.add(Marker(
+        draggable: true,
+        onDragEnd: (value) {
+          setState(() {
+            lat = value.latitude;
+            long = value.longitude;
+          });
+        },
+        icon: BitmapDescriptor.defaultMarker,
+        markerId: const MarkerId("pickup"),
+        position: LatLng(lat1, long1),
+        infoWindow: const InfoWindow(title: 'Pick-up Location')));
+  }
+
+  addMyMarker12(lat1, long1) async {
+    markers.add(Marker(
+        draggable: true,
+        onDragEnd: (value) {
+          setState(() {
+            dropOff = value;
+          });
+        },
+        icon: BitmapDescriptor.defaultMarker,
+        markerId: const MarkerId("dropOff"),
+        position: LatLng(lat1, long1),
+        infoWindow: const InfoWindow(title: 'Drop-off Location')));
+  }
+
+  late Polyline _poly = const Polyline(polylineId: PolylineId('new'));
+
+  List<LatLng> polylineCoordinates = [];
+  PolylinePoints polylinePoints = PolylinePoints();
+
+  late String pickup = 'My Location';
+  late String drop = 'Search Drop-off Location';
+
+  final receiverController = TextEditingController();
+  final receiverNumberController = TextEditingController();
+  final itemController = TextEditingController();
+
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
@@ -131,12 +179,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Set<Marker> markers = {};
 
   List<String> driversId = [];
-
-  final keyOne = GlobalKey();
-  final key2 = GlobalKey();
-  final key3 = GlobalKey();
-  final key4 = GlobalKey();
-  final key5 = GlobalKey();
 
   getMyBookings() async {
     FirebaseFirestore.instance
@@ -171,227 +213,6 @@ class _HomeScreenState extends State<HomeScreen> {
         target: LatLng(lat, long), zoom: 16, bearing: 45, tilt: 40);
     return hasLoaded && lat != 0 && long != 0
         ? Scaffold(
-            floatingActionButton: SpeedDial(
-              onOpen: () {
-                setState(() {
-                  dialColor = Colors.red;
-                });
-              },
-              backgroundColor: Colors.white,
-              animatedIcon: AnimatedIcons.menu_close,
-              animatedIconTheme: IconThemeData(color: dialColor),
-              iconTheme: const IconThemeData(
-                color: Colors.black,
-              ),
-              closeManually: false,
-              children: [
-                SpeedDialChild(
-                    onTap: () {
-                      mapController?.animateCamera(
-                          CameraUpdate.newCameraPosition(CameraPosition(
-                              bearing: 45,
-                              tilt: 40,
-                              target: LatLng(lat, long),
-                              zoom: 16)));
-                    },
-                    label: 'My Location',
-                    labelStyle: const TextStyle(
-                        fontFamily: 'QBold', fontSize: 12, color: Colors.red),
-                    child: const Icon(
-                      Icons.my_location_rounded,
-                      color: Colors.red,
-                    )),
-                SpeedDialChild(
-                  onTap: () {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => const MessagesTab()));
-                  },
-                  label: 'Messages',
-                  labelStyle: const TextStyle(
-                      fontFamily: 'QBold', fontSize: 12, color: Colors.black),
-                  child: StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('Messages')
-                          .where('userId',
-                              isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                          .where('seen', isEqualTo: false)
-                          .snapshots(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.hasError) {
-                          print('error');
-                          return const Center(child: Text('Error'));
-                        }
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const SizedBox();
-                        }
-
-                        final data = snapshot.requireData;
-                        return b.Badge(
-                          showBadge: data.docs.isNotEmpty,
-                          badgeAnimation: const b.BadgeAnimation.fade(),
-                          badgeStyle: const b.BadgeStyle(
-                            badgeColor: Colors.red,
-                          ),
-                          badgeContent: TextRegular(
-                              text: data.docs.length.toString(),
-                              fontSize: 12,
-                              color: Colors.white),
-                          child: AvatarGlow(
-                            animate: data.docs.isNotEmpty,
-                            glowColor: Colors.red,
-                            endRadius: 60.0,
-                            duration: const Duration(milliseconds: 2000),
-                            repeatPauseDuration:
-                                const Duration(milliseconds: 100),
-                            repeat: true,
-                            child: Icon(
-                              key: key2,
-                              Icons.message_outlined,
-                              color: grey,
-                            ),
-                          ),
-                        );
-                      }),
-                ),
-                SpeedDialChild(
-                  label: 'Favorites',
-                  labelStyle: const TextStyle(
-                      fontFamily: 'QBold', fontSize: 12, color: Colors.black),
-                  child: StreamBuilder<DocumentSnapshot>(
-                      stream: FirebaseData().userData,
-                      builder:
-                          (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                        if (!snapshot.hasData) {
-                          return const SizedBox();
-                        } else if (snapshot.hasError) {
-                          return const Center(
-                              child: Text('Something went wrong'));
-                        } else if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const SizedBox();
-                        }
-                        dynamic data = snapshot.data;
-
-                        List oldfavs = data['favorites'];
-
-                        List favs = oldfavs.reversed.toList();
-                        return FloatingActionButton(
-                            backgroundColor: Colors.white,
-                            onPressed: (() {
-                              if (favs.isNotEmpty) {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        content: SizedBox(
-                                          height: 100,
-                                          width: 500,
-                                          child: Center(
-                                            child: ListView.builder(
-                                                itemCount: favs.length,
-                                                itemBuilder: (context, index) {
-                                                  return Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(10, 5, 10, 5),
-                                                    child: ListTile(
-                                                      title: TextRegular(
-                                                          text: favs[index],
-                                                          fontSize: 14,
-                                                          color: Colors.black),
-                                                      trailing: IconButton(
-                                                        onPressed: () async {
-                                                          await FirebaseFirestore
-                                                              .instance
-                                                              .collection(
-                                                                  'Users')
-                                                              .doc(FirebaseAuth
-                                                                  .instance
-                                                                  .currentUser!
-                                                                  .uid)
-                                                              .update({
-                                                            'favorites':
-                                                                FieldValue
-                                                                    .arrayRemove([
-                                                              favs[index]
-                                                            ]),
-                                                          });
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        icon: const Icon(
-                                                          Icons.star_rounded,
-                                                          color: Colors.amber,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                }),
-                                          ),
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: TextRegular(
-                                                text: 'Close',
-                                                fontSize: 14,
-                                                color: grey),
-                                          ),
-                                        ],
-                                      );
-                                    });
-                              } else {
-                                showToast('Your favorites are empty');
-                              }
-                            }),
-                            child: b.Badge(
-                              showBadge: favs.isNotEmpty,
-                              badgeStyle: b.BadgeStyle(
-                                badgeColor: Colors.amber[700]!,
-                              ),
-                              badgeContent: TextRegular(
-                                  text: favs.length.toString(),
-                                  fontSize: 12,
-                                  color: Colors.white),
-                              child: Icon(
-                                key: key3,
-                                Icons.star_border_rounded,
-                                color: grey,
-                              ),
-                            ));
-                      }),
-                ),
-                SpeedDialChild(
-                    onTap: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const HomeScreen()));
-                    },
-                    label: 'Refresh',
-                    labelStyle: const TextStyle(
-                        fontFamily: 'QBold', fontSize: 12, color: Colors.black),
-                    child: Icon(
-                      key: key5,
-                      Icons.refresh,
-                      color: grey,
-                    )),
-                SpeedDialChild(
-                    onTap: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const TripsPage()));
-                    },
-                    label: 'History',
-                    labelStyle: const TextStyle(
-                        fontFamily: 'QBold', fontSize: 12, color: Colors.black),
-                    child: Icon(
-                      key: key4,
-                      Icons.collections_bookmark_outlined,
-                      color: grey,
-                    )),
-              ],
-            ),
             drawer: const Drawer(
               child: DrawerWidget(),
             ),
@@ -442,8 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontSize: 12,
                               color: Colors.white,
                             ),
-                            child:
-                                Icon(key: keyOne, Icons.notifications_rounded)),
+                            child: const Icon(Icons.notifications_rounded)),
                       );
                     }),
               ],
@@ -451,19 +271,16 @@ class _HomeScreenState extends State<HomeScreen> {
             body: Stack(
               children: [
                 GoogleMap(
+                  onCameraMove: (position) {},
+                  polylines: {_poly},
                   mapToolbarEnabled: false,
                   zoomControlsEnabled: false,
                   buildingsEnabled: true,
                   compassEnabled: true,
-                  myLocationEnabled: true,
                   markers: markers,
                   mapType: MapType.normal,
                   initialCameraPosition: camPosition,
                   onMapCreated: (controller) {
-                    if (box.read('shown') == false ||
-                        box.read('shown') == null) {
-                      _createTutorial();
-                    }
                     _controller.complete(controller);
 
                     setState(() {
@@ -533,7 +350,385 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                )
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: dialWidget(),
+                        ),
+                        Card(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Container(
+                            height: pickup != 'My Location' &&
+                                    drop != 'Search Drop-off Location'
+                                ? 210
+                                : 150,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    TextBold(
+                                        text: pickup == 'My Location' ||
+                                                drop ==
+                                                    'Search Drop-off Location'
+                                            ? 'Search locations'
+                                            : 'Distance: ${calculateDistance(lat, long, dropOff.latitude, dropOff.longitude).toStringAsFixed(2)} km away',
+                                        fontSize: 18,
+                                        color: grey),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        location.Prediction? p =
+                                            await PlacesAutocomplete.show(
+                                                mode: Mode.overlay,
+                                                context: context,
+                                                apiKey: kGoogleApiKey,
+                                                language: 'en',
+                                                strictbounds: false,
+                                                types: [""],
+                                                decoration: InputDecoration(
+                                                    hintText:
+                                                        'Search Pick-up Location',
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20),
+                                                            borderSide:
+                                                                const BorderSide(
+                                                                    color: Colors
+                                                                        .white))),
+                                                components: [
+                                                  location.Component(
+                                                      location
+                                                          .Component.country,
+                                                      "ph")
+                                                ]);
+
+                                        location.GoogleMapsPlaces places =
+                                            location.GoogleMapsPlaces(
+                                                apiKey: kGoogleApiKey,
+                                                apiHeaders:
+                                                    await const GoogleApiHeaders()
+                                                        .getHeaders());
+
+                                        location.PlacesDetailsResponse detail =
+                                            await places.getDetailsByPlaceId(
+                                                p!.placeId!);
+
+                                        addMyMarker1(
+                                            detail
+                                                .result.geometry!.location.lat,
+                                            detail
+                                                .result.geometry!.location.lng);
+
+                                        mapController!.animateCamera(
+                                            CameraUpdate.newLatLngZoom(
+                                                LatLng(
+                                                    detail.result.geometry!
+                                                        .location.lat,
+                                                    detail.result.geometry!
+                                                        .location.lng),
+                                                18.0));
+
+                                        setState(() {
+                                          pickup = detail.result.name;
+                                          // pickUp = LatLng(
+                                          //     detail.result.geometry!.location
+                                          //         .lat,
+                                          //     detail.result.geometry!.location
+                                          //         .lng);
+                                          lat = detail
+                                              .result.geometry!.location.lat;
+                                          long = detail
+                                              .result.geometry!.location.lng;
+                                        });
+                                      },
+                                      child: Container(
+                                        height: 35,
+                                        width: 300,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(100)),
+                                        child: TextFormField(
+                                          enabled: false,
+                                          decoration: InputDecoration(
+                                            prefixIcon: const Icon(
+                                              Icons.looks_one_outlined,
+                                              color: grey,
+                                            ),
+                                            suffixIcon: Icon(
+                                              Icons.my_location_outlined,
+                                              color: pickup == 'My Location'
+                                                  ? grey
+                                                  : Colors.red,
+                                            ),
+                                            fillColor: Colors.white,
+                                            filled: true,
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  width: 1, color: grey),
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            disabledBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  width: 1, color: grey),
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  width: 1,
+                                                  color: Colors.black),
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            label: TextRegular(
+                                                text: pickup,
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        setState(() {
+                                          _poly = const Polyline(
+                                              polylineId: PolylineId('new'));
+                                        });
+                                        location.Prediction? p =
+                                            await PlacesAutocomplete.show(
+                                                mode: Mode.overlay,
+                                                context: context,
+                                                apiKey: kGoogleApiKey,
+                                                language: 'en',
+                                                strictbounds: false,
+                                                types: [""],
+                                                decoration: InputDecoration(
+                                                    hintText:
+                                                        'Search Drop-off Location',
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20),
+                                                            borderSide:
+                                                                const BorderSide(
+                                                                    color: Colors
+                                                                        .white))),
+                                                components: [
+                                                  location.Component(
+                                                      location
+                                                          .Component.country,
+                                                      "ph")
+                                                ]);
+
+                                        location.GoogleMapsPlaces places =
+                                            location.GoogleMapsPlaces(
+                                                apiKey: kGoogleApiKey,
+                                                apiHeaders:
+                                                    await const GoogleApiHeaders()
+                                                        .getHeaders());
+
+                                        location.PlacesDetailsResponse detail =
+                                            await places.getDetailsByPlaceId(
+                                                p!.placeId!);
+
+                                        addMyMarker12(
+                                            detail
+                                                .result.geometry!.location.lat,
+                                            detail
+                                                .result.geometry!.location.lng);
+
+                                        setState(() {
+                                          drop = detail.result.name;
+
+                                          dropOff = LatLng(
+                                              detail.result.geometry!.location
+                                                  .lat,
+                                              detail.result.geometry!.location
+                                                  .lng);
+                                        });
+
+                                        PolylineResult result =
+                                            await polylinePoints
+                                                .getRouteBetweenCoordinates(
+                                                    kGoogleApiKey,
+                                                    PointLatLng(lat, long),
+                                                    PointLatLng(
+                                                        detail.result.geometry!
+                                                            .location.lat,
+                                                        detail.result.geometry!
+                                                            .location.lng));
+                                        if (result.points.isNotEmpty) {
+                                          polylineCoordinates = result.points
+                                              .map((point) => LatLng(
+                                                  point.latitude,
+                                                  point.longitude))
+                                              .toList();
+                                        }
+                                        setState(() {
+                                          _poly = Polyline(
+                                              color: Colors.red,
+                                              polylineId:
+                                                  const PolylineId('route'),
+                                              points: polylineCoordinates,
+                                              width: 4);
+                                        });
+
+                                        mapController!.animateCamera(
+                                            CameraUpdate.newLatLngZoom(
+                                                LatLng(
+                                                    detail.result.geometry!
+                                                        .location.lat,
+                                                    detail.result.geometry!
+                                                        .location.lng),
+                                                18.0));
+
+                                        double miny = (lat <= dropOff.latitude)
+                                            ? lat
+                                            : dropOff.latitude;
+                                        double minx =
+                                            (long <= dropOff.longitude)
+                                                ? long
+                                                : dropOff.longitude;
+                                        double maxy = (lat <= dropOff.latitude)
+                                            ? dropOff.latitude
+                                            : lat;
+                                        double maxx =
+                                            (long <= dropOff.longitude)
+                                                ? dropOff.longitude
+                                                : long;
+
+                                        double southWestLatitude = miny;
+                                        double southWestLongitude = minx;
+
+                                        double northEastLatitude = maxy;
+                                        double northEastLongitude = maxx;
+
+                                        // Accommodate the two locations within the
+                                        // camera view of the map
+                                        mapController!.animateCamera(
+                                          CameraUpdate.newLatLngBounds(
+                                            LatLngBounds(
+                                              northeast: LatLng(
+                                                northEastLatitude,
+                                                northEastLongitude,
+                                              ),
+                                              southwest: LatLng(
+                                                southWestLatitude,
+                                                southWestLongitude,
+                                              ),
+                                            ),
+                                            100.0,
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        height: 35,
+                                        width: 300,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(100)),
+                                        child: TextFormField(
+                                          enabled: false,
+                                          decoration: InputDecoration(
+                                            prefixIcon: const Icon(
+                                              Icons.looks_two_outlined,
+                                              color: grey,
+                                            ),
+                                            suffixIcon: Icon(
+                                              Icons.sports_score_outlined,
+                                              color: drop ==
+                                                      'Search Drop-off Location'
+                                                  ? grey
+                                                  : Colors.red,
+                                            ),
+                                            fillColor: Colors.white,
+                                            filled: true,
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  width: 1, color: grey),
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            disabledBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  width: 1, color: grey),
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: const BorderSide(
+                                                  width: 1,
+                                                  color: Colors.black),
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                            label: TextRegular(
+                                                text: drop,
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                            border: InputBorder.none,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    pickup != 'My Location' &&
+                                            drop != 'Search Drop-off Location'
+                                        ? ButtonWidget(
+                                            width: 250,
+                                            fontSize: 15,
+                                            color: Colors.green,
+                                            height: 40,
+                                            radius: 100,
+                                            opacity: 1,
+                                            label: 'Book Now',
+                                            onPressed: () {},
+                                          )
+                                        : const SizedBox(),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           )
@@ -555,6 +750,12 @@ class _HomeScreenState extends State<HomeScreen> {
       long = position.longitude;
       hasLoaded = true;
     });
+
+    markers.add(Marker(
+        icon: BitmapDescriptor.defaultMarker,
+        markerId: const MarkerId("mylocation"),
+        position: LatLng(position.latitude, position.longitude),
+        infoWindow: const InfoWindow(title: 'My Location')));
   }
 
   String profilePicture = '';
@@ -580,109 +781,319 @@ class _HomeScreenState extends State<HomeScreen> {
     mapController!.dispose();
   }
 
-  Future<void> _createTutorial() async {
-    final targets = [
-      TargetFocus(
-        identify: 'notif',
-        keyTarget: keyOne,
-        alignSkip: Alignment.topCenter,
-        contents: [
-          TargetContent(
-            align: ContentAlign.bottom,
-            builder: (context, controller) => SafeArea(
-              child: TextRegular(
-                text:
-                    "Stay in the loop! Get real-time updates on your booking status through our notifications",
-                fontSize: 18,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
-      TargetFocus(
-        identify: 'messages',
-        keyTarget: key2,
-        alignSkip: Alignment.topCenter,
-        contents: [
-          TargetContent(
-            align: ContentAlign.bottom,
-            builder: (context, controller) => SafeArea(
-              child: TextRegular(
-                text:
-                    "Stay connected with PARA! Use our messaging feature to easily communicate and exchange messages with drivers, keeping you in touch and engaged at all times.",
-                fontSize: 18,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
-      TargetFocus(
-        identify: 'favs',
-        keyTarget: key3,
-        alignSkip: Alignment.topCenter,
-        contents: [
-          TargetContent(
-            align: ContentAlign.top,
-            builder: (context, controller) => SafeArea(
-              child: TextRegular(
-                text:
-                    "Discover and access your favorite places with ease! PARA's Favorites feature lets you save and conveniently access your preferred locations, ensuring you can quickly navigate to the places you love with just a few taps.",
-                fontSize: 18,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
-      TargetFocus(
-        identify: 'trips',
-        keyTarget: key4,
-        alignSkip: Alignment.topCenter,
-        contents: [
-          TargetContent(
-            align: ContentAlign.top,
-            builder: (context, controller) => SafeArea(
-              child: TextRegular(
-                text:
-                    "Relive your past adventures with PARA's Trips or History feature! Easily access and review your previous trips, allowing you to reminisce, track your travel history, and plan future journeys based on your favorite destinations.",
-                fontSize: 18,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
-      TargetFocus(
-        identify: 'refresh',
-        keyTarget: key5,
-        alignSkip: Alignment.topCenter,
-        contents: [
-          TargetContent(
-            align: ContentAlign.top,
-            builder: (context, controller) => SafeArea(
-              child: TextRegular(
-                text:
-                    "Stay up-to-date with the latest available drivers! Just tap the Refresh button in PARA to instantly get the most current list of drivers, ensuring you have access to a wide selection and can quickly find a driver that suits your needs.",
-                fontSize: 18,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
-    ];
+  // Future<void> _createTutorial() async {
+  //   final targets = [
+  //     TargetFocus(
+  //       identify: 'notif',
+  //       keyTarget: keyOne,
+  //       alignSkip: Alignment.topCenter,
+  //       contents: [
+  //         TargetContent(
+  //           align: ContentAlign.bottom,
+  //           builder: (context, controller) => SafeArea(
+  //             child: TextRegular(
+  //               text:
+  //                   "Stay in the loop! Get real-time updates on your booking status through our notifications",
+  //               fontSize: 18,
+  //               color: Colors.white,
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //     TargetFocus(
+  //       identify: 'messages',
+  //       keyTarget: key2,
+  //       alignSkip: Alignment.topCenter,
+  //       contents: [
+  //         TargetContent(
+  //           align: ContentAlign.bottom,
+  //           builder: (context, controller) => SafeArea(
+  //             child: TextRegular(
+  //               text:
+  //                   "Stay connected with PARA! Use our messaging feature to easily communicate and exchange messages with drivers, keeping you in touch and engaged at all times.",
+  //               fontSize: 18,
+  //               color: Colors.white,
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //     TargetFocus(
+  //       identify: 'favs',
+  //       keyTarget: key3,
+  //       alignSkip: Alignment.topCenter,
+  //       contents: [
+  //         TargetContent(
+  //           align: ContentAlign.top,
+  //           builder: (context, controller) => SafeArea(
+  //             child: TextRegular(
+  //               text:
+  //                   "Discover and access your favorite places with ease! PARA's Favorites feature lets you save and conveniently access your preferred locations, ensuring you can quickly navigate to the places you love with just a few taps.",
+  //               fontSize: 18,
+  //               color: Colors.white,
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //     TargetFocus(
+  //       identify: 'trips',
+  //       keyTarget: key4,
+  //       alignSkip: Alignment.topCenter,
+  //       contents: [
+  //         TargetContent(
+  //           align: ContentAlign.top,
+  //           builder: (context, controller) => SafeArea(
+  //             child: TextRegular(
+  //               text:
+  //                   "Relive your past adventures with PARA's Trips or History feature! Easily access and review your previous trips, allowing you to reminisce, track your travel history, and plan future journeys based on your favorite destinations.",
+  //               fontSize: 18,
+  //               color: Colors.white,
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //     TargetFocus(
+  //       identify: 'refresh',
+  //       keyTarget: key5,
+  //       alignSkip: Alignment.topCenter,
+  //       contents: [
+  //         TargetContent(
+  //           align: ContentAlign.top,
+  //           builder: (context, controller) => SafeArea(
+  //             child: TextRegular(
+  //               text:
+  //                   "Stay up-to-date with the latest available drivers! Just tap the Refresh button in PARA to instantly get the most current list of drivers, ensuring you have access to a wide selection and can quickly find a driver that suits your needs.",
+  //               fontSize: 18,
+  //               color: Colors.white,
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   ];
 
-    final tutorial = TutorialCoachMark(
-      hideSkip: true,
-      targets: targets,
+  //   final tutorial = TutorialCoachMark(
+  //     hideSkip: true,
+  //     targets: targets,
+  //   );
+
+  //   Future.delayed(const Duration(milliseconds: 500), () {
+  //     tutorial.show(context: context);
+  //   });
+
+  //   box.write('shown', true);
+  // }
+
+  Widget dialWidget() {
+    return SpeedDial(
+      onOpen: () {
+        setState(() {
+          dialColor = Colors.red;
+        });
+      },
+      backgroundColor: Colors.white,
+      animatedIcon: AnimatedIcons.menu_close,
+      animatedIconTheme: IconThemeData(color: dialColor),
+      iconTheme: const IconThemeData(
+        color: Colors.black,
+      ),
+      closeManually: false,
+      children: [
+        SpeedDialChild(
+            onTap: () {
+              mapController?.animateCamera(CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                      bearing: 45,
+                      tilt: 40,
+                      target: LatLng(lat, long),
+                      zoom: 16)));
+            },
+            label: 'My Location',
+            labelStyle: const TextStyle(
+                fontFamily: 'QBold', fontSize: 12, color: Colors.red),
+            child: const Icon(
+              Icons.my_location_rounded,
+              color: Colors.red,
+            )),
+        SpeedDialChild(
+          onTap: () {
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const MessagesTab()));
+          },
+          label: 'Messages',
+          labelStyle: const TextStyle(
+              fontFamily: 'QBold', fontSize: 12, color: Colors.black),
+          child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('Messages')
+                  .where('userId',
+                      isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                  .where('seen', isEqualTo: false)
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  print('error');
+                  return const Center(child: Text('Error'));
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SizedBox();
+                }
+
+                final data = snapshot.requireData;
+                return b.Badge(
+                  showBadge: data.docs.isNotEmpty,
+                  badgeAnimation: const b.BadgeAnimation.fade(),
+                  badgeStyle: const b.BadgeStyle(
+                    badgeColor: Colors.red,
+                  ),
+                  badgeContent: TextRegular(
+                      text: data.docs.length.toString(),
+                      fontSize: 12,
+                      color: Colors.white),
+                  child: AvatarGlow(
+                    animate: data.docs.isNotEmpty,
+                    glowColor: Colors.red,
+                    endRadius: 60.0,
+                    duration: const Duration(milliseconds: 2000),
+                    repeatPauseDuration: const Duration(milliseconds: 100),
+                    repeat: true,
+                    child: const Icon(
+                      Icons.message_outlined,
+                      color: grey,
+                    ),
+                  ),
+                );
+              }),
+        ),
+        SpeedDialChild(
+          label: 'Favorites',
+          labelStyle: const TextStyle(
+              fontFamily: 'QBold', fontSize: 12, color: Colors.black),
+          child: StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseData().userData,
+              builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return const SizedBox();
+                } else if (snapshot.hasError) {
+                  return const Center(child: Text('Something went wrong'));
+                } else if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return const SizedBox();
+                }
+                dynamic data = snapshot.data;
+
+                List oldfavs = data['favorites'];
+
+                List favs = oldfavs.reversed.toList();
+                return FloatingActionButton(
+                    backgroundColor: Colors.white,
+                    onPressed: (() {
+                      if (favs.isNotEmpty) {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                content: SizedBox(
+                                  height: 100,
+                                  width: 500,
+                                  child: Center(
+                                    child: ListView.builder(
+                                        itemCount: favs.length,
+                                        itemBuilder: (context, index) {
+                                          return Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                10, 5, 10, 5),
+                                            child: ListTile(
+                                              title: TextRegular(
+                                                  text: favs[index],
+                                                  fontSize: 14,
+                                                  color: Colors.black),
+                                              trailing: IconButton(
+                                                onPressed: () async {
+                                                  await FirebaseFirestore
+                                                      .instance
+                                                      .collection('Users')
+                                                      .doc(FirebaseAuth.instance
+                                                          .currentUser!.uid)
+                                                      .update({
+                                                    'favorites':
+                                                        FieldValue.arrayRemove(
+                                                            [favs[index]]),
+                                                  });
+                                                  Navigator.pop(context);
+                                                },
+                                                icon: const Icon(
+                                                  Icons.star_rounded,
+                                                  color: Colors.amber,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: TextRegular(
+                                        text: 'Close',
+                                        fontSize: 14,
+                                        color: grey),
+                                  ),
+                                ],
+                              );
+                            });
+                      } else {
+                        showToast('Your favorites are empty');
+                      }
+                    }),
+                    child: b.Badge(
+                      showBadge: favs.isNotEmpty,
+                      badgeStyle: b.BadgeStyle(
+                        badgeColor: Colors.amber[700]!,
+                      ),
+                      badgeContent: TextRegular(
+                          text: favs.length.toString(),
+                          fontSize: 12,
+                          color: Colors.white),
+                      child: const Icon(
+                        Icons.star_border_rounded,
+                        color: grey,
+                      ),
+                    ));
+              }),
+        ),
+        SpeedDialChild(
+            onTap: () {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const HomeScreen()));
+            },
+            label: 'Refresh',
+            labelStyle: const TextStyle(
+                fontFamily: 'QBold', fontSize: 12, color: Colors.black),
+            child: const Icon(
+              Icons.refresh,
+              color: grey,
+            )),
+        SpeedDialChild(
+            onTap: () {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const TripsPage()));
+            },
+            label: 'History',
+            labelStyle: const TextStyle(
+                fontFamily: 'QBold', fontSize: 12, color: Colors.black),
+            child: const Icon(
+              Icons.collections_bookmark_outlined,
+              color: grey,
+            )),
+      ],
     );
-
-    Future.delayed(const Duration(milliseconds: 500), () {
-      tutorial.show(context: context);
-    });
-
-    box.write('shown', true);
   }
 }
