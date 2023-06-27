@@ -871,7 +871,7 @@ class _MapScreenState extends State<MapScreen> {
                                                                                                         )));
                                                                                               },
                                                                                               child: TextBold(
-                                                                                                text: 'View Profile',
+                                                                                                text: 'Reviews',
                                                                                                 fontSize: 12,
                                                                                                 color: Colors.green,
                                                                                               ),

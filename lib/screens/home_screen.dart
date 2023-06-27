@@ -122,15 +122,15 @@ class _HomeScreenState extends State<HomeScreen> {
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_outlined),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.email),
+            icon: Icon(Icons.email_outlined),
             label: 'Inbox',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications_rounded),
+            icon: Icon(Icons.notifications_outlined),
             label: 'Notifications',
           ),
           BottomNavigationBarItem(
@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Map',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.history),
+            icon: Icon(Icons.collections_bookmark_outlined),
             label: 'History',
           ),
         ],
@@ -478,7 +478,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             )));
                                               },
                                               child: TextBold(
-                                                text: 'View Profile',
+                                                text: 'Reviews',
                                                 fontSize: 12,
                                                 color: Colors.green,
                                               ),

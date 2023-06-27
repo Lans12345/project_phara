@@ -366,9 +366,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             },
                           ),
                           ListTile(
-                            leading: const Icon(Icons.map_outlined),
+                            leading: const Icon(Icons.my_location),
                             title: TextRegular(
-                              text: 'Book Now',
+                              text: 'Book a Ride',
                               fontSize: 14,
                               color: Colors.grey,
                             ),
@@ -414,7 +414,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     color: Colors.white),
                                 badgeStyle:
                                     b.BadgeStyle(badgeColor: Colors.red[600]!),
-                                child: const Icon(Icons.message_outlined)),
+                                child: const Icon(Icons.email_outlined)),
                             title: TextRegular(
                               text: 'Messages',
                               fontSize: 14,
