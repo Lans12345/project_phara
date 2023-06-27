@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phara/data/distance_calculations.dart';
 import 'package:phara/data/time_calculation.dart';
 import 'package:phara/services/add_booking.dart';
@@ -10,7 +9,6 @@ import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/text_widget.dart';
 import 'package:phara/widgets/trackbooking_bottomsheet_widget.dart';
 
-import '../services/providers/coordinates_provider.dart';
 import 'button_widget.dart';
 
 class BookBottomSheetWidget extends StatefulWidget {
@@ -18,8 +16,13 @@ class BookBottomSheetWidget extends StatefulWidget {
 
   final Map coordinates;
 
+  final locationData;
+
   const BookBottomSheetWidget(
-      {super.key, required this.driverId, required this.coordinates});
+      {super.key,
+      required this.driverId,
+      required this.coordinates,
+      required this.locationData});
 
   @override
   State<BookBottomSheetWidget> createState() => _BookBottomSheetWidgetState();
@@ -73,11 +76,11 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
             dynamic data = snapshot.data;
 
             double rating = data['stars'] / data['ratings'].length;
-            return Consumer(builder: ((context, ref, child) {
-              return SizedBox(
-                height: 500,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+            return SizedBox(
+              height: 500,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -115,10 +118,13 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              TextBold(
-                                  text: 'Name: ${data['name']}',
-                                  fontSize: 15,
-                                  color: grey),
+                              SizedBox(
+                                width: 225,
+                                child: TextBold(
+                                    text: 'Name: ${data['name']}',
+                                    fontSize: 15,
+                                    color: grey),
+                              ),
                               TextRegular(
                                   text: 'Vehicle: ${data['vehicle']}',
                                   fontSize: 14,
@@ -194,9 +200,7 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                 ),
                                 fillColor: Colors.white,
                                 filled: true,
-                                hintText: ref
-                                    .read(destinationProvider.notifier)
-                                    .state,
+                                hintText: widget.locationData['destination'],
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: const BorderSide(
                                       width: 1, color: Colors.black),
@@ -222,7 +226,7 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                       ),
                       TextRegular(
                           text:
-                              'Distance: ${(calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)).toStringAsFixed(2)} km',
+                              'Distance: ${(calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], widget.locationData['destinationlat'], widget.locationData['destinationlong'])).toStringAsFixed(2)} km',
                           fontSize: 18,
                           color: grey),
                       const SizedBox(
@@ -230,7 +234,7 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                       ),
                       TextRegular(
                           text:
-                              'Estimated time: ${(calculateTravelTime((calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)), 26.8)).toStringAsFixed(2)} hr/s',
+                              'Estimated time: ${(calculateTravelTime((calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], widget.locationData['destinationlat'], widget.locationData['destinationlong'])), 26.8)).toStringAsFixed(2)} hr/s',
                           fontSize: 18,
                           color: grey),
                       const SizedBox(
@@ -238,7 +242,7 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                       ),
                       TextRegular(
                           text:
-                              'Fare: ₱${(((calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)) * 10) + 20).toStringAsFixed(2)}',
+                              'Fare: ₱${(((calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], widget.locationData['destinationlat'], widget.locationData['destinationlong'])) * 10) + 20).toStringAsFixed(2)}',
                           fontSize: 18,
                           color: grey),
                       const SizedBox(
@@ -300,44 +304,58 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                                 ]),
                                               });
 
-                                              final String docId = await addBooking(
-                                                  widget.driverId,
-                                                  widget.coordinates[
-                                                      'pickupLocation'],
-                                                  ref
-                                                      .read(destinationProvider
-                                                          .notifier)
-                                                      .state,
-                                                  (calculateDistance(
-                                                          widget.coordinates[
-                                                              'lat'],
-                                                          widget.coordinates[
-                                                              'long'],
-                                                          ref
-                                                              .read(latProvider
-                                                                  .notifier)
-                                                              .state,
-                                                          ref
-                                                              .read(longProvider
-                                                                  .notifier)
-                                                              .state))
-                                                      .toStringAsFixed(2),
-                                                  (calculateTravelTime(
-                                                          (calculateDistance(
-                                                              widget
-                                                                  .coordinates['lat'],
-                                                              widget.coordinates['long'],
-                                                              ref.read(latProvider.notifier).state,
-                                                              ref.read(longProvider.notifier).state)),
-                                                          26.8))
-                                                      .toStringAsFixed(2),
-                                                  (((calculateDistance(widget.coordinates['lat'], widget.coordinates['long'], ref.read(latProvider.notifier).state, ref.read(longProvider.notifier).state)) * 10) + 20).toStringAsFixed(2),
-                                                  widget.coordinates['lat'],
-                                                  widget.coordinates['long'],
-                                                  ref.read(latProvider.notifier).state,
-                                                  ref.read(longProvider.notifier).state,
-                                                  userName,
-                                                  userProfile);
+                                              final String docId =
+                                                  await addBooking(
+                                                      widget.driverId,
+                                                      widget.coordinates[
+                                                          'pickupLocation'],
+                                                      widget.locationData[
+                                                          'destination'],
+                                                      (calculateDistance(
+                                                        widget
+                                                            .coordinates['lat'],
+                                                        widget.coordinates[
+                                                            'long'],
+                                                        widget.locationData[
+                                                            'destinationlat'],
+                                                        widget.locationData[
+                                                            'destinationlong'],
+                                                      )).toStringAsFixed(2),
+                                                      (calculateTravelTime(
+                                                              (calculateDistance(
+                                                                widget.coordinates[
+                                                                    'lat'],
+                                                                widget.coordinates[
+                                                                    'long'],
+                                                                widget.locationData[
+                                                                    'destinationlat'],
+                                                                widget.locationData[
+                                                                    'destinationlong'],
+                                                              )),
+                                                              26.8))
+                                                          .toStringAsFixed(2),
+                                                      (((calculateDistance(
+                                                                    widget.coordinates[
+                                                                        'lat'],
+                                                                    widget.coordinates[
+                                                                        'long'],
+                                                                    widget.locationData[
+                                                                        'destinationlat'],
+                                                                    widget.locationData[
+                                                                        'destinationlong'],
+                                                                  )) *
+                                                                  10) +
+                                                              20)
+                                                          .toStringAsFixed(2),
+                                                      widget.coordinates['lat'],
+                                                      widget
+                                                          .coordinates['long'],
+                                                      widget.locationData[
+                                                          'destinationlat'],
+                                                      widget.locationData[
+                                                          'destinationlong'],
+                                                      userName,
+                                                      userProfile);
                                               Navigator.pop(context);
                                               Navigator.pop(context);
                                               Navigator.pop(context);
@@ -363,43 +381,38 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                                             data['name'],
                                                         'driverId':
                                                             widget.driverId,
-                                                        'distance': (calculateDistance(
-                                                                widget.coordinates[
-                                                                    'lat'],
-                                                                widget.coordinates[
-                                                                    'long'],
-                                                                ref
-                                                                    .read(latProvider
-                                                                        .notifier)
-                                                                    .state,
-                                                                ref
-                                                                    .read(longProvider
-                                                                        .notifier)
-                                                                    .state))
-                                                            .toStringAsFixed(2),
+                                                        'distance':
+                                                            (calculateDistance(
+                                                          widget.coordinates[
+                                                              'lat'],
+                                                          widget.coordinates[
+                                                              'long'],
+                                                          widget.locationData[
+                                                              'destinationlat'],
+                                                          widget.locationData[
+                                                              'destinationlong'],
+                                                        )).toStringAsFixed(2),
                                                         'origin': widget
                                                                 .coordinates[
                                                             'pickupLocation'],
-                                                        'destination': ref
-                                                            .read(
-                                                                destinationProvider
-                                                                    .notifier)
-                                                            .state,
-                                                        'fare': (((calculateDistance(
-                                                                        widget.coordinates[
-                                                                            'lat'],
-                                                                        widget.coordinates[
-                                                                            'long'],
-                                                                        ref
-                                                                            .read(latProvider
-                                                                                .notifier)
-                                                                            .state,
-                                                                        ref
-                                                                            .read(longProvider.notifier)
-                                                                            .state)) *
-                                                                    12) +
-                                                                20)
-                                                            .toStringAsFixed(2)
+                                                        'destination':
+                                                            widget.locationData[
+                                                                'destination'],
+                                                        'fare':
+                                                            (((calculateDistance(
+                                                                          widget
+                                                                              .coordinates['lat'],
+                                                                          widget
+                                                                              .coordinates['long'],
+                                                                          widget
+                                                                              .locationData['destinationlat'],
+                                                                          widget
+                                                                              .locationData['destinationlong'],
+                                                                        )) *
+                                                                        12) +
+                                                                    20)
+                                                                .toStringAsFixed(
+                                                                    2)
                                                       },
                                                     );
                                                   }));
@@ -418,8 +431,8 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                     ],
                   ),
                 ),
-              );
-            }));
+              ),
+            );
           }),
     );
   }

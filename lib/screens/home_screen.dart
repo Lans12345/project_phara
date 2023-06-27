@@ -5,6 +5,7 @@ import 'package:badges/badges.dart' as b;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_webservice/places.dart' as location;
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,6 +18,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:phara/data/user_stream.dart';
 import 'package:phara/plugins/my_location.dart';
+import 'package:phara/screens/pages/driver_profile_page.dart';
 import 'package:phara/screens/pages/notif_page.dart';
 import 'package:phara/screens/pages/trips_page.dart';
 import 'package:phara/utils/colors.dart';
@@ -25,6 +27,7 @@ import 'package:phara/widgets/text_widget.dart';
 
 import '../data/distance_calculations.dart';
 import '../utils/keys.dart';
+import '../widgets/book_bottomsheet_widget.dart';
 import '../widgets/button_widget.dart';
 import '../widgets/toast_widget.dart';
 import 'pages/messages_tab.dart';
@@ -417,11 +420,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                               Icons.looks_one_outlined,
                                               color: grey,
                                             ),
-                                            suffixIcon: Icon(
+                                            suffixIcon: const Icon(
                                               Icons.my_location_outlined,
-                                              color: pickup == 'My Location'
-                                                  ? grey
-                                                  : Colors.red,
+                                              color: Colors.red,
                                             ),
                                             fillColor: Colors.white,
                                             filled: true,
@@ -653,7 +654,269 @@ class _HomeScreenState extends State<HomeScreen> {
                                             radius: 100,
                                             opacity: 1,
                                             label: 'Book Now',
-                                            onPressed: () {},
+                                            onPressed: () async {
+                                              List<Placemark> p =
+                                                  await placemarkFromCoordinates(
+                                                      lat, long);
+
+                                              Placemark place = p[0];
+
+                                              // ignore: use_build_context_synchronously
+
+                                              // ignore: use_build_context_synchronously
+
+                                              showModalBottomSheet(
+                                                  //     isScrollControlled: true,
+                                                  //     context: context,
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return SizedBox(
+                                                      height: 275,
+                                                      child: Column(
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    right: 10),
+                                                            child: Align(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .topRight,
+                                                              child: TextButton
+                                                                  .icon(
+                                                                onPressed:
+                                                                    () {},
+                                                                icon:
+                                                                    const Icon(
+                                                                  Icons
+                                                                      .near_me_rounded,
+                                                                  color: Colors
+                                                                      .green,
+                                                                ),
+                                                                label:
+                                                                    TextRegular(
+                                                                  text:
+                                                                      'Select nearest',
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .green,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Center(
+                                                            child: StreamBuilder<
+                                                                    QuerySnapshot>(
+                                                                stream: FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        'Drivers')
+                                                                    .where(
+                                                                        'isActive',
+                                                                        isEqualTo:
+                                                                            true)
+                                                                    .snapshots(),
+                                                                builder: (BuildContext
+                                                                        context,
+                                                                    AsyncSnapshot<
+                                                                            QuerySnapshot>
+                                                                        snapshot) {
+                                                                  if (snapshot
+                                                                      .hasError) {
+                                                                    print(snapshot
+                                                                        .error);
+                                                                    return const Center(
+                                                                        child: Text(
+                                                                            'Error'));
+                                                                  }
+                                                                  if (snapshot
+                                                                          .connectionState ==
+                                                                      ConnectionState
+                                                                          .waiting) {
+                                                                    return const Padding(
+                                                                      padding: EdgeInsets
+                                                                          .only(
+                                                                              top: 50),
+                                                                      child: Center(
+                                                                          child: CircularProgressIndicator(
+                                                                        color: Colors
+                                                                            .black,
+                                                                      )),
+                                                                    );
+                                                                  }
+
+                                                                  final data =
+                                                                      snapshot
+                                                                          .requireData;
+                                                                  final sortedData =
+                                                                      List<QueryDocumentSnapshot>.from(
+                                                                          data.docs);
+
+                                                                  WidgetsBinding
+                                                                      .instance
+                                                                      .addPostFrameCallback(
+                                                                          (timeStamp) {
+                                                                    sortedData
+                                                                        .sort((a,
+                                                                            b) {
+                                                                      final double
+                                                                          lat1 =
+                                                                          a['location']
+                                                                              [
+                                                                              'lat'];
+                                                                      final double
+                                                                          long1 =
+                                                                          a['location']
+                                                                              [
+                                                                              'long'];
+                                                                      final double
+                                                                          lat2 =
+                                                                          b['location']
+                                                                              [
+                                                                              'lat'];
+                                                                      final double
+                                                                          long2 =
+                                                                          b['location']
+                                                                              [
+                                                                              'long'];
+
+                                                                      final double
+                                                                          distance1 =
+                                                                          calculateDistance(
+                                                                              lat,
+                                                                              long,
+                                                                              lat1,
+                                                                              long1);
+                                                                      final double
+                                                                          distance2 =
+                                                                          calculateDistance(
+                                                                              lat,
+                                                                              long,
+                                                                              lat2,
+                                                                              long2);
+
+                                                                      return distance1
+                                                                          .compareTo(
+                                                                              distance2);
+                                                                    });
+                                                                  });
+
+                                                                  return SizedBox(
+                                                                    height: 220,
+                                                                    child: ListView.builder(
+                                                                        itemCount: sortedData.length,
+                                                                        scrollDirection: Axis.horizontal,
+                                                                        itemBuilder: (context, index) {
+                                                                          return Padding(
+                                                                            padding: const EdgeInsets.fromLTRB(
+                                                                                10,
+                                                                                20,
+                                                                                10,
+                                                                                20),
+                                                                            child:
+                                                                                Card(
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: Column(
+                                                                                  children: [
+                                                                                    Row(
+                                                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                      children: [
+                                                                                        Column(
+                                                                                          children: [
+                                                                                            CircleAvatar(
+                                                                                              minRadius: 25,
+                                                                                              maxRadius: 25,
+                                                                                              backgroundImage: NetworkImage(data.docs[index]['profilePicture']),
+                                                                                            ),
+                                                                                            TextButton(
+                                                                                              onPressed: () {
+                                                                                                Navigator.of(context).push(MaterialPageRoute(
+                                                                                                    builder: (context) => DriverProfilePage(
+                                                                                                          driverId: data.docs[index].id,
+                                                                                                        )));
+                                                                                              },
+                                                                                              child: TextBold(
+                                                                                                text: 'View Profile',
+                                                                                                fontSize: 12,
+                                                                                                color: Colors.green,
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                        const SizedBox(
+                                                                                          width: 15,
+                                                                                        ),
+                                                                                        Column(
+                                                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                          children: [
+                                                                                            SizedBox(
+                                                                                              width: 120,
+                                                                                              child: TextBold(text: 'Name: ${data.docs[index]['name']}', fontSize: 12, color: grey),
+                                                                                            ),
+                                                                                            SizedBox(
+                                                                                              width: 120,
+                                                                                              child: TextRegular(text: 'Vehicle: ${data.docs[index]['vehicle']}', fontSize: 11, color: grey),
+                                                                                            ),
+                                                                                            SizedBox(
+                                                                                              width: 120,
+                                                                                              child: TextRegular(text: 'Plate No.: ${data.docs[index]['plateNumber']}', fontSize: 11, color: grey),
+                                                                                            ),
+                                                                                            TextRegular(text: data.docs[index]['ratings'].length != 0 ? 'Rating: ${(data.docs[index]['stars'] / data.docs[index]['ratings'].length).toStringAsFixed(2)} ★' : 'No ratings', fontSize: 11, color: Colors.amber),
+                                                                                            TextRegular(text: '${calculateDistance(lat, long, data.docs[index]['location']['lat'], data.docs[index]['location']['long']).toStringAsFixed(2)} kms away', fontSize: 11, color: Colors.grey),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                    ButtonWidget(
+                                                                                      width: 125,
+                                                                                      height: 30,
+                                                                                      fontSize: 11,
+                                                                                      label: 'Select Driver',
+                                                                                      onPressed: () {
+                                                                                        Navigator.pop(context);
+                                                                                        showModalBottomSheet(
+                                                                                            isScrollControlled: true,
+                                                                                            context: context,
+                                                                                            builder: ((context) {
+                                                                                              return BookBottomSheetWidget(
+                                                                                                locationData: {
+                                                                                                  'pickuplat': lat,
+                                                                                                  'pickuplong': long,
+                                                                                                  'pickup': pickup,
+                                                                                                  'destinationlat': dropOff.latitude,
+                                                                                                  'destinationlong': dropOff.longitude,
+                                                                                                  'dropoff': drop
+                                                                                                },
+                                                                                                driverId: data.docs[index].id,
+                                                                                                coordinates: {
+                                                                                                  'lat': lat,
+                                                                                                  'long': long,
+                                                                                                  'pickupLocation': '${place.street}, ${place.locality}, ${place.administrativeArea}'
+                                                                                                },
+                                                                                              );
+                                                                                            }));
+                                                                                      },
+                                                                                      opacity: 1,
+                                                                                      radius: 100,
+                                                                                      color: Colors.green,
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          );
+                                                                        }),
+                                                                  );
+                                                                }),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  });
+                                            },
                                           )
                                         : const SizedBox(),
                                   ],
