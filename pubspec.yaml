@@ -68,6 +68,7 @@ dependencies:
   flutter_inapp_notifications:
   firebase_auth_oauth:
   flutter_speed_dial:
+  flutter_carousel_slider:
   
 
 dev_dependencies:

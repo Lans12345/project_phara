@@ -101,8 +101,6 @@ class _MapScreenState extends State<MapScreen> {
         .snapshots()
         .listen((event) {
       for (var element in event.docChanges) {
-        print(element.doc['messages'].length);
-
         if (element.type == DocumentChangeType.modified) {
           if (element.doc['seen'] == false &&
               element.doc['messages'][element.doc['messages'].length - 1]
@@ -224,16 +222,10 @@ class _MapScreenState extends State<MapScreen> {
               centerTitle: true,
               foregroundColor: grey,
               backgroundColor: Colors.white,
-              title: DefaultTextStyle(
-                style: const TextStyle(
-                  fontSize: 24.0,
-                  fontFamily: 'QBold',
-                ),
-                child: TextBold(
-                  text: 'MAP',
-                  fontSize: 24,
-                  color: Colors.black,
-                ),
+              title: TextRegular(
+                text: 'Map',
+                fontSize: 24,
+                color: grey,
               ),
               actions: [
                 StreamBuilder<DocumentSnapshot>(
@@ -842,16 +834,6 @@ class _MapScreenState extends State<MapScreen> {
                                                                               distance2);
                                                                     });
                                                                   });
-                                                                  for (int i =
-                                                                          0;
-                                                                      i <
-                                                                          sortedData
-                                                                              .length;
-                                                                      i++) {
-                                                                    print(sortedData[
-                                                                            i][
-                                                                        'name']);
-                                                                  }
 
                                                                   return SizedBox(
                                                                     height: 220,
