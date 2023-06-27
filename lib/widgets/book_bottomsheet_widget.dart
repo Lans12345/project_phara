@@ -200,7 +200,7 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                 ),
                                 fillColor: Colors.white,
                                 filled: true,
-                                hintText: widget.locationData['destination'],
+                                hintText: widget.locationData['dropoff'],
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: const BorderSide(
                                       width: 1, color: Colors.black),
@@ -310,7 +310,7 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                                       widget.coordinates[
                                                           'pickupLocation'],
                                                       widget.locationData[
-                                                          'destination'],
+                                                          'dropoff'],
                                                       (calculateDistance(
                                                         widget
                                                             .coordinates['lat'],
@@ -358,7 +358,6 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                                       userProfile);
                                               Navigator.pop(context);
                                               Navigator.pop(context);
-                                              Navigator.pop(context);
 
                                               showModalBottomSheet(
                                                   isDismissible: false,
@@ -397,7 +396,7 @@ class _BookBottomSheetWidgetState extends State<BookBottomSheetWidget> {
                                                             'pickupLocation'],
                                                         'destination':
                                                             widget.locationData[
-                                                                'destination'],
+                                                                'dropoff'],
                                                         'fare':
                                                             (((calculateDistance(
                                                                           widget

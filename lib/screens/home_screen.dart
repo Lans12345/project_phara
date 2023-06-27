@@ -199,6 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final box = GetStorage();
 
   Color dialColor = Colors.black;
+  String nearestDriverId = '';
 
   @override
   Widget build(BuildContext context) {
@@ -685,14 +686,50 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       .topRight,
                                                               child: TextButton
                                                                   .icon(
-                                                                onPressed:
-                                                                    () {},
+                                                                onPressed: () {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                  showModalBottomSheet(
+                                                                      isScrollControlled:
+                                                                          true,
+                                                                      context:
+                                                                          context,
+                                                                      builder:
+                                                                          ((context) {
+                                                                        return BookBottomSheetWidget(
+                                                                          locationData: {
+                                                                            'pickuplat':
+                                                                                lat,
+                                                                            'pickuplong':
+                                                                                long,
+                                                                            'pickup':
+                                                                                pickup,
+                                                                            'destinationlat':
+                                                                                dropOff.latitude,
+                                                                            'destinationlong':
+                                                                                dropOff.longitude,
+                                                                            'dropoff':
+                                                                                drop
+                                                                          },
+                                                                          driverId:
+                                                                              nearestDriverId,
+                                                                          coordinates: {
+                                                                            'lat':
+                                                                                lat,
+                                                                            'long':
+                                                                                long,
+                                                                            'pickupLocation':
+                                                                                '${place.street}, ${place.locality}, ${place.administrativeArea}'
+                                                                          },
+                                                                        );
+                                                                      }));
+                                                                },
                                                                 icon:
                                                                     const Icon(
                                                                   Icons
-                                                                      .near_me_rounded,
+                                                                      .my_location,
                                                                   color: Colors
-                                                                      .green,
+                                                                      .red,
                                                                 ),
                                                                 label:
                                                                     TextRegular(
@@ -700,7 +737,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       'Select nearest',
                                                                   fontSize: 12,
                                                                   color: Colors
-                                                                      .green,
+                                                                      .red,
                                                                 ),
                                                               ),
                                                             ),
@@ -760,6 +797,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     sortedData
                                                                         .sort((a,
                                                                             b) {
+                                                                      nearestDriverId = data
+                                                                          .docs[
+                                                                              0]
+                                                                          .id;
                                                                       final double
                                                                           lat1 =
                                                                           a['location']
@@ -801,6 +842,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               distance2);
                                                                     });
                                                                   });
+                                                                  for (int i =
+                                                                          0;
+                                                                      i <
+                                                                          sortedData
+                                                                              .length;
+                                                                      i++) {
+                                                                    print(sortedData[
+                                                                            i][
+                                                                        'name']);
+                                                                  }
 
                                                                   return SizedBox(
                                                                     height: 220,

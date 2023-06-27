@@ -164,12 +164,12 @@ class _TrackBookingBottomSheetWidgetState
                         ? MaterialButton(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100)),
-                            minWidth: 300,
-                            height: 50,
+                            minWidth: 250,
+                            height: 45,
                             color: Colors.blue,
                             onPressed: () {},
                             child: SizedBox(
-                              width: 280,
+                              width: 250,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -178,6 +178,7 @@ class _TrackBookingBottomSheetWidgetState
                                     child: Image.asset(
                                       'assets/images/animation.gif',
                                       width: 50,
+                                      height: 30,
                                     ),
                                   ),
                                   const SizedBox(
@@ -185,7 +186,7 @@ class _TrackBookingBottomSheetWidgetState
                                   ),
                                   TextRegular(
                                     text: 'Pending request...',
-                                    fontSize: 18,
+                                    fontSize: 14,
                                     color: Colors.white,
                                   )
                                 ],
@@ -195,8 +196,8 @@ class _TrackBookingBottomSheetWidgetState
                             ? MaterialButton(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(100)),
-                                minWidth: 300,
-                                height: 50,
+                                minWidth: 250,
+                                height: 45,
                                 color: Colors.red,
                                 onPressed: () {
                                   Navigator.of(context).pushReplacement(
@@ -205,7 +206,7 @@ class _TrackBookingBottomSheetWidgetState
                                               const HomeScreen()));
                                 },
                                 child: SizedBox(
-                                  width: 280,
+                                  width: 250,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -214,6 +215,7 @@ class _TrackBookingBottomSheetWidgetState
                                         child: Image.asset(
                                           'assets/images/animation.gif',
                                           width: 50,
+                                          height: 30,
                                         ),
                                       ),
                                       const SizedBox(
