@@ -10,10 +10,13 @@ class ButtonWidget extends StatelessWidget {
   final double? height;
   final double? opacity;
   final Color? color;
+  final Color? textcolor;
 
   const ButtonWidget(
-      {required this.label,
+      {super.key,
+      required this.label,
       required this.onPressed,
+      this.textcolor = Colors.white,
       this.width = 300,
       this.fontSize = 18,
       this.height = 50,
@@ -29,6 +32,6 @@ class ButtonWidget extends StatelessWidget {
         height: height,
         color: color?.withOpacity(opacity!),
         onPressed: onPressed,
-        child: TextBold(text: label, fontSize: fontSize!, color: Colors.white));
+        child: TextBold(text: label, fontSize: fontSize!, color: textcolor!));
   }
 }
