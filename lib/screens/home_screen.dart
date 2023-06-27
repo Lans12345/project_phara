@@ -309,10 +309,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Container(
-                            height: pickup != 'My Location' &&
-                                    drop != 'Search Drop-off Location'
-                                ? 210
-                                : 150,
+                            height:
+                                drop != 'Search Drop-off Location' ? 210 : 150,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -646,8 +644,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     const SizedBox(
                                       height: 15,
                                     ),
-                                    pickup != 'My Location' &&
-                                            drop != 'Search Drop-off Location'
+                                    drop != 'Search Drop-off Location'
                                         ? ButtonWidget(
                                             width: 250,
                                             fontSize: 15,
