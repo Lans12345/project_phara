@@ -181,11 +181,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 slideBuilder: (index) {
                   return Padding(
                     padding:
-                        const EdgeInsets.only(left: 10, right: 10, top: 10),
+                        const EdgeInsets.only(left: 15, right: 15, top: 10),
                     child: Container(
                       height: 150,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
                         image: DecorationImage(
                             image: AssetImage(
                                 'assets/images/${imageLinks[index]}'),
@@ -222,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Container(
                   height: 125,
-                  width: 175,
+                  width: MediaQuery.of(context).size.width / 2.25,
                   decoration: BoxDecoration(
                     color: grey,
                     borderRadius: BorderRadius.circular(10),
@@ -276,7 +277,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Container(
                   height: 125,
-                  width: 175,
+                  width: MediaQuery.of(context).size.width / 2.25,
                   decoration: BoxDecoration(
                     color: grey,
                     borderRadius: BorderRadius.circular(10),
@@ -338,7 +339,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Container(
                   height: 125,
-                  width: 175,
+                  width: MediaQuery.of(context).size.width / 2.25,
                   decoration: BoxDecoration(
                     color: grey,
                     borderRadius: BorderRadius.circular(10),
@@ -389,7 +390,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Container(
                   height: 125,
-                  width: 175,
+                  width: MediaQuery.of(context).size.width / 2.25,
                   decoration: BoxDecoration(
                     color: grey,
                     borderRadius: BorderRadius.circular(10),

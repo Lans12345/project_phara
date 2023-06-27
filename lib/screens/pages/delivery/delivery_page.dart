@@ -18,7 +18,6 @@ import 'package:phara/widgets/text_widget.dart';
 import 'package:google_maps_webservice/places.dart' as location;
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:phara/widgets/toast_widget.dart';
-import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import '../../../data/time_calculation.dart';
 import '../../../utils/keys.dart';
 
@@ -132,7 +131,7 @@ class DeliveryPageState extends State<DeliveryPage> {
           ),
         ],
       ),
-      body: hasLoaded
+      body: hasLoaded && lat != 0
           ? Stack(
               children: [
                 GoogleMap(
