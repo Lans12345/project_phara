@@ -164,7 +164,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     const Icon(
-                                      Icons.phone,
+                                      Icons.phone_outlined,
                                       color: Colors.grey,
                                       size: 15,
                                     ),
@@ -302,7 +302,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     const Icon(
-                                      Icons.email,
+                                      Icons.email_outlined,
                                       color: Colors.grey,
                                       size: 15,
                                     ),
@@ -352,7 +352,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             ),
                           ),
                           ListTile(
-                            leading: const Icon(Icons.home),
+                            leading: const Icon(Icons.home_outlined),
                             title: TextRegular(
                               text: 'Home',
                               fontSize: 14,
@@ -393,7 +393,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             },
                           ),
                           ListTile(
-                            leading: const Icon(Icons.notifications_rounded),
+                            leading: const Icon(Icons.notifications_outlined),
                             title: TextRegular(
                               text: 'Notifications',
                               fontSize: 14,
