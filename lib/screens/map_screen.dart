@@ -259,7 +259,7 @@ class _MapScreenState extends State<MapScreen> {
                               fontSize: 12,
                               color: Colors.white,
                             ),
-                            child: const Icon(Icons.notifications_rounded)),
+                            child: const Icon(Icons.notifications_outlined)),
                       );
                     }),
               ],

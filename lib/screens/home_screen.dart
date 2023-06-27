@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontSize: 12,
                               color: Colors.white,
                             ),
-                            child: const Icon(Icons.notifications_rounded)),
+                            child: const Icon(Icons.notifications_outlined)),
                       );
                     }),
               ],
