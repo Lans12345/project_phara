@@ -11,7 +11,6 @@ import 'package:phara/screens/pages/aboutus_page.dart';
 import 'package:phara/screens/pages/contactus_page.dart';
 import 'package:phara/screens/pages/delivery/delivery_page.dart';
 import 'package:phara/screens/pages/messages_tab.dart';
-import 'package:phara/screens/pages/notif_page.dart';
 import 'package:phara/screens/pages/trips_page.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/text_widget.dart';
@@ -390,19 +389,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   MaterialPageRoute(
                                       builder: (context) =>
                                           const DeliveryPage()));
-                            },
-                          ),
-                          ListTile(
-                            leading: const Icon(Icons.notifications_outlined),
-                            title: TextRegular(
-                              text: 'Notifications',
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
-                            onTap: () {
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) => const NotifTab()));
                             },
                           ),
                           ListTile(

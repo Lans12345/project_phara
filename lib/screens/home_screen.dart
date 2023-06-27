@@ -190,7 +190,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             image: AssetImage(
                                 'assets/images/${imageLinks[index]}'),
                             fit: BoxFit.cover),
-                        borderRadius: BorderRadius.circular(20),
                       ),
                     ),
                   );
@@ -216,85 +215,111 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                height: 125,
-                width: 175,
-                decoration: BoxDecoration(
-                  color: Colors.black,
+              Card(
+                elevation: 3,
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 10, left: 10, top: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: TextBold(
-                          text: 'Book a\nRide',
-                          fontSize: 18,
-                          color: Colors.white,
+                child: Container(
+                  height: 125,
+                  width: 175,
+                  decoration: BoxDecoration(
+                    color: grey,
+                    borderRadius: BorderRadius.circular(10),
+                    image: const DecorationImage(
+                        opacity: 175,
+                        image: AssetImage(
+                          'assets/images/graphics1.jpg',
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: ButtonWidget(
-                          color: Colors.white,
-                          textcolor: Colors.black,
-                          radius: 100,
-                          opacity: 1,
-                          fontSize: 10,
-                          width: 60,
-                          height: 25,
-                          label: 'Ride now',
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const MapScreen()));
-                          },
+                        fit: BoxFit.cover),
+                  ),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(right: 10, left: 10, top: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: TextBold(
+                            text: 'Book a\nRide',
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    ],
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: ButtonWidget(
+                            color: Colors.white,
+                            textcolor: grey,
+                            radius: 100,
+                            opacity: 1,
+                            fontSize: 10,
+                            width: 60,
+                            height: 25,
+                            label: 'Ride now',
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const MapScreen()));
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-              Container(
-                height: 125,
-                width: 175,
-                decoration: BoxDecoration(
-                  color: Colors.black,
+              Card(
+                elevation: 3,
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 10, left: 10, top: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: TextBold(
-                          text: 'Book a\nDelivery',
-                          fontSize: 18,
-                          color: Colors.white,
+                child: Container(
+                  height: 125,
+                  width: 175,
+                  decoration: BoxDecoration(
+                    color: grey,
+                    borderRadius: BorderRadius.circular(10),
+                    image: const DecorationImage(
+                        opacity: 175,
+                        image: AssetImage(
+                          'assets/images/graphics2.jpg',
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: ButtonWidget(
-                          radius: 100,
-                          opacity: 1,
-                          fontSize: 10,
-                          color: Colors.white,
-                          textcolor: Colors.black,
-                          width: 60,
-                          height: 25,
-                          label: 'Book now',
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const DeliveryPage()));
-                          },
+                        fit: BoxFit.cover),
+                  ),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(right: 10, left: 10, top: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: TextBold(
+                            text: 'Book a\nDelivery',
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    ],
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: ButtonWidget(
+                            radius: 100,
+                            opacity: 1,
+                            fontSize: 10,
+                            color: Colors.white,
+                            textcolor: grey,
+                            width: 60,
+                            height: 25,
+                            label: 'Book now',
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const DeliveryPage()));
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -306,79 +331,105 @@ class _HomeScreenState extends State<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                height: 125,
-                width: 175,
-                decoration: BoxDecoration(
-                  color: Colors.black,
+              Card(
+                elevation: 3,
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 10, left: 10, top: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: TextBold(
-                          text: 'Pabili',
-                          fontSize: 18,
-                          color: Colors.white,
+                child: Container(
+                  height: 125,
+                  width: 175,
+                  decoration: BoxDecoration(
+                    color: grey,
+                    borderRadius: BorderRadius.circular(10),
+                    image: const DecorationImage(
+                        opacity: 175,
+                        image: AssetImage(
+                          'assets/images/graphics4.jpg',
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: ButtonWidget(
-                          radius: 100,
-                          opacity: 1,
-                          fontSize: 10,
-                          color: Colors.white,
-                          textcolor: Colors.black,
-                          width: 60,
-                          height: 25,
-                          label: 'Coming soon',
-                          onPressed: () {},
+                        fit: BoxFit.cover),
+                  ),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(right: 10, left: 10, top: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: TextBold(
+                            text: 'Pabili',
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    ],
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: ButtonWidget(
+                            radius: 100,
+                            opacity: 1,
+                            fontSize: 10,
+                            color: Colors.white,
+                            textcolor: grey,
+                            width: 60,
+                            height: 25,
+                            label: 'Coming soon',
+                            onPressed: () {},
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-              Container(
-                height: 125,
-                width: 175,
-                decoration: BoxDecoration(
-                  color: Colors.black,
+              Card(
+                elevation: 3,
+                shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 10, left: 10, top: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: TextBold(
-                          text: 'Food\nDelivery',
-                          fontSize: 18,
-                          color: Colors.white,
+                child: Container(
+                  height: 125,
+                  width: 175,
+                  decoration: BoxDecoration(
+                    color: grey,
+                    borderRadius: BorderRadius.circular(10),
+                    image: const DecorationImage(
+                        opacity: 175,
+                        image: AssetImage(
+                          'assets/images/graphics3.jpg',
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: ButtonWidget(
-                          radius: 100,
-                          opacity: 1,
-                          fontSize: 10,
-                          color: Colors.white,
-                          textcolor: Colors.black,
-                          width: 60,
-                          height: 25,
-                          label: 'Coming soon',
-                          onPressed: () {},
+                        fit: BoxFit.cover),
+                  ),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(right: 10, left: 10, top: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: TextBold(
+                            text: 'Food\nDelivery',
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    ],
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: ButtonWidget(
+                            radius: 100,
+                            opacity: 1,
+                            fontSize: 10,
+                            color: Colors.white,
+                            textcolor: grey,
+                            width: 60,
+                            height: 25,
+                            label: 'Coming soon',
+                            onPressed: () {},
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -433,12 +484,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       return distance1.compareTo(distance2);
                     });
                   });
-                  for (int i = 0; i < sortedData.length; i++) {
-                    print(sortedData[i]['name']);
-                  }
 
                   return SizedBox(
-                    height: 140,
+                    height: 120,
                     child: ListView.builder(
                         itemCount: sortedData.length,
                         scrollDirection: Axis.horizontal,
@@ -466,21 +514,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   data.docs[index]
                                                       ['profilePicture']),
                                             ),
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            DriverProfilePage(
-                                                              driverId: data
-                                                                  .docs[index]
-                                                                  .id,
-                                                            )));
-                                              },
-                                              child: TextBold(
-                                                text: 'Reviews',
-                                                fontSize: 12,
-                                                color: Colors.green,
+                                            SizedBox(
+                                              height: 28,
+                                              child: TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              DriverProfilePage(
+                                                                driverId: data
+                                                                    .docs[index]
+                                                                    .id,
+                                                              )));
+                                                },
+                                                child: TextBold(
+                                                  text: 'Reviews',
+                                                  fontSize: 12,
+                                                  color: Colors.green,
+                                                ),
                                               ),
                                             ),
                                           ],
@@ -500,22 +551,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   text:
                                                       'Name: ${data.docs[index]['name']}',
                                                   fontSize: 12,
-                                                  color: grey),
-                                            ),
-                                            SizedBox(
-                                              width: 120,
-                                              child: TextRegular(
-                                                  text:
-                                                      'Vehicle: ${data.docs[index]['vehicle']}',
-                                                  fontSize: 11,
-                                                  color: grey),
-                                            ),
-                                            SizedBox(
-                                              width: 120,
-                                              child: TextRegular(
-                                                  text:
-                                                      'Plate No.: ${data.docs[index]['plateNumber']}',
-                                                  fontSize: 11,
                                                   color: grey),
                                             ),
                                             TextRegular(
