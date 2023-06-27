@@ -17,7 +17,7 @@ import 'package:phara/widgets/toast_widget.dart';
 import '../../plugins/my_location.dart';
 import '../../utils/colors.dart';
 import '../../utils/keys.dart';
-import '../home_screen.dart';
+import '../map_screen.dart';
 
 class TrackingOfDriverPage extends StatefulWidget {
   final Map tripDetails;
@@ -374,7 +374,7 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
 
                   showToast('Thankyou for your booking!');
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => const HomeScreen()));
+                      builder: (context) => const MapScreen()));
                 },
                 child: TextBold(
                     text: 'Continue', fontSize: 18, color: Colors.amber),

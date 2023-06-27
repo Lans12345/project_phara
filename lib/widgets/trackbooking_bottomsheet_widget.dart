@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:phara/screens/home_screen.dart';
+import 'package:phara/screens/map_screen.dart';
 import 'package:phara/screens/pages/tracking_driver_page.dart';
 import 'package:phara/widgets/text_widget.dart';
 
@@ -203,7 +203,7 @@ class _TrackBookingBottomSheetWidgetState
                                   Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const HomeScreen()));
+                                              const MapScreen()));
                                 },
                                 child: SizedBox(
                                   width: 250,

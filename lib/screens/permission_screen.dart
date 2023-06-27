@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 
-import 'package:phara/screens/home_screen.dart';
+import 'package:phara/screens/map_screen.dart';
 import 'package:phara/widgets/button_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
 
@@ -95,7 +95,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                         );
                       } else {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => const HomeScreen()));
+                            builder: (context) => const MapScreen()));
                         Fluttertoast.showToast(
                           toastLength: Toast.LENGTH_LONG,
                           msg: 'Location Services Enabled',

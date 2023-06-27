@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:phara/screens/auth/login_screen.dart';
 import 'package:phara/screens/home_screen.dart';
+import 'package:phara/screens/map_screen.dart';
 import 'package:phara/screens/pages/aboutus_page.dart';
 import 'package:phara/screens/pages/contactus_page.dart';
 import 'package:phara/screens/pages/delivery/delivery_page.dart';
@@ -362,6 +363,19 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   MaterialPageRoute(
                                       builder: (context) =>
                                           const HomeScreen()));
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.map_outlined),
+                            title: TextRegular(
+                              text: 'Book Now',
+                              fontSize: 14,
+                              color: Colors.grey,
+                            ),
+                            onTap: () {
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) => const MapScreen()));
                             },
                           ),
                           ListTile(
