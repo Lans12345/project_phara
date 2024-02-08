@@ -48,7 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
       mainHome(),
       const MessagesTab(),
       const NotifTab(),
-      const MapScreen(),
+      MapScreen(
+        inHome: true,
+      ),
       const TripsPage(),
     ];
     return Scaffold(
@@ -62,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
               foregroundColor: grey,
               backgroundColor: Colors.white,
               title: TextRegular(
-                text: 'HOME',
+                text: 'Home',
                 fontSize: 24,
                 color: grey,
               ),
@@ -261,7 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             label: 'Ride now',
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const MapScreen()));
+                                  builder: (context) => MapScreen()));
                             },
                           ),
                         ),

@@ -202,8 +202,7 @@ class _TrackBookingBottomSheetWidgetState
                                 onPressed: () {
                                   Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              const MapScreen()));
+                                          builder: (context) => MapScreen()));
                                 },
                                 child: SizedBox(
                                   width: 250,

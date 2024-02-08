@@ -28,11 +28,17 @@ import '../data/distance_calculations.dart';
 import '../utils/keys.dart';
 import '../widgets/book_bottomsheet_widget.dart';
 import '../widgets/button_widget.dart';
+import '../widgets/drawer_widget.dart';
 import '../widgets/toast_widget.dart';
 import 'pages/messages_tab.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+  bool inHome;
+
+  MapScreen({
+    super.key,
+    this.inHome = false,
+  });
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -214,6 +220,11 @@ class _MapScreenState extends State<MapScreen> {
         target: LatLng(lat, long), zoom: 16, bearing: 45, tilt: 40);
     return hasLoaded && lat != 0 && long != 0
         ? Scaffold(
+            drawer: widget.inHome
+                ? const Drawer(
+                    child: DrawerWidget(),
+                  )
+                : null,
             appBar: AppBar(
               centerTitle: true,
               foregroundColor: grey,
@@ -1310,8 +1321,10 @@ class _MapScreenState extends State<MapScreen> {
           ),
           SpeedDialChild(
               onTap: () {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const MapScreen()));
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => MapScreen(
+                          inHome: widget.inHome,
+                        )));
               },
               label: 'Refresh',
               labelStyle: const TextStyle(

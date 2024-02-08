@@ -373,8 +373,8 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
                   });
 
                   showToast('Thankyou for your booking!');
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => const MapScreen()));
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => MapScreen()));
                 },
                 child: TextBold(
                     text: 'Continue', fontSize: 18, color: Colors.amber),

@@ -212,6 +212,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                                     .number,
                                                             label:
                                                                 'Mobile Number',
+                                                            hintColor:
+                                                                Colors.black,
                                                             controller:
                                                                 numberController,
                                                             validator: (value) {
@@ -373,7 +375,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             ),
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const MapScreen()));
+                                  builder: (context) => MapScreen()));
                             },
                           ),
                           ListTile(
