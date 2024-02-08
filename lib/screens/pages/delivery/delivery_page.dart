@@ -13,7 +13,6 @@ import 'package:phara/screens/pages/delivery/delivery_history_page.dart';
 import 'package:phara/services/add_delivery.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/button_widget.dart';
-import 'package:phara/widgets/drawer_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
 import 'package:google_maps_webservice/places.dart' as location;
 import 'package:google_api_headers/google_api_headers.dart';
@@ -112,7 +111,6 @@ class DeliveryPageState extends State<DeliveryPage> {
       zoom: 18,
     );
     return Scaffold(
-      drawer: const DrawerWidget(),
       appBar: AppBar(
         centerTitle: true,
         foregroundColor: grey,
@@ -1034,8 +1032,7 @@ class DeliveryPageState extends State<DeliveryPage> {
                                                                             fontFamily:
                                                                                 'QRegular'),
                                                                       ),
-                                                                      actions: <
-                                                                          Widget>[
+                                                                      actions: <Widget>[
                                                                         MaterialButton(
                                                                           onPressed: () =>
                                                                               Navigator.of(context).pop(true),

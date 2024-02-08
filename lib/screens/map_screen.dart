@@ -22,7 +22,6 @@ import 'package:phara/screens/pages/driver_profile_page.dart';
 import 'package:phara/screens/pages/notif_page.dart';
 import 'package:phara/screens/pages/trips_page.dart';
 import 'package:phara/utils/colors.dart';
-import 'package:phara/widgets/drawer_widget.dart';
 import 'package:phara/widgets/text_widget.dart';
 
 import '../data/distance_calculations.dart';
@@ -215,9 +214,6 @@ class _MapScreenState extends State<MapScreen> {
         target: LatLng(lat, long), zoom: 16, bearing: 45, tilt: 40);
     return hasLoaded && lat != 0 && long != 0
         ? Scaffold(
-            drawer: const Drawer(
-              child: DrawerWidget(),
-            ),
             appBar: AppBar(
               centerTitle: true,
               foregroundColor: grey,

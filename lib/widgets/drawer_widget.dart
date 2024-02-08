@@ -59,11 +59,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (BuildContext context) => Padding(
-            padding: const EdgeInsets.only(left: 30, right: 30),
+          builder: (BuildContext context) => const Padding(
+            padding: EdgeInsets.only(left: 30, right: 30),
             child: AlertDialog(
                 title: Row(
-              children: const [
+              children: [
                 CircularProgressIndicator(
                   color: Colors.black,
                 ),
@@ -372,9 +372,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               color: Colors.grey,
                             ),
                             onTap: () {
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) => const MapScreen()));
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const MapScreen()));
                             },
                           ),
                           ListTile(
@@ -385,10 +384,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               color: Colors.grey,
                             ),
                             onTap: () {
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const DeliveryPage()));
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const DeliveryPage()));
                             },
                           ),
                           ListTile(
