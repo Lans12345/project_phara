@@ -189,68 +189,7 @@ class DeliveryPageState extends State<DeliveryPage> {
                                     ),
                                     GestureDetector(
                                       onTap: () async {
-                                        location.Prediction? p =
-                                            await PlacesAutocomplete.show(
-                                                mode: Mode.overlay,
-                                                context: context,
-                                                apiKey: kGoogleApiKey,
-                                                language: 'en',
-                                                strictbounds: false,
-                                                types: [""],
-                                                decoration: InputDecoration(
-                                                    hintText:
-                                                        'Search Pick-up Location',
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                            borderSide:
-                                                                const BorderSide(
-                                                                    color: Colors
-                                                                        .white))),
-                                                components: [
-                                                  location.Component(
-                                                      location
-                                                          .Component.country,
-                                                      "ph")
-                                                ]);
-
-                                        location.GoogleMapsPlaces places =
-                                            location.GoogleMapsPlaces(
-                                                apiKey: kGoogleApiKey,
-                                                apiHeaders:
-                                                    await const GoogleApiHeaders()
-                                                        .getHeaders());
-
-                                        location.PlacesDetailsResponse detail =
-                                            await places.getDetailsByPlaceId(
-                                                p!.placeId!);
-
-                                        addMyMarker1(
-                                            detail
-                                                .result.geometry!.location.lat,
-                                            detail
-                                                .result.geometry!.location.lng);
-
-                                        mapController!.animateCamera(
-                                            CameraUpdate.newLatLngZoom(
-                                                LatLng(
-                                                    detail.result.geometry!
-                                                        .location.lat,
-                                                    detail.result.geometry!
-                                                        .location.lng),
-                                                18.0));
-
-                                        setState(() {
-                                          pickup = detail.result.name;
-                                          pickUp = LatLng(
-                                              detail.result.geometry!.location
-                                                  .lat,
-                                              detail.result.geometry!.location
-                                                  .lng);
-                                        });
+                                        searchPickup();
                                       },
                                       child: Container(
                                         height: 35,
@@ -307,137 +246,7 @@ class DeliveryPageState extends State<DeliveryPage> {
                                     ),
                                     GestureDetector(
                                       onTap: () async {
-                                        location.Prediction? p =
-                                            await PlacesAutocomplete.show(
-                                                mode: Mode.overlay,
-                                                context: context,
-                                                apiKey: kGoogleApiKey,
-                                                language: 'en',
-                                                strictbounds: false,
-                                                types: [""],
-                                                decoration: InputDecoration(
-                                                    hintText:
-                                                        'Search Drop-off Location',
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                            borderSide:
-                                                                const BorderSide(
-                                                                    color: Colors
-                                                                        .white))),
-                                                components: [
-                                                  location.Component(
-                                                      location
-                                                          .Component.country,
-                                                      "ph")
-                                                ]);
-
-                                        location.GoogleMapsPlaces places =
-                                            location.GoogleMapsPlaces(
-                                                apiKey: kGoogleApiKey,
-                                                apiHeaders:
-                                                    await const GoogleApiHeaders()
-                                                        .getHeaders());
-
-                                        location.PlacesDetailsResponse detail =
-                                            await places.getDetailsByPlaceId(
-                                                p!.placeId!);
-
-                                        addMyMarker12(
-                                            detail
-                                                .result.geometry!.location.lat,
-                                            detail
-                                                .result.geometry!.location.lng);
-
-                                        setState(() {
-                                          drop = detail.result.name;
-
-                                          dropOff = LatLng(
-                                              detail.result.geometry!.location
-                                                  .lat,
-                                              detail.result.geometry!.location
-                                                  .lng);
-                                        });
-
-                                        PolylineResult result =
-                                            await polylinePoints
-                                                .getRouteBetweenCoordinates(
-                                                    kGoogleApiKey,
-                                                    PointLatLng(pickUp.latitude,
-                                                        pickUp.longitude),
-                                                    PointLatLng(
-                                                        detail.result.geometry!
-                                                            .location.lat,
-                                                        detail.result.geometry!
-                                                            .location.lng));
-                                        if (result.points.isNotEmpty) {
-                                          polylineCoordinates = result.points
-                                              .map((point) => LatLng(
-                                                  point.latitude,
-                                                  point.longitude))
-                                              .toList();
-                                        }
-                                        setState(() {
-                                          _poly = Polyline(
-                                              color: Colors.red,
-                                              polylineId:
-                                                  const PolylineId('route'),
-                                              points: polylineCoordinates,
-                                              width: 4);
-                                        });
-
-                                        mapController!.animateCamera(
-                                            CameraUpdate.newLatLngZoom(
-                                                LatLng(
-                                                    detail.result.geometry!
-                                                        .location.lat,
-                                                    detail.result.geometry!
-                                                        .location.lng),
-                                                18.0));
-
-                                        double miny = (pickUp.latitude <=
-                                                dropOff.latitude)
-                                            ? pickUp.latitude
-                                            : dropOff.latitude;
-                                        double minx = (pickUp.longitude <=
-                                                dropOff.longitude)
-                                            ? pickUp.longitude
-                                            : dropOff.longitude;
-                                        double maxy = (pickUp.latitude <=
-                                                dropOff.latitude)
-                                            ? dropOff.latitude
-                                            : pickUp.latitude;
-                                        double maxx = (pickUp.longitude <=
-                                                dropOff.longitude)
-                                            ? dropOff.longitude
-                                            : pickUp.longitude;
-
-                                        double southWestLatitude = miny;
-                                        double southWestLongitude = minx;
-
-                                        double northEastLatitude = maxy;
-                                        double northEastLongitude = maxx;
-
-                                        // Accommodate the two locations within the
-                                        // camera view of the map
-                                        mapController!.animateCamera(
-                                          CameraUpdate.newLatLngBounds(
-                                            LatLngBounds(
-                                              northeast: LatLng(
-                                                northEastLatitude,
-                                                northEastLongitude,
-                                              ),
-                                              southwest: LatLng(
-                                                southWestLatitude,
-                                                southWestLongitude,
-                                              ),
-                                            ),
-                                            100.0,
-                                          ),
-                                        );
+                                        searchDropoff();
                                       },
                                       child: Container(
                                         height: 35,
@@ -1145,6 +954,135 @@ class DeliveryPageState extends State<DeliveryPage> {
     super.dispose();
   }
 
+  searchPickup() async {
+    location.Prediction? p = await PlacesAutocomplete.show(
+        mode: Mode.overlay,
+        context: context,
+        apiKey: kGoogleApiKey,
+        language: 'en',
+        strictbounds: false,
+        types: [""],
+        decoration: InputDecoration(
+            hintText: 'Search Pick-up Location',
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: const BorderSide(color: Colors.white))),
+        components: [location.Component(location.Component.country, "ph")]);
+
+    location.GoogleMapsPlaces places = location.GoogleMapsPlaces(
+        apiKey: kGoogleApiKey,
+        apiHeaders: await const GoogleApiHeaders().getHeaders());
+
+    location.PlacesDetailsResponse detail =
+        await places.getDetailsByPlaceId(p!.placeId!);
+
+    addMyMarker1(detail.result.geometry!.location.lat,
+        detail.result.geometry!.location.lng);
+
+    mapController!.animateCamera(CameraUpdate.newLatLngZoom(
+        LatLng(detail.result.geometry!.location.lat,
+            detail.result.geometry!.location.lng),
+        18.0));
+
+    setState(() {
+      pickup = detail.result.name;
+      pickUp = LatLng(detail.result.geometry!.location.lat,
+          detail.result.geometry!.location.lng);
+    });
+  }
+
+  searchDropoff() async {
+    location.Prediction? p = await PlacesAutocomplete.show(
+        mode: Mode.overlay,
+        context: context,
+        apiKey: kGoogleApiKey,
+        language: 'en',
+        strictbounds: false,
+        types: [""],
+        decoration: InputDecoration(
+            hintText: 'Search Drop-off Location',
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: const BorderSide(color: Colors.white))),
+        components: [location.Component(location.Component.country, "ph")]);
+
+    location.GoogleMapsPlaces places = location.GoogleMapsPlaces(
+        apiKey: kGoogleApiKey,
+        apiHeaders: await const GoogleApiHeaders().getHeaders());
+
+    location.PlacesDetailsResponse detail =
+        await places.getDetailsByPlaceId(p!.placeId!);
+
+    addMyMarker12(detail.result.geometry!.location.lat,
+        detail.result.geometry!.location.lng);
+
+    setState(() {
+      drop = detail.result.name;
+
+      dropOff = LatLng(detail.result.geometry!.location.lat,
+          detail.result.geometry!.location.lng);
+    });
+
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        kGoogleApiKey,
+        PointLatLng(pickUp.latitude, pickUp.longitude),
+        PointLatLng(detail.result.geometry!.location.lat,
+            detail.result.geometry!.location.lng));
+    if (result.points.isNotEmpty) {
+      polylineCoordinates = result.points
+          .map((point) => LatLng(point.latitude, point.longitude))
+          .toList();
+    }
+    setState(() {
+      _poly = Polyline(
+          color: Colors.red,
+          polylineId: const PolylineId('route'),
+          points: polylineCoordinates,
+          width: 4);
+    });
+
+    mapController!.animateCamera(CameraUpdate.newLatLngZoom(
+        LatLng(detail.result.geometry!.location.lat,
+            detail.result.geometry!.location.lng),
+        18.0));
+
+    double miny = (pickUp.latitude <= dropOff.latitude)
+        ? pickUp.latitude
+        : dropOff.latitude;
+    double minx = (pickUp.longitude <= dropOff.longitude)
+        ? pickUp.longitude
+        : dropOff.longitude;
+    double maxy = (pickUp.latitude <= dropOff.latitude)
+        ? dropOff.latitude
+        : pickUp.latitude;
+    double maxx = (pickUp.longitude <= dropOff.longitude)
+        ? dropOff.longitude
+        : pickUp.longitude;
+
+    double southWestLatitude = miny;
+    double southWestLongitude = minx;
+
+    double northEastLatitude = maxy;
+    double northEastLongitude = maxx;
+
+    // Accommodate the two locations within the
+    // camera view of the map
+    mapController!.animateCamera(
+      CameraUpdate.newLatLngBounds(
+        LatLngBounds(
+          northeast: LatLng(
+            northEastLatitude,
+            northEastLongitude,
+          ),
+          southwest: LatLng(
+            southWestLatitude,
+            southWestLongitude,
+          ),
+        ),
+        100.0,
+      ),
+    );
+  }
   // Future<void> _createTutorial() async {
   //   final targets = [
   //     TargetFocus(

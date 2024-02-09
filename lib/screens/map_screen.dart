@@ -340,72 +340,7 @@ class _MapScreenState extends State<MapScreen> {
                                     ),
                                     GestureDetector(
                                       onTap: () async {
-                                        location.Prediction? p =
-                                            await PlacesAutocomplete.show(
-                                                mode: Mode.overlay,
-                                                context: context,
-                                                apiKey: kGoogleApiKey,
-                                                language: 'en',
-                                                strictbounds: false,
-                                                types: [""],
-                                                decoration: InputDecoration(
-                                                    hintText:
-                                                        'Search Pick-up Location',
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                            borderSide:
-                                                                const BorderSide(
-                                                                    color: Colors
-                                                                        .white))),
-                                                components: [
-                                                  location.Component(
-                                                      location
-                                                          .Component.country,
-                                                      "ph")
-                                                ]);
-
-                                        location.GoogleMapsPlaces places =
-                                            location.GoogleMapsPlaces(
-                                                apiKey: kGoogleApiKey,
-                                                apiHeaders:
-                                                    await const GoogleApiHeaders()
-                                                        .getHeaders());
-
-                                        location.PlacesDetailsResponse detail =
-                                            await places.getDetailsByPlaceId(
-                                                p!.placeId!);
-
-                                        addMyMarker1(
-                                            detail
-                                                .result.geometry!.location.lat,
-                                            detail
-                                                .result.geometry!.location.lng);
-
-                                        mapController!.animateCamera(
-                                            CameraUpdate.newLatLngZoom(
-                                                LatLng(
-                                                    detail.result.geometry!
-                                                        .location.lat,
-                                                    detail.result.geometry!
-                                                        .location.lng),
-                                                18.0));
-
-                                        setState(() {
-                                          pickup = detail.result.name;
-                                          // pickUp = LatLng(
-                                          //     detail.result.geometry!.location
-                                          //         .lat,
-                                          //     detail.result.geometry!.location
-                                          //         .lng);
-                                          lat = detail
-                                              .result.geometry!.location.lat;
-                                          long = detail
-                                              .result.geometry!.location.lng;
-                                        });
+                                        searchPickup();
                                       },
                                       child: Container(
                                         height: 35,
@@ -459,138 +394,7 @@ class _MapScreenState extends State<MapScreen> {
                                     ),
                                     GestureDetector(
                                       onTap: () async {
-                                        setState(() {
-                                          _poly = const Polyline(
-                                              polylineId: PolylineId('new'));
-                                        });
-                                        location.Prediction? p =
-                                            await PlacesAutocomplete.show(
-                                                mode: Mode.overlay,
-                                                context: context,
-                                                apiKey: kGoogleApiKey,
-                                                language: 'en',
-                                                strictbounds: false,
-                                                types: [""],
-                                                decoration: InputDecoration(
-                                                    hintText:
-                                                        'Search Drop-off Location',
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20),
-                                                            borderSide:
-                                                                const BorderSide(
-                                                                    color: Colors
-                                                                        .white))),
-                                                components: [
-                                                  location.Component(
-                                                      location
-                                                          .Component.country,
-                                                      "ph")
-                                                ]);
-
-                                        location.GoogleMapsPlaces places =
-                                            location.GoogleMapsPlaces(
-                                                apiKey: kGoogleApiKey,
-                                                apiHeaders:
-                                                    await const GoogleApiHeaders()
-                                                        .getHeaders());
-
-                                        location.PlacesDetailsResponse detail =
-                                            await places.getDetailsByPlaceId(
-                                                p!.placeId!);
-
-                                        addMyMarker12(
-                                            detail
-                                                .result.geometry!.location.lat,
-                                            detail
-                                                .result.geometry!.location.lng);
-
-                                        setState(() {
-                                          drop = detail.result.name;
-
-                                          dropOff = LatLng(
-                                              detail.result.geometry!.location
-                                                  .lat,
-                                              detail.result.geometry!.location
-                                                  .lng);
-                                        });
-
-                                        PolylineResult result =
-                                            await polylinePoints
-                                                .getRouteBetweenCoordinates(
-                                                    kGoogleApiKey,
-                                                    PointLatLng(lat, long),
-                                                    PointLatLng(
-                                                        detail.result.geometry!
-                                                            .location.lat,
-                                                        detail.result.geometry!
-                                                            .location.lng));
-                                        if (result.points.isNotEmpty) {
-                                          polylineCoordinates = result.points
-                                              .map((point) => LatLng(
-                                                  point.latitude,
-                                                  point.longitude))
-                                              .toList();
-                                        }
-                                        setState(() {
-                                          _poly = Polyline(
-                                              color: Colors.red,
-                                              polylineId:
-                                                  const PolylineId('route'),
-                                              points: polylineCoordinates,
-                                              width: 4);
-                                        });
-
-                                        mapController!.animateCamera(
-                                            CameraUpdate.newLatLngZoom(
-                                                LatLng(
-                                                    detail.result.geometry!
-                                                        .location.lat,
-                                                    detail.result.geometry!
-                                                        .location.lng),
-                                                18.0));
-
-                                        double miny = (lat <= dropOff.latitude)
-                                            ? lat
-                                            : dropOff.latitude;
-                                        double minx =
-                                            (long <= dropOff.longitude)
-                                                ? long
-                                                : dropOff.longitude;
-                                        double maxy = (lat <= dropOff.latitude)
-                                            ? dropOff.latitude
-                                            : lat;
-                                        double maxx =
-                                            (long <= dropOff.longitude)
-                                                ? dropOff.longitude
-                                                : long;
-
-                                        double southWestLatitude = miny;
-                                        double southWestLongitude = minx;
-
-                                        double northEastLatitude = maxy;
-                                        double northEastLongitude = maxx;
-
-                                        // Accommodate the two locations within the
-                                        // camera view of the map
-                                        mapController!.animateCamera(
-                                          CameraUpdate.newLatLngBounds(
-                                            LatLngBounds(
-                                              northeast: LatLng(
-                                                northEastLatitude,
-                                                northEastLongitude,
-                                              ),
-                                              southwest: LatLng(
-                                                southWestLatitude,
-                                                southWestLongitude,
-                                              ),
-                                            ),
-                                            100.0,
-                                          ),
-                                        );
+                                        searchDropoff();
                                       },
                                       child: Container(
                                         height: 35,
@@ -655,307 +459,7 @@ class _MapScreenState extends State<MapScreen> {
                                             opacity: 1,
                                             label: 'Book Now',
                                             onPressed: () async {
-                                              List<Placemark> p =
-                                                  await placemarkFromCoordinates(
-                                                      lat, long);
-
-                                              Placemark place = p[0];
-
-                                              // ignore: use_build_context_synchronously
-
-                                              // ignore: use_build_context_synchronously
-
-                                              showModalBottomSheet(
-                                                  //     isScrollControlled: true,
-                                                  //     context: context,
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return SizedBox(
-                                                      height: 275,
-                                                      child: Column(
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    right: 10),
-                                                            child: Align(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .topRight,
-                                                              child: TextButton
-                                                                  .icon(
-                                                                onPressed: () {
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                  showModalBottomSheet(
-                                                                      isScrollControlled:
-                                                                          true,
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          ((context) {
-                                                                        return BookBottomSheetWidget(
-                                                                          locationData: {
-                                                                            'pickuplat':
-                                                                                lat,
-                                                                            'pickuplong':
-                                                                                long,
-                                                                            'pickup':
-                                                                                pickup,
-                                                                            'destinationlat':
-                                                                                dropOff.latitude,
-                                                                            'destinationlong':
-                                                                                dropOff.longitude,
-                                                                            'dropoff':
-                                                                                drop
-                                                                          },
-                                                                          driverId:
-                                                                              nearestDriverId,
-                                                                          coordinates: {
-                                                                            'lat':
-                                                                                lat,
-                                                                            'long':
-                                                                                long,
-                                                                            'pickupLocation':
-                                                                                '${place.street}, ${place.locality}, ${place.administrativeArea}'
-                                                                          },
-                                                                        );
-                                                                      }));
-                                                                },
-                                                                icon:
-                                                                    const Icon(
-                                                                  Icons
-                                                                      .my_location,
-                                                                  color: Colors
-                                                                      .red,
-                                                                ),
-                                                                label:
-                                                                    TextRegular(
-                                                                  text:
-                                                                      'Select nearest',
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                      .red,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Center(
-                                                            child: StreamBuilder<
-                                                                    QuerySnapshot>(
-                                                                stream: FirebaseFirestore
-                                                                    .instance
-                                                                    .collection(
-                                                                        'Drivers')
-                                                                    .where(
-                                                                        'isActive',
-                                                                        isEqualTo:
-                                                                            true)
-                                                                    .snapshots(),
-                                                                builder: (BuildContext
-                                                                        context,
-                                                                    AsyncSnapshot<
-                                                                            QuerySnapshot>
-                                                                        snapshot) {
-                                                                  if (snapshot
-                                                                      .hasError) {
-                                                                    print(snapshot
-                                                                        .error);
-                                                                    return const Center(
-                                                                        child: Text(
-                                                                            'Error'));
-                                                                  }
-                                                                  if (snapshot
-                                                                          .connectionState ==
-                                                                      ConnectionState
-                                                                          .waiting) {
-                                                                    return const Padding(
-                                                                      padding: EdgeInsets
-                                                                          .only(
-                                                                              top: 50),
-                                                                      child: Center(
-                                                                          child: CircularProgressIndicator(
-                                                                        color: Colors
-                                                                            .black,
-                                                                      )),
-                                                                    );
-                                                                  }
-
-                                                                  final data =
-                                                                      snapshot
-                                                                          .requireData;
-                                                                  final sortedData =
-                                                                      List<QueryDocumentSnapshot>.from(
-                                                                          data.docs);
-
-                                                                  WidgetsBinding
-                                                                      .instance
-                                                                      .addPostFrameCallback(
-                                                                          (timeStamp) {
-                                                                    sortedData
-                                                                        .sort((a,
-                                                                            b) {
-                                                                      nearestDriverId = data
-                                                                          .docs[
-                                                                              0]
-                                                                          .id;
-                                                                      final double
-                                                                          lat1 =
-                                                                          a['location']
-                                                                              [
-                                                                              'lat'];
-                                                                      final double
-                                                                          long1 =
-                                                                          a['location']
-                                                                              [
-                                                                              'long'];
-                                                                      final double
-                                                                          lat2 =
-                                                                          b['location']
-                                                                              [
-                                                                              'lat'];
-                                                                      final double
-                                                                          long2 =
-                                                                          b['location']
-                                                                              [
-                                                                              'long'];
-
-                                                                      final double
-                                                                          distance1 =
-                                                                          calculateDistance(
-                                                                              lat,
-                                                                              long,
-                                                                              lat1,
-                                                                              long1);
-                                                                      final double
-                                                                          distance2 =
-                                                                          calculateDistance(
-                                                                              lat,
-                                                                              long,
-                                                                              lat2,
-                                                                              long2);
-
-                                                                      return distance1
-                                                                          .compareTo(
-                                                                              distance2);
-                                                                    });
-                                                                  });
-
-                                                                  return SizedBox(
-                                                                    height: 220,
-                                                                    child: ListView.builder(
-                                                                        itemCount: sortedData.length,
-                                                                        scrollDirection: Axis.horizontal,
-                                                                        itemBuilder: (context, index) {
-                                                                          return Padding(
-                                                                            padding: const EdgeInsets.fromLTRB(
-                                                                                10,
-                                                                                20,
-                                                                                10,
-                                                                                20),
-                                                                            child:
-                                                                                Card(
-                                                                              child: Padding(
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: Column(
-                                                                                  children: [
-                                                                                    Row(
-                                                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                      children: [
-                                                                                        Column(
-                                                                                          children: [
-                                                                                            CircleAvatar(
-                                                                                              minRadius: 25,
-                                                                                              maxRadius: 25,
-                                                                                              backgroundImage: NetworkImage(data.docs[index]['profilePicture']),
-                                                                                            ),
-                                                                                            TextButton(
-                                                                                              onPressed: () {
-                                                                                                Navigator.of(context).push(MaterialPageRoute(
-                                                                                                    builder: (context) => DriverProfilePage(
-                                                                                                          driverId: data.docs[index].id,
-                                                                                                        )));
-                                                                                              },
-                                                                                              child: TextBold(
-                                                                                                text: 'Reviews',
-                                                                                                fontSize: 12,
-                                                                                                color: Colors.green,
-                                                                                              ),
-                                                                                            ),
-                                                                                          ],
-                                                                                        ),
-                                                                                        const SizedBox(
-                                                                                          width: 15,
-                                                                                        ),
-                                                                                        Column(
-                                                                                          mainAxisAlignment: MainAxisAlignment.start,
-                                                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                          children: [
-                                                                                            SizedBox(
-                                                                                              width: 120,
-                                                                                              child: TextBold(text: 'Name: ${data.docs[index]['name']}', fontSize: 12, color: grey),
-                                                                                            ),
-                                                                                            SizedBox(
-                                                                                              width: 120,
-                                                                                              child: TextRegular(text: 'Vehicle: ${data.docs[index]['vehicle']}', fontSize: 11, color: grey),
-                                                                                            ),
-                                                                                            SizedBox(
-                                                                                              width: 120,
-                                                                                              child: TextRegular(text: 'Plate No.: ${data.docs[index]['plateNumber']}', fontSize: 11, color: grey),
-                                                                                            ),
-                                                                                            TextRegular(text: data.docs[index]['ratings'].length != 0 ? 'Rating: ${(data.docs[index]['stars'] / data.docs[index]['ratings'].length).toStringAsFixed(2)} ★' : 'No ratings', fontSize: 11, color: Colors.amber),
-                                                                                            TextRegular(text: '${calculateDistance(lat, long, data.docs[index]['location']['lat'], data.docs[index]['location']['long']).toStringAsFixed(2)} kms away', fontSize: 11, color: Colors.grey),
-                                                                                          ],
-                                                                                        ),
-                                                                                      ],
-                                                                                    ),
-                                                                                    ButtonWidget(
-                                                                                      width: 125,
-                                                                                      height: 30,
-                                                                                      fontSize: 11,
-                                                                                      label: 'Select Driver',
-                                                                                      onPressed: () {
-                                                                                        Navigator.pop(context);
-                                                                                        showModalBottomSheet(
-                                                                                            isScrollControlled: true,
-                                                                                            context: context,
-                                                                                            builder: ((context) {
-                                                                                              return BookBottomSheetWidget(
-                                                                                                locationData: {
-                                                                                                  'pickuplat': lat,
-                                                                                                  'pickuplong': long,
-                                                                                                  'pickup': pickup,
-                                                                                                  'destinationlat': dropOff.latitude,
-                                                                                                  'destinationlong': dropOff.longitude,
-                                                                                                  'dropoff': drop
-                                                                                                },
-                                                                                                driverId: data.docs[index].id,
-                                                                                                coordinates: {
-                                                                                                  'lat': lat,
-                                                                                                  'long': long,
-                                                                                                  'pickupLocation': '${place.street}, ${place.locality}, ${place.administrativeArea}'
-                                                                                                },
-                                                                                              );
-                                                                                            }));
-                                                                                      },
-                                                                                      opacity: 1,
-                                                                                      radius: 100,
-                                                                                      color: Colors.green,
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          );
-                                                                        }),
-                                                                  );
-                                                                }),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  });
+                                              booknow();
                                             },
                                           )
                                         : const SizedBox(),
@@ -1126,6 +630,136 @@ class _MapScreenState extends State<MapScreen> {
 
   //   box.write('shown', true);
   // }
+
+  searchPickup() async {
+    location.Prediction? p = await PlacesAutocomplete.show(
+        mode: Mode.overlay,
+        context: context,
+        apiKey: kGoogleApiKey,
+        language: 'en',
+        strictbounds: false,
+        types: [""],
+        decoration: InputDecoration(
+            hintText: 'Search Pick-up Location',
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: const BorderSide(color: Colors.white))),
+        components: [location.Component(location.Component.country, "ph")]);
+
+    location.GoogleMapsPlaces places = location.GoogleMapsPlaces(
+        apiKey: kGoogleApiKey,
+        apiHeaders: await const GoogleApiHeaders().getHeaders());
+
+    location.PlacesDetailsResponse detail =
+        await places.getDetailsByPlaceId(p!.placeId!);
+
+    addMyMarker1(detail.result.geometry!.location.lat,
+        detail.result.geometry!.location.lng);
+
+    mapController!.animateCamera(CameraUpdate.newLatLngZoom(
+        LatLng(detail.result.geometry!.location.lat,
+            detail.result.geometry!.location.lng),
+        18.0));
+
+    setState(() {
+      pickup = detail.result.name;
+      // pickUp = LatLng(
+      //     detail.result.geometry!.location
+      //         .lat,
+      //     detail.result.geometry!.location
+      //         .lng);
+      lat = detail.result.geometry!.location.lat;
+      long = detail.result.geometry!.location.lng;
+    });
+  }
+
+  searchDropoff() async {
+    setState(() {
+      _poly = const Polyline(polylineId: PolylineId('new'));
+    });
+    location.Prediction? p = await PlacesAutocomplete.show(
+        mode: Mode.overlay,
+        context: context,
+        apiKey: kGoogleApiKey,
+        language: 'en',
+        strictbounds: false,
+        types: [""],
+        decoration: InputDecoration(
+            hintText: 'Search Drop-off Location',
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: const BorderSide(color: Colors.white))),
+        components: [location.Component(location.Component.country, "ph")]);
+
+    location.GoogleMapsPlaces places = location.GoogleMapsPlaces(
+        apiKey: kGoogleApiKey,
+        apiHeaders: await const GoogleApiHeaders().getHeaders());
+
+    location.PlacesDetailsResponse detail =
+        await places.getDetailsByPlaceId(p!.placeId!);
+
+    addMyMarker12(detail.result.geometry!.location.lat,
+        detail.result.geometry!.location.lng);
+
+    setState(() {
+      drop = detail.result.name;
+
+      dropOff = LatLng(detail.result.geometry!.location.lat,
+          detail.result.geometry!.location.lng);
+    });
+
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        kGoogleApiKey,
+        PointLatLng(lat, long),
+        PointLatLng(detail.result.geometry!.location.lat,
+            detail.result.geometry!.location.lng));
+    if (result.points.isNotEmpty) {
+      polylineCoordinates = result.points
+          .map((point) => LatLng(point.latitude, point.longitude))
+          .toList();
+    }
+    setState(() {
+      _poly = Polyline(
+          color: Colors.red,
+          polylineId: const PolylineId('route'),
+          points: polylineCoordinates,
+          width: 4);
+    });
+
+    mapController!.animateCamera(CameraUpdate.newLatLngZoom(
+        LatLng(detail.result.geometry!.location.lat,
+            detail.result.geometry!.location.lng),
+        18.0));
+
+    double miny = (lat <= dropOff.latitude) ? lat : dropOff.latitude;
+    double minx = (long <= dropOff.longitude) ? long : dropOff.longitude;
+    double maxy = (lat <= dropOff.latitude) ? dropOff.latitude : lat;
+    double maxx = (long <= dropOff.longitude) ? dropOff.longitude : long;
+
+    double southWestLatitude = miny;
+    double southWestLongitude = minx;
+
+    double northEastLatitude = maxy;
+    double northEastLongitude = maxx;
+
+    // Accommodate the two locations within the
+    // camera view of the map
+    mapController!.animateCamera(
+      CameraUpdate.newLatLngBounds(
+        LatLngBounds(
+          northeast: LatLng(
+            northEastLatitude,
+            northEastLongitude,
+          ),
+          southwest: LatLng(
+            southWestLatitude,
+            southWestLongitude,
+          ),
+        ),
+        100.0,
+      ),
+    );
+  }
 
   Widget dialWidget() {
     return Card(
@@ -1348,5 +982,262 @@ class _MapScreenState extends State<MapScreen> {
         ],
       ),
     );
+  }
+
+  booknow() async {
+    List<Placemark> p = await placemarkFromCoordinates(lat, long);
+
+    Placemark place = p[0];
+
+    // ignore: use_build_context_synchronously
+
+    // ignore: use_build_context_synchronously
+
+    showModalBottomSheet(
+        //     isScrollControlled: true,
+        //     context: context,
+        context: context,
+        builder: (context) {
+          return SizedBox(
+            height: 275,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: TextButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        showModalBottomSheet(
+                            isScrollControlled: true,
+                            context: context,
+                            builder: ((context) {
+                              return BookBottomSheetWidget(
+                                locationData: {
+                                  'pickuplat': lat,
+                                  'pickuplong': long,
+                                  'pickup': pickup,
+                                  'destinationlat': dropOff.latitude,
+                                  'destinationlong': dropOff.longitude,
+                                  'dropoff': drop
+                                },
+                                driverId: nearestDriverId,
+                                coordinates: {
+                                  'lat': lat,
+                                  'long': long,
+                                  'pickupLocation':
+                                      '${place.street}, ${place.locality}, ${place.administrativeArea}'
+                                },
+                              );
+                            }));
+                      },
+                      icon: const Icon(
+                        Icons.my_location,
+                        color: Colors.red,
+                      ),
+                      label: TextRegular(
+                        text: 'Select nearest',
+                        fontSize: 12,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('Drivers')
+                          .where('isActive', isEqualTo: true)
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasError) {
+                          print(snapshot.error);
+                          return const Center(child: Text('Error'));
+                        }
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Padding(
+                            padding: EdgeInsets.only(top: 50),
+                            child: Center(
+                                child: CircularProgressIndicator(
+                              color: Colors.black,
+                            )),
+                          );
+                        }
+
+                        final data = snapshot.requireData;
+                        final sortedData =
+                            List<QueryDocumentSnapshot>.from(data.docs);
+
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((timeStamp) {
+                          sortedData.sort((a, b) {
+                            nearestDriverId = data.docs[0].id;
+                            final double lat1 = a['location']['lat'];
+                            final double long1 = a['location']['long'];
+                            final double lat2 = b['location']['lat'];
+                            final double long2 = b['location']['long'];
+
+                            final double distance1 =
+                                calculateDistance(lat, long, lat1, long1);
+                            final double distance2 =
+                                calculateDistance(lat, long, lat2, long2);
+
+                            return distance1.compareTo(distance2);
+                          });
+                        });
+
+                        return SizedBox(
+                          height: 220,
+                          child: ListView.builder(
+                              itemCount: sortedData.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 20, 10, 20),
+                                  child: Card(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  CircleAvatar(
+                                                    minRadius: 25,
+                                                    maxRadius: 25,
+                                                    backgroundImage:
+                                                        NetworkImage(data
+                                                                .docs[index]
+                                                            ['profilePicture']),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context).push(
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  DriverProfilePage(
+                                                                    driverId: data
+                                                                        .docs[
+                                                                            index]
+                                                                        .id,
+                                                                  )));
+                                                    },
+                                                    child: TextBold(
+                                                      text: 'Reviews',
+                                                      fontSize: 12,
+                                                      color: Colors.green,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                width: 15,
+                                              ),
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 120,
+                                                    child: TextBold(
+                                                        text:
+                                                            'Name: ${data.docs[index]['name']}',
+                                                        fontSize: 12,
+                                                        color: grey),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 120,
+                                                    child: TextRegular(
+                                                        text:
+                                                            'Vehicle: ${data.docs[index]['vehicle']}',
+                                                        fontSize: 11,
+                                                        color: grey),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 120,
+                                                    child: TextRegular(
+                                                        text:
+                                                            'Plate No.: ${data.docs[index]['plateNumber']}',
+                                                        fontSize: 11,
+                                                        color: grey),
+                                                  ),
+                                                  TextRegular(
+                                                      text: data
+                                                                  .docs[index][
+                                                                      'ratings']
+                                                                  .length !=
+                                                              0
+                                                          ? 'Rating: ${(data.docs[index]['stars'] / data.docs[index]['ratings'].length).toStringAsFixed(2)} ★'
+                                                          : 'No ratings',
+                                                      fontSize: 11,
+                                                      color: Colors.amber),
+                                                  TextRegular(
+                                                      text:
+                                                          '${calculateDistance(lat, long, data.docs[index]['location']['lat'], data.docs[index]['location']['long']).toStringAsFixed(2)} kms away',
+                                                      fontSize: 11,
+                                                      color: Colors.grey),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          ButtonWidget(
+                                            width: 125,
+                                            height: 30,
+                                            fontSize: 11,
+                                            label: 'Select Driver',
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              showModalBottomSheet(
+                                                  isScrollControlled: true,
+                                                  context: context,
+                                                  builder: ((context) {
+                                                    return BookBottomSheetWidget(
+                                                      locationData: {
+                                                        'pickuplat': lat,
+                                                        'pickuplong': long,
+                                                        'pickup': pickup,
+                                                        'destinationlat':
+                                                            dropOff.latitude,
+                                                        'destinationlong':
+                                                            dropOff.longitude,
+                                                        'dropoff': drop
+                                                      },
+                                                      driverId:
+                                                          data.docs[index].id,
+                                                      coordinates: {
+                                                        'lat': lat,
+                                                        'long': long,
+                                                        'pickupLocation':
+                                                            '${place.street}, ${place.locality}, ${place.administrativeArea}'
+                                                      },
+                                                    );
+                                                  }));
+                                            },
+                                            opacity: 1,
+                                            radius: 100,
+                                            color: Colors.green,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                        );
+                      }),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }
