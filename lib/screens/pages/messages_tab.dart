@@ -6,11 +6,14 @@ import 'package:phara/screens/pages/chat_page.dart';
 import 'package:phara/utils/colors.dart';
 import 'package:phara/widgets/text_widget.dart';
 import 'package:intl/intl.dart' show DateFormat, toBeginningOfSentenceCase;
+import '../../utils/const.dart';
 import '../../widgets/appbar_widget.dart';
 import '../../widgets/drawer_widget.dart';
 
 class MessagesTab extends StatefulWidget {
-  const MessagesTab({super.key});
+  final ChatpageUsecase useCase;
+
+  const MessagesTab({super.key, this.useCase = ChatpageUsecase.messages});
 
   @override
   State<MessagesTab> createState() => _MessagesTabState();
@@ -130,6 +133,7 @@ class _MessagesTabState extends State<MessagesTab> {
                                       .update({'seen': true});
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => ChatPage(
+                                            useCase: widget.useCase,
                                             driverId: data.docs[index]
                                                 ['driverId'],
                                             driverName: data.docs[index]

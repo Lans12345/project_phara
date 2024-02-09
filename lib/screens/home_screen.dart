@@ -10,6 +10,7 @@ import 'package:phara/screens/pages/driver_profile_page.dart';
 import 'package:phara/screens/pages/messages_tab.dart';
 import 'package:phara/screens/pages/trips_page.dart';
 import 'package:phara/utils/colors.dart';
+import 'package:phara/utils/const.dart';
 import 'package:phara/widgets/button_widget.dart';
 
 import '../data/distance_calculations.dart';
@@ -46,7 +47,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final List<Widget> children = [
       mainHome(),
-      const MessagesTab(),
+      const MessagesTab(
+        useCase: ChatpageUsecase.trackDriver,
+      ),
       const NotifTab(),
       MapScreen(
         inHome: true,
