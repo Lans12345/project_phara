@@ -233,7 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: grey,
                     borderRadius: BorderRadius.circular(10),
                     image: const DecorationImage(
-                        opacity: 175,
+                        opacity: 0.5,
                         image: AssetImage(
                           'assets/images/graphics1.jpg',
                         ),
@@ -287,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: grey,
                     borderRadius: BorderRadius.circular(10),
                     image: const DecorationImage(
-                        opacity: 175,
+                        opacity: 0.5,
                         image: AssetImage(
                           'assets/images/graphics2.jpg',
                         ),
@@ -349,7 +349,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: grey,
                     borderRadius: BorderRadius.circular(10),
                     image: const DecorationImage(
-                        opacity: 175,
+                        opacity: 0.5,
                         image: AssetImage(
                           'assets/images/graphics4.jpg',
                         ),
@@ -400,7 +400,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: grey,
                     borderRadius: BorderRadius.circular(10),
                     image: const DecorationImage(
-                        opacity: 175,
+                        opacity: 0.5,
                         image: AssetImage(
                           'assets/images/graphics3.jpg',
                         ),
