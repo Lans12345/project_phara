@@ -24,7 +24,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
             color: grey,
             image: DecorationImage(
                 opacity: 0.5,
-                image: AssetImage('assets/images/background.png'),
+                image: AssetImage('assets/images/newimg.jpg'),
                 fit: BoxFit.fitHeight)),
         child: Center(
           child: Padding(
@@ -33,20 +33,20 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image.asset(
-                          'assets/images/animation.gif',
-                          width: 50,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // SafeArea(
+                //   child: Padding(
+                //     padding: const EdgeInsets.only(top: 10),
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.start,
+                //       children: [
+                //         Image.asset(
+                //           'assets/images/animation.gif',
+                //           width: 50,
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 const Expanded(
                   child: SizedBox(),
                 ),
@@ -64,7 +64,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                 ),
                 TextRegular(
                     text:
-                        "Ride with ease and speed, experience the thrill of the road with PARA - your ultimate motorcycle ride-hailing app!",
+                        "Ride with ease and speed, experience the thrill of the road with PARA - your ultimate tricycle ride-hailing app!",
                     fontSize: 14,
                     color: Colors.white),
                 const SizedBox(

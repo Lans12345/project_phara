@@ -26,7 +26,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
             color: grey,
             image: DecorationImage(
                 opacity: 180,
-                image: AssetImage('assets/images/background.png'),
+                image: AssetImage('assets/images/newimg.jpg'),
                 fit: BoxFit.fitHeight)),
         child: Center(
           child: Padding(
@@ -35,20 +35,20 @@ class _PermissionScreenState extends State<PermissionScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image.asset(
-                          'assets/images/animation.gif',
-                          width: 50,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // SafeArea(
+                //   child: Padding(
+                //     padding: const EdgeInsets.only(top: 10),
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.start,
+                //       children: [
+                //         Image.asset(
+                //           'assets/images/animation.gif',
+                //           width: 50,
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 const Expanded(
                   child: SizedBox(),
                 ),

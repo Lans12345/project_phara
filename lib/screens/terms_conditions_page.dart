@@ -16,12 +16,12 @@ class TermsAndConditionsPage extends StatelessWidget {
           title: TextRegular(
               text: 'Terms and Conditions', fontSize: 24, color: grey),
         ),
-        body: SingleChildScrollView(
+        body: const SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const <Widget>[
+              children: <Widget>[
                 Text(
                   'Terms and Conditions',
                   style: TextStyle(
@@ -43,7 +43,7 @@ class TermsAndConditionsPage extends StatelessWidget {
                       fontFamily: 'QBold'),
                 ),
                 Text(
-                  '1.1 PARA can only be used by individuals who are at least 18 years old and possess a valid motorcycle license.',
+                  '1.1 PARA can only be used by individuals who are at least 18 years old and possess a valid tricycle license.',
                   style: TextStyle(fontSize: 14.0, fontFamily: 'QRegular'),
                 ),
                 SizedBox(height: 16.0),
@@ -59,7 +59,7 @@ class TermsAndConditionsPage extends StatelessWidget {
                   style: TextStyle(fontSize: 14.0, fontFamily: 'QRegular'),
                 ),
                 Text(
-                  '2.2 The availability of motorcycle drivers and the estimated time of arrival are provided for informational purposes and may vary based on traffic conditions.',
+                  '2.2 The availability of tricycle drivers and the estimated time of arrival are provided for informational purposes and may vary based on traffic conditions.',
                   style: TextStyle(fontSize: 16.0, fontFamily: 'QRegular'),
                 ),
                 SizedBox(height: 16.0),
@@ -83,11 +83,11 @@ class TermsAndConditionsPage extends StatelessWidget {
                       fontFamily: 'QBold'),
                 ),
                 Text(
-                  '4.1 Users are expected to behave responsibly and respectfully towards the motorcycle drivers and other users.',
+                  '4.1 Users are expected to behave responsibly and respectfully towards the tricycle drivers and other users.',
                   style: TextStyle(fontSize: 14.0, fontFamily: 'QRegular'),
                 ),
                 Text(
-                  '4.2 Any damage caused to the motorcycle during the ride due to user negligence may result in additional charges.',
+                  '4.2 Any damage caused to the tricycle during the ride due to user negligence may result in additional charges.',
                   style: TextStyle(fontSize: 14.0, fontFamily: 'QRegular'),
                 ),
                 SizedBox(height: 16.0),
@@ -99,11 +99,11 @@ class TermsAndConditionsPage extends StatelessWidget {
                       fontFamily: 'QBold'),
                 ),
                 Text(
-                  '5.1 PARA shall not be held liable for any damages, losses, or injuries arising from the use of the application or the services provided by the motorcycle drivers.',
+                  '5.1 PARA shall not be held liable for any damages, losses, or injuries arising from the use of the application or the services provided by the tricycle drivers.',
                   style: TextStyle(fontSize: 14.0, fontFamily: 'QRegular'),
                 ),
                 Text(
-                  '5.2 PARA does not guarantee the availability of motorcycle drivers at all times. The application relies on the availability of independent motorcycle drivers, and their availability cannot be guaranteed.',
+                  '5.2 PARA does not guarantee the availability of tricycle drivers at all times. The application relies on the availability of independent tricycle drivers, and their availability cannot be guaranteed.',
                   style: TextStyle(fontSize: 14.0, fontFamily: 'QRegular'),
                 ),
                 Text(

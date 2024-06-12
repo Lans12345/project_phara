@@ -47,16 +47,16 @@ class _SplashScreenState extends State<SplashScreen> {
             color: grey,
             image: DecorationImage(
                 opacity: 0.5,
-                image: AssetImage('assets/images/background.png'),
+                image: AssetImage('assets/images/newimg.jpg'),
                 fit: BoxFit.cover)),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                'assets/images/animation.gif',
-                width: 250,
-              ),
+              // Image.asset(
+              //   'assets/images/animation.gif',
+              //   width: 250,
+              // ),
               const SizedBox(
                 height: 100,
               ),

@@ -378,18 +378,18 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   builder: (context) => MapScreen()));
                             },
                           ),
-                          ListTile(
-                            leading: const Icon(Icons.delivery_dining_outlined),
-                            title: TextRegular(
-                              text: 'Delivery',
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const DeliveryPage()));
-                            },
-                          ),
+                          // ListTile(
+                          //   leading: const Icon(Icons.delivery_dining_outlined),
+                          //   title: TextRegular(
+                          //     text: 'Delivery',
+                          //     fontSize: 14,
+                          //     color: Colors.grey,
+                          //   ),
+                          //   onTap: () {
+                          //     Navigator.of(context).push(MaterialPageRoute(
+                          //         builder: (context) => const DeliveryPage()));
+                          //   },
+                          // ),
                           ListTile(
                             leading: b.Badge(
                                 showBadge: messageBadge != 0,
@@ -516,12 +516,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       ),
                     ),
                   ),
-                  Image.asset(
-                    'assets/images/animation.gif',
-                    width: 60,
-                    height: 60,
-                    color: grey.withOpacity(0.5),
-                  ),
+                  // Image.asset(
+                  //   'assets/images/animation.gif',
+                  //   width: 60,
+                  //   height: 60,
+                  //   color: grey.withOpacity(0.5),
+                  // ),
                 ],
               ),
             ),

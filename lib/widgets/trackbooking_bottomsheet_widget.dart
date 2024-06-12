@@ -173,14 +173,14 @@ class _TrackBookingBottomSheetWidgetState
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Image.asset(
-                                      'assets/images/animation.gif',
-                                      width: 50,
-                                      height: 30,
-                                    ),
-                                  ),
+                                  // Padding(
+                                  //   padding: const EdgeInsets.all(5.0),
+                                  //   child: Image.asset(
+                                  //     'assets/images/animation.gif',
+                                  //     width: 50,
+                                  //     height: 30,
+                                  //   ),
+                                  // ),
                                   const SizedBox(
                                     width: 10,
                                   ),
@@ -209,14 +209,14 @@ class _TrackBookingBottomSheetWidgetState
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Image.asset(
-                                          'assets/images/animation.gif',
-                                          width: 50,
-                                          height: 30,
-                                        ),
-                                      ),
+                                      // Padding(
+                                      //   padding: const EdgeInsets.all(5.0),
+                                      //   child: Image.asset(
+                                      //     'assets/images/animation.gif',
+                                      //     width: 50,
+                                      //     height: 30,
+                                      //   ),
+                                      // ),
                                       const SizedBox(
                                         width: 10,
                                       ),

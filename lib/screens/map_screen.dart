@@ -75,7 +75,7 @@ class _MapScreenState extends State<MapScreen> {
         if (element.type == DocumentChangeType.modified) {
           InAppNotifications.show(
             title: 'Your Booking Response was ${element.doc['status']}',
-            leading: Image.asset('assets/images/logo.png'),
+            leading: Image.asset('assets/images/new.png'),
             description:
                 'The rider has responded to your booking!\nView your notifications for more details',
           );
@@ -92,7 +92,7 @@ class _MapScreenState extends State<MapScreen> {
         if (element.type == DocumentChangeType.modified) {
           InAppNotifications.show(
             title: 'Your Delivery Booking was ${element.doc['status']}',
-            leading: Image.asset('assets/images/logo.png'),
+            leading: Image.asset('assets/images/new.png'),
             description:
                 'The rider has responded to your delivery booking!\nView your notifications for more details',
           );

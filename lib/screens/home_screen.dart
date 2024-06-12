@@ -275,170 +275,170 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              Card(
-                elevation: 3,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Container(
-                  height: 125,
-                  width: MediaQuery.of(context).size.width / 2.25,
-                  decoration: BoxDecoration(
-                    color: grey,
-                    borderRadius: BorderRadius.circular(10),
-                    image: const DecorationImage(
-                        opacity: 0.5,
-                        image: AssetImage(
-                          'assets/images/graphics2.jpg',
-                        ),
-                        fit: BoxFit.cover),
-                  ),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(right: 10, left: 10, top: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: TextBold(
-                            text: 'Book a\nDelivery',
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: ButtonWidget(
-                            radius: 100,
-                            opacity: 1,
-                            fontSize: 10,
-                            color: Colors.white,
-                            textcolor: grey,
-                            width: 60,
-                            height: 25,
-                            label: 'Book now',
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const DeliveryPage()));
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              // Card(
+              //   elevation: 3,
+              //   shape: RoundedRectangleBorder(
+              //     borderRadius: BorderRadius.circular(10),
+              //   ),
+              //   child: Container(
+              //     height: 125,
+              //     width: MediaQuery.of(context).size.width / 2.25,
+              //     decoration: BoxDecoration(
+              //       color: grey,
+              //       borderRadius: BorderRadius.circular(10),
+              //       image: const DecorationImage(
+              //           opacity: 0.5,
+              //           image: AssetImage(
+              //             'assets/images/graphics2.jpg',
+              //           ),
+              //           fit: BoxFit.cover),
+              //     ),
+              //     child: Padding(
+              //       padding:
+              //           const EdgeInsets.only(right: 10, left: 10, top: 10),
+              //       child: Column(
+              //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //         children: [
+              //           Align(
+              //             alignment: Alignment.topLeft,
+              //             child: TextBold(
+              //               text: 'Book a\nDelivery',
+              //               fontSize: 18,
+              //               color: Colors.white,
+              //             ),
+              //           ),
+              //           Align(
+              //             alignment: Alignment.bottomRight,
+              //             child: ButtonWidget(
+              //               radius: 100,
+              //               opacity: 1,
+              //               fontSize: 10,
+              //               color: Colors.white,
+              //               textcolor: grey,
+              //               width: 60,
+              //               height: 25,
+              //               label: 'Book now',
+              //               onPressed: () {
+              //                 Navigator.of(context).push(MaterialPageRoute(
+              //                     builder: (context) => const DeliveryPage()));
+              //               },
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
           const SizedBox(
             height: 10,
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Card(
-                elevation: 3,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Container(
-                  height: 125,
-                  width: MediaQuery.of(context).size.width / 2.25,
-                  decoration: BoxDecoration(
-                    color: grey,
-                    borderRadius: BorderRadius.circular(10),
-                    image: const DecorationImage(
-                        opacity: 0.5,
-                        image: AssetImage(
-                          'assets/images/graphics4.jpg',
-                        ),
-                        fit: BoxFit.cover),
-                  ),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(right: 10, left: 10, top: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: TextBold(
-                            text: 'Pabili',
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: ButtonWidget(
-                            radius: 100,
-                            opacity: 1,
-                            fontSize: 10,
-                            color: Colors.white,
-                            textcolor: grey,
-                            width: 60,
-                            height: 25,
-                            label: 'Coming soon',
-                            onPressed: () {},
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Card(
-                elevation: 3,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Container(
-                  height: 125,
-                  width: MediaQuery.of(context).size.width / 2.25,
-                  decoration: BoxDecoration(
-                    color: grey,
-                    borderRadius: BorderRadius.circular(10),
-                    image: const DecorationImage(
-                        opacity: 0.5,
-                        image: AssetImage(
-                          'assets/images/graphics3.jpg',
-                        ),
-                        fit: BoxFit.cover),
-                  ),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(right: 10, left: 10, top: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: TextBold(
-                            text: 'Food\nDelivery',
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: ButtonWidget(
-                            radius: 100,
-                            opacity: 1,
-                            fontSize: 10,
-                            color: Colors.white,
-                            textcolor: grey,
-                            width: 60,
-                            height: 25,
-                            label: 'Coming soon',
-                            onPressed: () {},
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              // Card(
+              //   elevation: 3,
+              //   shape: RoundedRectangleBorder(
+              //     borderRadius: BorderRadius.circular(10),
+              //   ),
+              //   child: Container(
+              //     height: 125,
+              //     width: MediaQuery.of(context).size.width / 2.25,
+              //     decoration: BoxDecoration(
+              //       color: grey,
+              //       borderRadius: BorderRadius.circular(10),
+              //       image: const DecorationImage(
+              //           opacity: 0.5,
+              //           image: AssetImage(
+              //             'assets/images/graphics4.jpg',
+              //           ),
+              //           fit: BoxFit.cover),
+              //     ),
+              //     child: Padding(
+              //       padding:
+              //           const EdgeInsets.only(right: 10, left: 10, top: 10),
+              //       child: Column(
+              //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //         children: [
+              //           Align(
+              //             alignment: Alignment.topLeft,
+              //             child: TextBold(
+              //               text: 'Pabili',
+              //               fontSize: 18,
+              //               color: Colors.white,
+              //             ),
+              //           ),
+              //           Align(
+              //             alignment: Alignment.bottomRight,
+              //             child: ButtonWidget(
+              //               radius: 100,
+              //               opacity: 1,
+              //               fontSize: 10,
+              //               color: Colors.white,
+              //               textcolor: grey,
+              //               width: 60,
+              //               height: 25,
+              //               label: 'Coming soon',
+              //               onPressed: () {},
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // Card(
+              //   elevation: 3,
+              //   shape: RoundedRectangleBorder(
+              //     borderRadius: BorderRadius.circular(10),
+              //   ),
+              //   child: Container(
+              //     height: 125,
+              //     width: MediaQuery.of(context).size.width / 2.25,
+              //     decoration: BoxDecoration(
+              //       color: grey,
+              //       borderRadius: BorderRadius.circular(10),
+              //       image: const DecorationImage(
+              //           opacity: 0.5,
+              //           image: AssetImage(
+              //             'assets/images/graphics3.jpg',
+              //           ),
+              //           fit: BoxFit.cover),
+              //     ),
+              //     child: Padding(
+              //       padding:
+              //           const EdgeInsets.only(right: 10, left: 10, top: 10),
+              //       child: Column(
+              //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //         children: [
+              //           Align(
+              //             alignment: Alignment.topLeft,
+              //             child: TextBold(
+              //               text: 'Food\nDelivery',
+              //               fontSize: 18,
+              //               color: Colors.white,
+              //             ),
+              //           ),
+              //           Align(
+              //             alignment: Alignment.bottomRight,
+              //             child: ButtonWidget(
+              //               radius: 100,
+              //               opacity: 1,
+              //               fontSize: 10,
+              //               color: Colors.white,
+              //               textcolor: grey,
+              //               width: 60,
+              //               height: 25,
+              //               label: 'Coming soon',
+              //               onPressed: () {},
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
           Padding(
