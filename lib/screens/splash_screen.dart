@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
         decoration: const BoxDecoration(
             color: grey,
             image: DecorationImage(
-                opacity: 150,
+                opacity: 0.5,
                 image: AssetImage('assets/images/background.png'),
                 fit: BoxFit.cover)),
         child: Center(
