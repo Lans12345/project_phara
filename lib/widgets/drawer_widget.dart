@@ -157,7 +157,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const SizedBox(
-                                  height: 10,
+                                  height: 5,
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
