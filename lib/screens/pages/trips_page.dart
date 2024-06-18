@@ -80,6 +80,33 @@ class TripsPage extends StatelessWidget {
                                     .format(newhistory[index]['date'].toDate()),
                                 fontSize: 12,
                                 color: grey),
+                            newhistory[index]['driver'] == null
+                                ? const SizedBox()
+                                : StreamBuilder<DocumentSnapshot>(
+                                    stream: FirebaseFirestore.instance
+                                        .collection('Drivers')
+                                        .doc(newhistory[index]['driver'])
+                                        .snapshots(),
+                                    builder: (context,
+                                        AsyncSnapshot<DocumentSnapshot>
+                                            snapshot) {
+                                      if (!snapshot.hasData) {
+                                        return const SizedBox();
+                                      } else if (snapshot.hasError) {
+                                        return const Center(
+                                            child:
+                                                Text('Something went wrong'));
+                                      } else if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const SizedBox();
+                                      }
+                                      dynamic driverData = snapshot.data;
+                                      return TextRegular(
+                                          text:
+                                              'Ratings: ${(driverData['stars'] / driverData['ratings'].length).toStringAsFixed(2)} ★',
+                                          fontSize: 12,
+                                          color: grey);
+                                    }),
                           ],
                         ),
                         IconButton(

@@ -52,6 +52,7 @@ Future<String> addBooking(
       .update({
     'history': FieldValue.arrayUnion([
       {
+        'driver': driverId,
         'origin': origin,
         'destination': destination,
         'distance': distance,
