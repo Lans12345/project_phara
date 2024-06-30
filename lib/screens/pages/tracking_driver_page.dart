@@ -353,8 +353,8 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
                       .collection('Drivers')
                       .doc(widget.tripDetails['driverId'])
                       .update({
-                    'ratings': FieldValue.arrayUnion(
-                        [FirebaseAuth.instance.currentUser!.uid]),
+                    'ratings':
+                        FieldValue.arrayUnion([DateTime.now().toString()]),
                     'stars': stars + rating.toInt()
                   });
 
