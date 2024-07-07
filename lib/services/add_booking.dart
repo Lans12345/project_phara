@@ -58,6 +58,7 @@ Future<String> addBooking(
         'distance': distance,
         'fare': fare,
         'date': DateTime.now(),
+        'rate': 0,
       }
     ]),
   });
