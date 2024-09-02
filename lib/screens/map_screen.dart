@@ -838,9 +838,7 @@ class _MapScreenState extends State<MapScreen> {
                     child: AvatarGlow(
                       animate: data.docs.isNotEmpty,
                       glowColor: Colors.red,
-                      endRadius: 60.0,
                       duration: const Duration(milliseconds: 2000),
-                      repeatPauseDuration: const Duration(milliseconds: 100),
                       repeat: true,
                       child: const Icon(
                         Icons.message_outlined,
