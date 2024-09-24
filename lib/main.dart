@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      title: 'PARA',
+      title: 'Pasada',
       home: const SplashScreen(),
       builder: InAppNotifications.init(),
     );
