@@ -46,7 +46,6 @@ dependencies:
   geocoding: ^2.1.0
   uuid:
   geolocator: ^9.0.2
-  share_plus:
   intl: ^0.17.0
   flutter_polyline_points: ^1.0.0
   flutter_google_places:
@@ -57,7 +56,6 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   location: ^4.4.0
   url_launcher:
-  connectivity_plus:
   cached_network_image:
   custom_map_markers:
   flutter_spinkit:

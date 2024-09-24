@@ -8,6 +8,7 @@ import 'package:phara/widgets/text_widget.dart';
 import 'package:phara/widgets/textfield_widget.dart';
 import 'package:phara/widgets/toast_widget.dart';
 
+import '../services/add_history.dart';
 import '../utils/colors.dart';
 import 'button_widget.dart';
 
@@ -409,8 +410,8 @@ class _TrackBookingBottomSheetWidgetState
                       .collection('Drivers')
                       .doc(widget.tripDetails['driverId'])
                       .update({
-                    'ratings': FieldValue.arrayUnion(
-                        [FirebaseAuth.instance.currentUser!.uid]),
+                    'ratings':
+                        FieldValue.arrayUnion([DateTime.now().toString()]),
                     'stars': stars + rating.toInt()
                   });
 
@@ -427,6 +428,14 @@ class _TrackBookingBottomSheetWidgetState
                       }
                     ]),
                   });
+
+                  addHistory(
+                      widget.tripDetails['destination'],
+                      widget.tripDetails['origin'],
+                      widget.tripDetails['distance'],
+                      widget.tripDetails['fare'],
+                      rating.toInt(),
+                      widget.tripDetails['driverId']);
 
                   showToast('Thankyou for your booking!');
                   Navigator.of(context).pushReplacement(

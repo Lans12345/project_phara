@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import 'package:phara/screens/pages/chat_page.dart';
+import 'package:phara/services/add_history.dart';
 import 'package:phara/utils/const.dart';
 import 'package:phara/widgets/text_widget.dart';
 import 'package:phara/widgets/textfield_widget.dart';
@@ -353,8 +354,8 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
                       .collection('Drivers')
                       .doc(widget.tripDetails['driverId'])
                       .update({
-                    'ratings': FieldValue.arrayUnion(
-                        [FirebaseAuth.instance.currentUser!.uid]),
+                    'ratings':
+                        FieldValue.arrayUnion([DateTime.now().toString()]),
                     'stars': stars + rating.toInt()
                   });
 
@@ -371,6 +372,14 @@ class _TrackingOfDriverPageState extends State<TrackingOfDriverPage> {
                       }
                     ]),
                   });
+
+                  addHistory(
+                      widget.tripDetails['destination'],
+                      widget.tripDetails['origin'],
+                      widget.tripDetails['distance'],
+                      widget.tripDetails['fare'],
+                      rating.toInt(),
+                      widget.tripDetails['driverId']);
 
                   showToast('Thankyou for your booking!');
                   Navigator.of(context).pushReplacement(
