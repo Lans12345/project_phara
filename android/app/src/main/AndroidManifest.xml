@@ -28,7 +28,7 @@
     </queries>
 
    <application
-        android:label="PARA"
+        android:label="Pasada"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
