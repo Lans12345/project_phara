@@ -103,8 +103,7 @@ class ContactusPage extends StatelessWidget {
                 SizedBox(
                   width: 200,
                   child: TextRegular(
-                      text:
-                          'Misamis Oriental, Cagayan De Oro City, Philippines, 9000',
+                      text: 'Province of Aurora, Philippines',
                       fontSize: 16,
                       color: grey),
                 ),

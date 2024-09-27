@@ -24,7 +24,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
             color: grey,
             image: DecorationImage(
                 opacity: 0.5,
-                image: AssetImage('assets/images/newimg.jpg'),
+                image: AssetImage('assets/images/newimg.jfif'),
                 fit: BoxFit.fitHeight)),
         child: Center(
           child: Padding(
@@ -64,7 +64,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                 ),
                 TextRegular(
                     text:
-                        "Ride with ease and speed, experience the thrill of the road with PARA - your ultimate tricycle ride-hailing app!",
+                        "Ride with ease and speed, experience the thrill of the road with PASADA - your ultimate tricycle ride-hailing app!",
                     fontSize: 14,
                     color: Colors.white),
                 const SizedBox(
@@ -82,7 +82,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                           builder: (context) {
                             return NormalDialog(
                                 label:
-                                    "PARA collects location data to enable user tracking for the transaction of ride to be proccessed even when the app is closed or not in use.",
+                                    "PASADA collects location data to enable user tracking for the transaction of ride to be proccessed even when the app is closed or not in use.",
                                 buttonColor: Colors.red,
                                 buttonText: 'I understand',
                                 icon: Icons.warning,

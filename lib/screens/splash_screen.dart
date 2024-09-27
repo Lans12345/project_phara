@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
             color: grey,
             image: DecorationImage(
                 opacity: 0.5,
-                image: AssetImage('assets/images/newimg.jpg'),
+                image: AssetImage('assets/images/newimg.jfif'),
                 fit: BoxFit.cover)),
         child: Center(
           child: Column(

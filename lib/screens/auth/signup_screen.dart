@@ -58,7 +58,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  TextBold(text: 'PARA', fontSize: 58, color: Colors.white),
+                  TextBold(text: 'PASADA', fontSize: 58, color: Colors.white),
                   const SizedBox(
                     height: 25,
                   ),

@@ -33,7 +33,7 @@ class _LandingScreenState extends State<LandingScreen> {
             color: grey,
             image: DecorationImage(
                 opacity: 0.5,
-                image: AssetImage('assets/images/newimg.jpg'),
+                image: AssetImage('assets/images/newimg.jfif'),
                 fit: BoxFit.cover)),
         child: SizedBox(
           width: double.infinity,
@@ -43,7 +43,7 @@ class _LandingScreenState extends State<LandingScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                TextBold(text: 'PARA', fontSize: 48, color: Colors.white),
+                TextBold(text: 'PASADA', fontSize: 48, color: Colors.white),
                 TextRegular(
                     text: 'Making your travels much easier',
                     fontSize: 15,
@@ -97,7 +97,7 @@ class _LandingScreenState extends State<LandingScreen> {
                         onPressed: (() {
                           Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                  builder: (context) => SignupScreen()));
+                                  builder: (context) => const SignupScreen()));
                         }),
                         child: TextBold(
                             text: 'Signup', fontSize: 18, color: Colors.white),

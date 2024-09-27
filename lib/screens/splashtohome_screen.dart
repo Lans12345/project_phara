@@ -55,7 +55,7 @@ class _SplashToHomeScreenState extends State<SplashToHomeScreen> {
             color: grey,
             image: DecorationImage(
                 opacity: 150,
-                image: AssetImage('assets/images/newimg.jpg'),
+                image: AssetImage('assets/images/newimg.jfif'),
                 fit: BoxFit.cover)),
         child: Center(
           child: Column(

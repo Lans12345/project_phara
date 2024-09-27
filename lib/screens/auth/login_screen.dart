@@ -37,7 +37,7 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(
                     height: 50,
                   ),
-                  TextBold(text: 'PARA', fontSize: 58, color: Colors.white),
+                  TextBold(text: 'PASADA', fontSize: 58, color: Colors.white),
                   const SizedBox(
                     height: 75,
                   ),
@@ -220,14 +220,14 @@ class LoginScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextRegular(
-                          text: "New to PARA?",
+                          text: "New to PASADA?",
                           fontSize: 12,
                           color: Colors.white),
                       TextButton(
                         onPressed: (() {
                           Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                  builder: (context) => SignupScreen()));
+                                  builder: (context) => const SignupScreen()));
                         }),
                         child: TextBold(
                             text: "Signup Now",

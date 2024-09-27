@@ -26,7 +26,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
             color: grey,
             image: DecorationImage(
                 opacity: 180,
-                image: AssetImage('assets/images/newimg.jpg'),
+                image: AssetImage('assets/images/newimg.jfif'),
                 fit: BoxFit.fitHeight)),
         child: Center(
           child: Padding(
@@ -66,7 +66,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                 ),
                 TextRegular(
                     text:
-                        "Let PARA access your location to find nearby drivers.",
+                        "Let PASADA access your location to find nearby drivers.",
                     fontSize: 18,
                     color: Colors.white),
                 const SizedBox(

@@ -179,37 +179,37 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            height: 200,
-            child: CarouselSlider.builder(
-                unlimitedMode: true,
-                slideBuilder: (index) {
-                  return Padding(
-                    padding:
-                        const EdgeInsets.only(left: 15, right: 15, top: 10),
-                    child: Container(
-                      height: 150,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        image: DecorationImage(
-                            image: AssetImage(
-                                'assets/images/${imageLinks[index]}'),
-                            fit: BoxFit.cover),
-                      ),
-                    ),
-                  );
-                },
-                enableAutoSlider: true,
-                scrollPhysics: const BouncingScrollPhysics(),
-                slideIndicator: CircularSlideIndicator(
-                  indicatorRadius: 3,
-                  currentIndicatorColor: Colors.black,
-                  indicatorBackgroundColor: Colors.grey,
-                  padding: const EdgeInsets.only(bottom: 32),
-                ),
-                itemCount: 3),
-          ),
+          // SizedBox(
+          //   height: 200,
+          //   child: CarouselSlider.builder(
+          //       unlimitedMode: true,
+          //       slideBuilder: (index) {
+          //         return Padding(
+          //           padding:
+          //               const EdgeInsets.only(left: 15, right: 15, top: 10),
+          //           child: Container(
+          //             height: 150,
+          //             alignment: Alignment.center,
+          //             decoration: BoxDecoration(
+          //               borderRadius: BorderRadius.circular(20),
+          //               image: DecorationImage(
+          //                   image: AssetImage(
+          //                       'assets/images/${imageLinks[index]}'),
+          //                   fit: BoxFit.cover),
+          //             ),
+          //           ),
+          //         );
+          //       },
+          //       enableAutoSlider: true,
+          //       scrollPhysics: const BouncingScrollPhysics(),
+          //       slideIndicator: CircularSlideIndicator(
+          //         indicatorRadius: 3,
+          //         currentIndicatorColor: Colors.black,
+          //         indicatorBackgroundColor: Colors.grey,
+          //         padding: const EdgeInsets.only(bottom: 32),
+          //       ),
+          //       itemCount: 3),
+          // ),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 5, 20, 10),
             child: TextBold(
@@ -494,7 +494,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return SizedBox(
                     height: 120,
                     child: ListView.builder(
-                        itemCount: sortedData.length,
+                        itemCount: 0,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
                           return Padding(
