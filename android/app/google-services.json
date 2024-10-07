@@ -1,41 +1,33 @@
 {
   "project_info": {
-    "project_number": "739665994216",
-    "project_id": "project-phara",
-    "storage_bucket": "project-phara.appspot.com"
+    "project_number": "976579912832",
+    "project_id": "pasada-e0b64",
+    "storage_bucket": "pasada-e0b64.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:739665994216:android:c8850e7df1b59865a9045d",
+        "mobilesdk_app_id": "1:976579912832:android:f7885457b6e2a87210f265",
         "android_client_info": {
           "package_name": "com.algovision.para"
         }
       },
       "oauth_client": [
         {
-          "client_id": "739665994216-olpsh5m2kfcdmlslkoi02kuf7hcsuvcb.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.algovision.para",
-            "certificate_hash": "6f937f6fdc3d77e85b800f722f26559ce656d889"
-          }
-        },
-        {
-          "client_id": "739665994216-tm7b1oj7isfafi66s8fucc83g4o1b3sm.apps.googleusercontent.com",
+          "client_id": "976579912832-sat5ccgvcojibctdq665p5u39cmg3mi6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCY6Bildzx07JbRVzSJeCKDXjclh43eKsI"
+          "current_key": "AIzaSyCJdnRBv6_uGa-u4cFH4yfC3JNVbbUxm6Q"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "739665994216-tm7b1oj7isfafi66s8fucc83g4o1b3sm.apps.googleusercontent.com",
+              "client_id": "976579912832-sat5ccgvcojibctdq665p5u39cmg3mi6.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
