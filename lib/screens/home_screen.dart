@@ -106,6 +106,59 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: const Icon(Icons.notifications_outlined)),
                       );
                     }),
+                IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Dialog(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                TextRegular(
+                                  text: 'Baler PNP ',
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(
+                                  height: 3,
+                                ),
+                                TextBold(
+                                  text: '0908-526-4029',
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                TextRegular(
+                                  text: 'Baler MDRRMO',
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(
+                                  height: 3,
+                                ),
+                                TextBold(
+                                  text: '0920-594-1906',
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.info_outline,
+                  ),
+                ),
               ],
             )
           : null,
@@ -444,7 +497,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
             child: TextBold(
-              text: 'Riders Nearby',
+              text: 'Available Riders',
               fontSize: 18,
               color: Colors.black,
             ),
